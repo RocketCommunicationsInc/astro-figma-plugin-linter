@@ -1,0 +1,24 @@
+<h2>Linter Exploration</h2>
+<ul>
+  <li>use case: plugin used on files that import the Astro library</li>
+  <li>use case: plugin used on files that don't import the Astro library</li>
+  <li>use case: plugin used on the file that IS the Astro library</li>
+</ul>
+
+<p>This plugin creates a specified number of shapes in the current Figma document.</p>
+<p>Count: <input id="count" type="number" value="5"></p>
+<button id="create">Create</button>
+<button id="cancel">Cancel</button>
+<script>
+
+document.getElementById('create').onclick = () => {
+  const textbox = document.getElementById('count');
+  const count = parseInt(textbox.value, 10);
+  parent.postMessage({ pluginMessage: { type: 'create-shapes', count } }, '*')
+}
+
+document.getElementById('cancel').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+
+</script>

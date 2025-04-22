@@ -27,7 +27,7 @@ function App() {
         <h2>Get Astro Tokens via REST</h2>
       </header>
       <section>
-        <textarea value={output}/>
+        <textarea value={output} readOnly />
       </section>
       <footer>
         <button className="brand" onClick={onGetStyles}>

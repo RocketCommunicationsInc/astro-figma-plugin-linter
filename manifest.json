@@ -2,17 +2,18 @@
   "name": "Astro Linter",
   "id": "1494388824036109437",
   "api": "1.0.0",
-  "main": "code.js",
   "capabilities": [],
-  "enableProposedApi": false,
   "documentAccess": "dynamic-page",
   "editorType": [
     "figma"
   ],
-  "ui": "ui.html",
+  "enableProposedApi": false,
+  "main": "./dist/code.js",
+  "ui": "./dist/ui.html",
   "networkAccess": {
     "allowedDomains": [
-      "none"
+      "https://api.figma.com"
     ]
-  }
+  },
+  "permissions": ["teamlibrary"]
 }

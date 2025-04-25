@@ -1,38 +1,76 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
+import { CopyToClipboardButton } from 'react-clipboard-button';
+import JSONPretty from 'react-json-pretty';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const JSONPrettyMon = require('react-json-pretty/themes/monikai.css');
 import "./ui.css";
 
-declare function require(path: string): string;
 
 function App() {
- const [output, setOutput] = React.useState(0);
+  const [output, setOutput] = React.useState<string>();
+  const [readyToCopy, setReadyToCopy] = React.useState(false);
 
-  // const inputRef = React.useRef<HTMLInputElement>(null);
-
-  const onGetStyles = () => {
+  const onLintSelection = () => {
     // parent.postMessage(
-    //   { pluginMessage: { type: "create-rectangles", count } },
+    //   { pluginMessage: { type: "lint-selection", count } },
     //   "*"
     // );
   };
+
+  const onExportColor = () => {
+    setOutput("");
+    setReadyToCopy(false);
+    parent.postMessage({ pluginMessage: { type: 'export-color' } }, '*')
+  }
 
   const onCancel = () => {
     parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
   };
 
+  onmessage = (event) => {
+    console.log(['event', event])
+    const messageType = event.data.pluginMessage.type;
+    const messageContent = event.data.pluginMessage.content;
+    console.log("got this from the plugin code", messageType, messageContent)
+    console.log(['messageType, messageContent', messageType, messageContent])
+    if (messageType === "exportJSON") {
+      setOutput(messageContent)
+      setReadyToCopy(true)
+    }
+  }
+
   return (
     <main>
       <header>
-        <img src={require("./logo.svg")} />
-        <h2>Get Astro Tokens via REST</h2>
+        <h3>Select objects to test</h3>
       </header>
       <section>
-        <textarea value={output} readOnly />
+        <div className="output">
+        <JSONPretty
+            className="json-text"
+            id="bi-json-export"
+            data={JSON.stringify(output)}
+            theme={JSONPrettyMon}
+          />
+        </div>
       </section>
       <footer>
-        <button className="brand" onClick={onGetStyles}>
-          Get Styles
+        <button className="brand" onClick={onLintSelection}>
+          Test Selection
         </button>
+        <button id="export-color" onClick={onExportColor}>
+          Export Color Styles
+        </button>
+        {readyToCopy && (
+          <CopyToClipboardButton
+            text={JSON.stringify(output)}
+            onSuccess={() => console.log('success!')}
+            onError={() => console.log('error!')}
+          >
+            <button>Copy</button>
+          </CopyToClipboardButton>
+          )}
         <button onClick={onCancel}>Cancel</button>
       </footer>
     </main>

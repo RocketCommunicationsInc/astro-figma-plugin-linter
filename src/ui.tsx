@@ -12,10 +12,7 @@ function App() {
   const [readyToCopy, setReadyToCopy] = React.useState(false);
 
   const onLintSelection = () => {
-    // parent.postMessage(
-    //   { pluginMessage: { type: "lint-selection", count } },
-    //   "*"
-    // );
+    parent.postMessage({ pluginMessage: { type: 'lint-selection' } }, '*')
   };
 
   const onExportColor = () => {
@@ -43,35 +40,39 @@ function App() {
   return (
     <main>
       <header>
-        <h3>Select objects to test</h3>
+        <p>Select objects to test</p>
       </header>
-      <section>
-        <div className="output">
+
+      <section className="feedback">
         <JSONPretty
-            className="json-text"
-            id="bi-json-export"
-            data={JSON.stringify(output)}
-            theme={JSONPrettyMon}
-          />
-        </div>
+          className="json-text"
+          id="bi-json-export"
+          data={JSON.stringify(output)}
+          theme={JSONPrettyMon}
+        />
       </section>
-      <footer>
-        <button className="brand" onClick={onLintSelection}>
+
+      <footer className="buttons">
+        <button className="primary" onClick={onLintSelection}>
           Test Selection
         </button>
-        <button id="export-color" onClick={onExportColor}>
-          Export Color Styles
-        </button>
-        {readyToCopy && (
-          <CopyToClipboardButton
-            text={JSON.stringify(output)}
-            onSuccess={() => console.log('success!')}
-            onError={() => console.log('error!')}
-          >
-            <button>Copy</button>
-          </CopyToClipboardButton>
-          )}
         <button onClick={onCancel}>Cancel</button>
+        <div className="dev-actions">
+          <h4>Development Actions</h4>
+          <button onClick={onExportColor}>
+            Export Color Styles
+          </button>
+          {readyToCopy && (
+            <CopyToClipboardButton
+              text={JSON.stringify(output)}
+              onSuccess={() => console.log('success!')}
+              onError={() => console.log('error!')}
+            >
+              <button>Copy</button>
+            </CopyToClipboardButton>
+          )}
+
+        </div>
       </footer>
     </main>
   );

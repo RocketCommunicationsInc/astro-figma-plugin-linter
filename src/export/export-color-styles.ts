@@ -1,13 +1,9 @@
 import tokensImport from "../tokens.json";
+import { TokensJSON } from "./types";
 
 const exportColorStyles = async () => {
   // Set up the JSON object structure
-  const tokensJSON: {
-    "color-tokens": {
-      dark: Record<string, unknown>;
-      light: Record<string, unknown>;
-    };
-  } = {
+  const tokensJSON: TokensJSON = {
     ...tokensImport,
     "color-tokens": {
       dark: tokensImport["color-tokens"]["dark"],

@@ -1,8 +1,9 @@
 import tokensImport from "../tokens.json";
+import { TokensJSON } from "./types";
 
 const exportTypeStyles = async () => {
   // Set up the JSON object structure
-  const tokensJSON = {
+  const tokensJSON: TokensJSON = {
     ...tokensImport,
     "type-tokens": tokensImport["type-tokens"],
   };

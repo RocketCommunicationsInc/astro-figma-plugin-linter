@@ -1,4 +1,5 @@
 import { exportColorStyles } from "./export/export-color-styles";
+import { exportTypeStyles } from "./export/export-type-styles";
 
 figma.showUI(__html__, { themeColors: true, width: 650, height: 525 });
 
@@ -14,6 +15,11 @@ figma.ui.onmessage = (msg: { type: string; count: number }) => {
   if (msg.type === "export-color") {
     figma.notify("Exporting color styles...");
     exportColorStyles();
+  }
+
+  if (msg.type === "export-type") {
+    figma.notify("Exporting text styles...");
+    exportTypeStyles();
   }
 
   if (msg.type === "cancel") {

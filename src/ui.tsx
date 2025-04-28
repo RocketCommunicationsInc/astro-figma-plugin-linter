@@ -21,6 +21,12 @@ function App() {
     parent.postMessage({ pluginMessage: { type: 'export-color' } }, '*')
   }
 
+  const onExportType = () => {
+    setOutput("");
+    setReadyToCopy(false);
+    parent.postMessage({ pluginMessage: { type: 'export-type' } }, '*')
+  }
+
   const onCancel = () => {
     parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
   };
@@ -61,6 +67,9 @@ function App() {
           <h4>Development Actions</h4>
           <button onClick={onExportColor}>
             Export Color Styles
+          </button>
+          <button onClick={onExportType}>
+            Export Text Styles
           </button>
           {readyToCopy && (
             <CopyToClipboardButton

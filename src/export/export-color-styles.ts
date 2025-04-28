@@ -8,6 +8,7 @@ const exportColorStyles = async () => {
       light: Record<string, unknown>;
     };
   } = {
+    ...tokensImport,
     "color-tokens": {
       dark: tokensImport["color-tokens"]["dark"],
       light: tokensImport["color-tokens"]["light"],

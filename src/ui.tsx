@@ -64,7 +64,7 @@ function App() {
         </button>
         <button onClick={onCancel}>Cancel</button>
         <div className="dev-actions">
-          <h4>Development Actions</h4>
+          <h4>Dev Actions</h4>
           <button onClick={onExportColor}>
             Export Color Styles
           </button>

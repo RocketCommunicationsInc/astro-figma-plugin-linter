@@ -18,7 +18,23 @@ const exportTypeStyles = async () => {
   );
 
   // Loop through the paint styles and add them to a JSON object
-  const typeStylesJSON = {};
+  const typeStylesJSON: Record<string, {
+    id: string;
+    name: string;
+    description: string | null;
+    type: string;
+    key: string;
+    fontName: { family: string; style: string };
+    fontSize: number;
+    leadingTrim: string;
+    letterSpacing: { value: number; unit: string };
+    lineHeight: { value: number | string; unit: string };
+    listSpacing: number;
+    paragraphIndent: number;
+    paragraphSpacing: number;
+    textCase: string;
+    textDecoration: string;
+  }> = {};
 
   typeStyles.forEach((typeStyle) => {
     typeStylesJSON[typeStyle.name] = {
@@ -31,17 +47,14 @@ const exportTypeStyles = async () => {
       fontSize: typeStyle.fontSize,
       leadingTrim: typeStyle.leadingTrim,
       letterSpacing: typeStyle.letterSpacing,
-      lineHeight: typeStyle.lineHeight,
+      lineHeight: 'value' in typeStyle.lineHeight
+        ? typeStyle.lineHeight
+        : { value: "AUTO", unit: typeStyle.lineHeight.unit },
       listSpacing: typeStyle.listSpacing,
       paragraphIndent: typeStyle.paragraphIndent,
       paragraphSpacing: typeStyle.paragraphSpacing,
       textCase: typeStyle.textCase,
       textDecoration: typeStyle.textDecoration,
-      textDecorationColor: typeStyle.textDecorationColor,
-      textDecorationOffset: typeStyle.textDecorationOffset,
-      textDecorationSkipLink: typeStyle.textDecorationSkipLink,
-      textDecorationStyle: typeStyle.textDecorationStyle,
-      textDecorationThickness: typeStyle.textDecorationThickness,
     };
   });
 

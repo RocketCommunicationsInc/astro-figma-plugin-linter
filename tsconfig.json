@@ -6,6 +6,8 @@
     "moduleResolution": "node",
     "strict": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@figma"

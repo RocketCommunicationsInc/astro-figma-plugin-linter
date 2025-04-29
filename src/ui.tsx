@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as ReactDOM from "react-dom/client";
 import { CopyToClipboardButton } from 'react-clipboard-button';
 import JSONPretty from 'react-json-pretty';
@@ -37,16 +37,23 @@ function App() {
   };
 
   // Listen for messages from the plugin code
-  onmessage = (event) => {
-    const messageType = event.data.pluginMessage.type;
-    const messageContent = event.data.pluginMessage.content;
-    console.log("got this from the plugin code", messageType, messageContent)
-    // Handle incoming message with exported JSON
-    if (messageType === "exportJSON") {
-      setOutput(messageContent)
-      setReadyToCopy(true)
-    }
-  }
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const messageType = event.data.pluginMessage.type;
+      const messageContent = event.data.pluginMessage.content;
+      console.log("got this from the plugin code", messageType, messageContent);
+      // Handle incoming message with exported JSON
+      if (messageType === "exportJSON") {
+        setOutput(messageContent);
+        setReadyToCopy(true);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
 
   return (
     <main>

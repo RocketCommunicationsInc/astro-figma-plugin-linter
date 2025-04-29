@@ -37,7 +37,7 @@ const exportColorStyles = async () => {
   } = {};
 
   // Loop through the paint styles and add them to a JSON object
-  paintStyles.forEach((paintStyle) => {
+  paintStyles.map((paintStyle) => {
     paintStylesJSON[paintStyle.name] = {
       id: paintStyle.id,
       name: paintStyle.name,

@@ -37,7 +37,7 @@ const exportTypeStyles = async () => {
   }> = {};
 
   // Loop through the type styles and add them to a JSON object
-  typeStyles.forEach((typeStyle) => {
+  typeStyles.map((typeStyle) => {
     typeStylesJSON[typeStyle.name] = {
       id: typeStyle.id,
       name: typeStyle.name,

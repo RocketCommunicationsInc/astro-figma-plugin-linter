@@ -10,7 +10,7 @@ import "./ui.css";
 function App() {
   // Set up the state for the output
   const [output, setOutput] = useState<string>('');
-  const [readyToCopy, setReadyToCopy] = useState(false);
+  const [readyToCopy, setReadyToCopy] = useState<boolean>(false);
 
   // Tell the plugin code to lint the selection
   const onLintSelection = () => {

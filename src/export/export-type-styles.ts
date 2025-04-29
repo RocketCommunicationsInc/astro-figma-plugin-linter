@@ -18,23 +18,25 @@ const exportTypeStyles = async () => {
   );
 
   // Create an empty object to hold the type styles
-  const typeStylesJSON: Record<string, {
-    id: string;
-    name: string;
-    description: string | null;
-    type: string;
-    key: string;
-    fontName: { family: string; style: string };
-    fontSize: number;
-    leadingTrim: string;
-    letterSpacing: { value: number; unit: string };
-    lineHeight: { value: number | string; unit: string };
-    listSpacing: number;
-    paragraphIndent: number;
-    paragraphSpacing: number;
-    textCase: string;
-    textDecoration: string;
-  }> = {};
+  const typeStylesJSON: {
+    [key: string]: {
+      id: string;
+      name: string;
+      description: string | null;
+      type: string;
+      key: string;
+      fontName: { family: string; style: string };
+      fontSize: number;
+      leadingTrim: string;
+      letterSpacing: { value: number; unit: string };
+      lineHeight: { value: number | string; unit: string };
+      listSpacing: number;
+      paragraphIndent: number;
+      paragraphSpacing: number;
+      textCase: string;
+      textDecoration: string;
+    };
+  } = {};
 
   // Loop through the type styles and add them to a JSON object
   typeStyles.map((typeStyle) => {
@@ -48,9 +50,10 @@ const exportTypeStyles = async () => {
       fontSize: typeStyle.fontSize,
       leadingTrim: typeStyle.leadingTrim,
       letterSpacing: typeStyle.letterSpacing,
-      lineHeight: 'value' in typeStyle.lineHeight
-        ? typeStyle.lineHeight
-        : { value: "AUTO", unit: typeStyle.lineHeight.unit },
+      lineHeight:
+        "value" in typeStyle.lineHeight
+          ? typeStyle.lineHeight
+          : { value: "AUTO", unit: typeStyle.lineHeight.unit },
       listSpacing: typeStyle.listSpacing,
       paragraphIndent: typeStyle.paragraphIndent,
       paragraphSpacing: typeStyle.paragraphSpacing,

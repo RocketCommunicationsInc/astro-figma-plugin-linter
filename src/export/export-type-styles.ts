@@ -17,7 +17,7 @@ const exportTypeStyles = async () => {
     }
   );
 
-  // Loop through the paint styles and add them to a JSON object
+  // Create an empty object to hold the type styles
   const typeStylesJSON: Record<string, {
     id: string;
     name: string;
@@ -36,6 +36,7 @@ const exportTypeStyles = async () => {
     textDecoration: string;
   }> = {};
 
+  // Loop through the type styles and add them to a JSON object
   typeStyles.forEach((typeStyle) => {
     typeStylesJSON[typeStyle.name] = {
       id: typeStyle.id,
@@ -58,7 +59,9 @@ const exportTypeStyles = async () => {
     };
   });
 
+  // sort type styles into respective json sections
   tokensJSON["type-tokens"] = typeStylesJSON;
+
   // Send JSON to the UI
   figma.ui.postMessage({ type: "exportJSON", content: tokensJSON });
 };

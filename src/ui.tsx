@@ -8,35 +8,40 @@ import "./ui.css";
 
 
 function App() {
+  // Set up the state for the output
   const [output, setOutput] = React.useState<string>();
   const [readyToCopy, setReadyToCopy] = React.useState(false);
 
+  // Tell the plugin code to lint the selection
   const onLintSelection = () => {
     parent.postMessage({ pluginMessage: { type: 'lint-selection' } }, '*')
   };
 
+  // Tell the plugin code to export color styles
   const onExportColor = () => {
     setOutput("");
     setReadyToCopy(false);
     parent.postMessage({ pluginMessage: { type: 'export-color' } }, '*')
   }
 
+  // Tell the plugin code to export type styles
   const onExportType = () => {
     setOutput("");
     setReadyToCopy(false);
     parent.postMessage({ pluginMessage: { type: 'export-type' } }, '*')
   }
 
+  // Tell the plugin code to close the plugin
   const onCancel = () => {
     parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
   };
 
+  // Listen for messages from the plugin code
   onmessage = (event) => {
-    console.log(['event', event])
     const messageType = event.data.pluginMessage.type;
     const messageContent = event.data.pluginMessage.content;
     console.log("got this from the plugin code", messageType, messageContent)
-    console.log(['messageType, messageContent', messageType, messageContent])
+    // Handle incoming message with exported JSON
     if (messageType === "exportJSON") {
       setOutput(messageContent)
       setReadyToCopy(true)
@@ -63,6 +68,8 @@ function App() {
           Test Selection
         </button>
         <button onClick={onCancel}>Cancel</button>
+
+        {/* Tools for plugin developers */}
         <div className="dev-actions">
           <h4>Dev Actions</h4>
           <button onClick={onExportColor}>

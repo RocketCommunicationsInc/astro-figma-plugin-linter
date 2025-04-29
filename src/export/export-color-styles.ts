@@ -24,7 +24,7 @@ const exportColorStyles = async () => {
     }
   );
 
-  // Loop through the paint styles and add them to a JSON object
+  // Create an empty object to hold the paint styles
   const paintStylesJSON: {
     [key: string]: {
       id: string;
@@ -36,6 +36,7 @@ const exportColorStyles = async () => {
     };
   } = {};
 
+  // Loop through the paint styles and add them to a JSON object
   paintStyles.forEach((paintStyle) => {
     paintStylesJSON[paintStyle.name] = {
       id: paintStyle.id,
@@ -47,7 +48,9 @@ const exportColorStyles = async () => {
     };
   });
 
+  // sort paint styles into respective json sections
   tokensJSON["color-tokens"][themename] = paintStylesJSON;
+
   // Send JSON to the UI
   figma.ui.postMessage({ type: "exportJSON", content: tokensJSON });
 };

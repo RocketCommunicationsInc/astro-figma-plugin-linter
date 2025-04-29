@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import * as ReactDOM from "react-dom/client";
 import { CopyToClipboardButton } from 'react-clipboard-button';
 import JSONPretty from 'react-json-pretty';
@@ -9,8 +9,8 @@ import "./ui.css";
 
 function App() {
   // Set up the state for the output
-  const [output, setOutput] = React.useState<string>();
-  const [readyToCopy, setReadyToCopy] = React.useState(false);
+  const [output, setOutput] = useState<string>();
+  const [readyToCopy, setReadyToCopy] = useState(false);
 
   // Tell the plugin code to lint the selection
   const onLintSelection = () => {

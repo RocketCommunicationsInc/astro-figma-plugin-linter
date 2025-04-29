@@ -1,3 +1,4 @@
+/* set variables */
 :root {
   --color-bg: var(--figma-color-bg);
   --color-bg-hover: var(--figma-color-bg-hover);
@@ -17,6 +18,7 @@
   --spacing-4: 32px;
 }
 
+/* Underlying defaults */
 * {
   box-sizing: border-box;
 }
@@ -40,6 +42,7 @@ body {
   margin: var(--spacing-2);
 }
 
+/* Layout */
 main {
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -85,6 +88,7 @@ main {
   justify-content: flex-end;
   flex-wrap: wrap;
   flex-direction: row;
+  align-items: baseline;
 }
 
 button {

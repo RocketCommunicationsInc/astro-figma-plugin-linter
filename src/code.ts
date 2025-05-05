@@ -1,3 +1,5 @@
+import { lintSelection } from "./lint-selection";
+
 figma.showUI(__html__, { themeColors: true, width: 650, height: 525 });
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
@@ -9,6 +11,7 @@ figma.ui.onmessage = (msg: { type: string; count: number }) => {
 
   if (msg.type === "lint-selection") {
     figma.notify("Linting Selection...");
+    lintSelection();
   }
 
   if (msg.type === "cancel") {

@@ -1,96 +1,27 @@
 import { FillStyleNode } from "./types";
 import { tokens, stripToLoadableId } from "./tokens";
+import { getSourceAstroComponent } from "./lint/components";
+import { canNodeHaveFillStyle, isUsingPaintStyle, findFillStyleNodes } from "./lint/colors";
 
 const { colorTokens, typeTokens, astroComponents } = tokens();
-
-const findFillStyleNodes = (nodes: readonly SceneNode[]): FillStyleNode[] => {
-  return nodes.filter((node): node is FillStyleNode =>
-    canNodeHaveFillStyle(node)
-  );
-};
-
-const canNodeHaveFillStyle = (node: SceneNode): boolean => {
-  // List of node types that support fillStyleId
-  const fillStyleSupportedTypes: NodeType[] = [
-    "RECTANGLE",
-    "ELLIPSE",
-    "POLYGON",
-    "STAR",
-    "VECTOR",
-    "TEXT",
-    "FRAME",
-    "COMPONENT",
-    "INSTANCE",
-  ];
-
-  return fillStyleSupportedTypes.includes(node.type);
-};
-
-const isUsingPaintStyle = (node: FillStyleNode) => {
-  // Check if the node is using a paint style
-  const usingPaintStyle =
-    "fillStyleId" in node &&
-    typeof node.fillStyleId === "string" &&
-    node.fillStyleId
-      ? true
-      : false;
-  return usingPaintStyle;
-};
-
-const componentLoaderFunction: (
-  componentType: string,
-  key: string
-) => Promise<ComponentNode | ComponentSetNode | null> = (
-  componentType: string,
-  key: string
-) => {
-  switch (componentType) {
-    case "COMPONENT":
-      return figma.importComponentByKeyAsync(key);
-    case "COMPONENT_SET":
-      return figma.importComponentSetByKeyAsync(key);
-    default:
-      console.error("Unknown component type");
-      return Promise.resolve(null);
-  }
-};
-
-interface AstroComponent {
-  type: "COMPONENT" | "COMPONENT_SET";
-  key: string;
-}
-
-const getSourceAstroComponent = async (node: InstanceNode): Promise<ComponentNode | ComponentSetNode | null> => {
-  const mainComponent = await node.getMainComponentAsync();
-
-  const mainComponentKey: string | undefined = mainComponent?.key;
-  // Check if mainComponent is one of the Astro components in components
-  let isAstroComponent: AstroComponent | undefined = astroComponents.get(mainComponentKey);
-  if (!isAstroComponent && mainComponent?.parent?.type === "COMPONENT_SET") {
-    const mainComponentParentKey: string | undefined = mainComponent?.parent?.key;
-    isAstroComponent = astroComponents.get(mainComponentParentKey);
-  }
-
-  if (!isAstroComponent) {
-    console.log("Not an Astro component");
-    return null;
-  }
-
-  // Load the Astro component from Figma
-  const astroComponent = await componentLoaderFunction(
-    isAstroComponent.type,
-    isAstroComponent.key
-  );
-  return astroComponent;
-};
 
 const lintSingleNode = async (node: FillStyleNode) => {
   console.log("lintSingleNode", node);
 
   // Check if the node is a valid type
   if (canNodeHaveFillStyle(node)) {
+    // Is this node part of an Astro component?
+    let sourceAstroComponent: ComponentNode | ComponentSetNode | null = null;
+    if (node.type === "INSTANCE") {
+      sourceAstroComponent = await getSourceAstroComponent(node);
+    }
+    console.log("sourceAstroComponent", sourceAstroComponent);
+
     // todo: Check if node is using a paint style
-    // todo: Fail if node is not using a paint style
+    // todo: Fail if node is in a component and not using the correct paint style
+    // todo: Fail if node is not in a component AND not using a paint style
+    // todo: Fail if node is not in a component AND using a paint style not from Astro
+    // todo: Check if the Astro component has a fill Style
     const passUsingPaintStyle =
       isUsingPaintStyle(node) && node.fillStyleId !== "" ? true : false;
     console.log("passUsingPaintStyle", passUsingPaintStyle);
@@ -112,13 +43,7 @@ const lintSingleNode = async (node: FillStyleNode) => {
     // }
 
     // todo: Pass if node is using an Astro paint style but not as part of an Astro component
-    // Is this node part of an Astro component?
-    if (node.type === "INSTANCE") {
-      console.log("Is this node part of an Astro component?", node.name, node);
 
-      const sourceAstroComponent = await getSourceAstroComponent(node);
-      console.log("sourceAstroComponent", sourceAstroComponent);
-    }
 
     // todo: Fail if node is using an Astro paint style but not the correct one for this component
 

@@ -1,4 +1,8 @@
-import {findFillStyleNodes, canNodeHaveFillStyle} from "./helpers";
-import { isUsingPaintStyle } from "./tests";
+import { findFillStyleNodes, canNodeHaveFillStyle } from "./helpers";
+import { testPaintStyle } from "./tests";
 
-export {findFillStyleNodes, canNodeHaveFillStyle, isUsingPaintStyle};
+export {
+  findFillStyleNodes,
+  canNodeHaveFillStyle,
+  testPaintStyle,
+};

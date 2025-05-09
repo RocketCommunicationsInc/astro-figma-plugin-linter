@@ -1,9 +1,13 @@
 import { FillStyleNode } from "./types";
 import { tokens, stripToLoadableId } from "./tokens";
 import { getSourceAstroComponent } from "./lint/components";
-import { canNodeHaveFillStyle, isUsingPaintStyle, findFillStyleNodes } from "./lint/colors";
+import {
+  canNodeHaveFillStyle,
+  findFillStyleNodes,
+  testPaintStyle,
+} from "./lint/colors";
 
-const { colorTokens, typeTokens, astroComponents } = tokens();
+const { colorTokens } = tokens();
 
 const lintSingleNode = async (node: FillStyleNode) => {
   console.log("lintSingleNode", node);
@@ -18,13 +22,20 @@ const lintSingleNode = async (node: FillStyleNode) => {
     console.log("sourceAstroComponent", sourceAstroComponent);
 
     // todo: Check if node is using a paint style
-    // todo: Fail if node is in a component and not using the correct paint style
+
+
     // todo: Fail if node is not in a component AND not using a paint style
     // todo: Fail if node is not in a component AND using a paint style not from Astro
     // todo: Check if the Astro component has a fill Style
-    const passUsingPaintStyle =
-      isUsingPaintStyle(node) && node.fillStyleId !== "" ? true : false;
+    const passUsingPaintStyle = testPaintStyle(
+      node,
+      sourceAstroComponent
+    );
     console.log("passUsingPaintStyle", passUsingPaintStyle);
+
+    // const passUsingPaintStyle =
+    //   checkIfUsingPaintStyle(node, sourceAstroComponent) && node.fillStyleId !== "" ? true : false;
+    // console.log("passUsingPaintStyle", passUsingPaintStyle);
 
     // todo: Fail if node is not using an Astro paint style
     // if (passUsingPaintStyle) {
@@ -43,7 +54,6 @@ const lintSingleNode = async (node: FillStyleNode) => {
     // }
 
     // todo: Pass if node is using an Astro paint style but not as part of an Astro component
-
 
     // todo: Fail if node is using an Astro paint style but not the correct one for this component
 

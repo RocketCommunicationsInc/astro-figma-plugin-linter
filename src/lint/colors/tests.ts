@@ -19,8 +19,11 @@ const testUsingColorFromComponent = (
   return null;
 };
 
-const testUsingAstroColorIfUsingColor = (fillStyleId) => {
-  return colorTokens.get(stripToLoadableId(fillStyleId)) ? true : false;
+const testUsingAstroColorIfUsingColor = (fillStyleId: string) => {
+  if (fillStyleId) {
+    return colorTokens.get(stripToLoadableId(fillStyleId)) ? true : false;
+  }
+  return false;
 };
 
 const testPaintStyle = (
@@ -43,14 +46,10 @@ const testPaintStyle = (
     // todo: Fail if node is not in an Astro component,
     // IS using a fill style
     // AND not using an Astro paint style
-    const fillStyleId = "fillStyleId" in node ? node.fillStyleId : undefined;
+    const fillStyleId = node.fillStyleId;
+    console.log('fillStyleId', fillStyleId)
     const isUsingAstroColorIfUsingColor =
-      testUsingAstroColorIfUsingColor(fillStyleId);
-    console.log(
-      "fillStyleId",
-      fillStyleId,
-      colorTokens.get(stripToLoadableId(fillStyleId)),
-    );
+      typeof fillStyleId === "string" ? testUsingAstroColorIfUsingColor(fillStyleId) : false;
     console.warn(
       "node is using an Astro paint style if using color",
       isUsingAstroColorIfUsingColor

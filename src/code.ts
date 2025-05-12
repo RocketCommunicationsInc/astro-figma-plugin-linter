@@ -1,4 +1,4 @@
-import { lintSelection } from "./lint-selection";
+import { lintSelection } from "./lint";
 
 figma.showUI(__html__, { themeColors: true, width: 650, height: 525 });
 

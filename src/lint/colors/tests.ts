@@ -3,7 +3,7 @@ import { stripToLoadableId } from "../../tokens";
 import { tokens } from "../../tokens";
 const { colorTokens } = tokens();
 
-const testUsingColorFromComponent = (
+const testIfUsingColorFromComponent = (
   node: FillStyleNode,
   sourceAstroComponent: ComponentNode | ComponentSetNode | null
 ) => {
@@ -19,7 +19,7 @@ const testUsingColorFromComponent = (
   return null;
 };
 
-const testUsingAstroColorIfUsingColor = (fillStyleId: string) => {
+const testIfUsingAstroColor = (fillStyleId: string) => {
   if (fillStyleId) {
     return colorTokens.get(stripToLoadableId(fillStyleId)) ? true : false;
   }
@@ -32,9 +32,9 @@ const testPaintStyle = (
 ) => {
   console.log("testPaintStyle", node, sourceAstroComponent);
 
-  // todo: Fail if node is in a component and using the correct paint style
+  // Fail if node is in a component and not using the correct paint style
   if (sourceAstroComponent) {
-    const isUsingColorFromComponent = testUsingColorFromComponent(
+    const isUsingColorFromComponent = testIfUsingColorFromComponent(
       node,
       sourceAstroComponent
     );
@@ -43,18 +43,20 @@ const testPaintStyle = (
       isUsingColorFromComponent
     );
   } else {
-    // todo: Fail if node is not in an Astro component,
-    // IS using a fill style
+    // Fail if node is not in an Astro component,
+    // IS using a fill style,
     // AND not using an Astro paint style
     const fillStyleId = node.fillStyleId;
     console.log('fillStyleId', fillStyleId)
     const isUsingAstroColorIfUsingColor =
-      typeof fillStyleId === "string" ? testUsingAstroColorIfUsingColor(fillStyleId) : false;
+      typeof fillStyleId === "string" ? testIfUsingAstroColor(fillStyleId) : false;
     console.warn(
       "node is using an Astro paint style if using color",
       isUsingAstroColorIfUsingColor
     );
   }
+
+  // todo: Fail if node is using an Astro paint style but not the correct one for this theme
 };
 
 export { testPaintStyle };

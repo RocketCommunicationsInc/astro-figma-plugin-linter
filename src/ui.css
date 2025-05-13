@@ -56,19 +56,9 @@ main {
 
 /* Output */
 .feedback {
+  grid-area: output;
   overflow-y: auto;
   max-width: calc(100vw - var(--spacing-4));
-}
-
-.json-text {
-  font-family: var(--font-mono);
-  font-weight: 400;
-  text-align: left;
-  font-size: 0.8em;
-}
-
-.json-text pre {
-  margin: 0 auto;
 }
 
 /* Buttons */
@@ -79,16 +69,6 @@ main {
   justify-content: flex-end;
   flex-wrap: wrap;
   flex-direction: row;
-}
-
-.dev-actions {
-  width: 100%;
-  display: flex;
-  gap: inherit;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  flex-direction: row;
-  align-items: baseline;
 }
 
 button {

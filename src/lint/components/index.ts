@@ -32,28 +32,30 @@ const componentLoaderFunction: (
  * @param node - The node to check.
  * @returns The source Astro component or null if not found.
  */
-const getSourceAstroComponent = async (node: InstanceNode): Promise<ComponentNode | ComponentSetNode | null> => {
+const getSourceAstroComponent = async (node: InstanceNode) => {
   const mainComponent = await node.getMainComponentAsync();
 
   const mainComponentKey: string | undefined = mainComponent?.key;
   // Check if mainComponent is one of the Astro components in components
-  let isAstroComponent: AstroComponent | undefined = astroComponents.get(mainComponentKey);
+  let isAstroComponent: AstroComponent | undefined =
+    astroComponents.get(mainComponentKey);
+
   if (!isAstroComponent && mainComponent?.parent?.type === "COMPONENT_SET") {
-    const mainComponentParentKey: string | undefined = mainComponent?.parent?.key;
+    const mainComponentParentKey: string | undefined =
+      mainComponent?.parent?.key;
     isAstroComponent = astroComponents.get(mainComponentParentKey);
   }
 
-  if (!isAstroComponent) {
-    console.log("Not an Astro component");
-    return null;
+  let astroComponent;
+  if (isAstroComponent) {
+    // Load the Astro component from Figma
+    astroComponent = await componentLoaderFunction(
+      isAstroComponent.type,
+      isAstroComponent.key
+    );
   }
 
-  // Load the Astro component from Figma
-  const astroComponent = await componentLoaderFunction(
-    isAstroComponent.type,
-    isAstroComponent.key
-  );
-  return astroComponent;
+  return { astroComponent, isAstroComponent, mainComponent };
 };
 
-export { getSourceAstroComponent}
+export { getSourceAstroComponent };

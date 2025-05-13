@@ -7,14 +7,30 @@ const lintSingleNode = async (node: FillStyleNode) => {
 
   // Check if the node is a valid type
   // Is this node part of an Astro component?
-  let sourceAstroComponent: ComponentNode | ComponentSetNode | null = null;
+  let sourceAstroComponent;
+  let astroComponentMeta;
+  let sourceCounterpartNode;
   if (node.type === "INSTANCE") {
-    sourceAstroComponent = await getSourceAstroComponent(node);
+    const result = await getSourceAstroComponent(node);
+    if (result) {
+      sourceAstroComponent = result.astroComponent;
+      astroComponentMeta = result.isAstroComponent;
+      sourceCounterpartNode = result.mainComponent;
+    } else {
+      console.warn("getSourceAstroComponent returned null");
+    }
   }
   console.log("sourceAstroComponent", sourceAstroComponent);
+  console.log("astroComponentMeta", astroComponentMeta);
+  console.log("sourceCounterpartNode", sourceCounterpartNode);
 
   // Test paint style
-  const passUsingPaintStyle = testPaintStyle(node, sourceAstroComponent);
+  const passUsingPaintStyle = testPaintStyle(
+    node,
+    sourceAstroComponent,
+    astroComponentMeta,
+    sourceCounterpartNode
+  );
   console.log("passUsingPaintStyle", passUsingPaintStyle);
 };
 

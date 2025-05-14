@@ -8,15 +8,15 @@ type TokensJSON = {
 };
 
 type FillStyleNode =
-  | RectangleNode
-  | EllipseNode
-  | PolygonNode
-  | StarNode
-  | VectorNode
-  | TextNode
-  | FrameNode
-  | ComponentNode
-  | InstanceNode;
+  | (RectangleNode & BaseNodeMixin)
+  | (EllipseNode & BaseNodeMixin)
+  | (PolygonNode & BaseNodeMixin)
+  | (StarNode & BaseNodeMixin)
+  | (VectorNode & BaseNodeMixin)
+  | (TextNode & BaseNodeMixin)
+  | (FrameNode & BaseNodeMixin)
+  | (ComponentNode & BaseNodeMixin)
+  | (InstanceNode & BaseNodeMixin);
 
 interface InheritedStyleField {
   fillStyleId?: string;

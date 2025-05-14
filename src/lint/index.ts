@@ -4,7 +4,7 @@ import { findFillStyleNodes, testPaintStyle } from "./colors";
 import { getFillStyleNode } from "./colors/helpers";
 
 const lintSingleNode = async (node: FillStyleNode) => {
-  console.log("lintSingleNode", node);
+  // console.log("lintSingleNode", node);
 
   // Check if the node is a valid type
   // Is this node part of an Astro component?
@@ -19,13 +19,12 @@ const lintSingleNode = async (node: FillStyleNode) => {
   // console.log("sourceCounterpartNode", sourceCounterpartNode);
 
   // Test paint style
-  const passUsingPaintStyle = testPaintStyle(
+  testPaintStyle(
     node,
     sourceAstroComponent,
     astroComponentMeta,
     sourceCounterpartNode
   );
-  console.log("passUsingPaintStyle", passUsingPaintStyle);
 };
 
 const lintSelection = async () => {
@@ -36,17 +35,17 @@ const lintSelection = async () => {
 
   // Check if there are any selected nodes
   if (fillStyleNodes.length === 0) {
-    console.log("No nodes selected");
+    // console.log("No nodes selected");
     return;
   } else if (fillStyleNodes.length === 1) {
-    console.log("Linting single node");
+    // console.log("Linting single node");
     lintSingleNode(fillStyleNodes[0]);
     // Use a type guard to check if the node supports `findAll`
     if ("findAll" in fillStyleNodes[0]) {
       const childrenToLint = fillStyleNodes[0].findAll((node) => {
         return findFillStyleNodes([node]).length > 0;
       });
-      console.log("childrenToLint", childrenToLint);
+      // console.log("childrenToLint", childrenToLint);
       childrenToLint.map((node) => {
         const fillStyleNode = getFillStyleNode(node);
         if (fillStyleNode) {

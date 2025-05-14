@@ -7,7 +7,7 @@ const { colorTokens } = tokens();
 
 const testIfUsingColorFromComponent = (
   node: FillStyleNode,
-  sourceCounterpartNode: FillStyleNode | undefined,
+  sourceCounterpartNode: FillStyleNode | undefined
 ): LintingResult => {
   let fillMatchesAstroSource = false;
 
@@ -18,9 +18,10 @@ const testIfUsingColorFromComponent = (
       "fillStyleId" in sourceCounterpartNode
         ? sourceCounterpartNode.fillStyleId
         : undefined;
-    fillMatchesAstroSource = (fillStyleId === sourceFillStyleId);
+    fillMatchesAstroSource = fillStyleId === sourceFillStyleId;
   }
   return {
+    test: "testIfUsingColorFromComponent",
     pass: fillMatchesAstroSource,
     message: `Node should be using a fill style from the source Astro component: ${sourceCounterpartNode?.name}`,
     name: node.name,
@@ -30,26 +31,53 @@ const testIfUsingColorFromComponent = (
 };
 
 const testIfUsingAstroColor = (node: FillStyleNode): LintingResult => {
+  const test = "testIfUsingAstroColor";
+  const name = node.name;
   const fillStyleId = node.fillStyleId;
 
   if (typeof fillStyleId !== "string") {
+    console.log("hi there");
     return {
+      test,
       pass: false,
       message: `Node should be using a fill style from Astro`,
-      name: node.name,
-      node: node,
+      name,
+      node,
     };
   }
 
   let isUsingAstroColor = false;
   if (fillStyleId) {
-    isUsingAstroColor = colorTokens.get(stripToLoadableId(fillStyleId)) ? true : false;
-  }
-  return {
-    pass: isUsingAstroColor,
-    message: `Node should be using a fill style from Astro`,
-    name: node.name,
-    node: node,
+    isUsingAstroColor = colorTokens.get(stripToLoadableId(fillStyleId))
+      ? true
+      : false;
+    return {
+      test,
+      pass: isUsingAstroColor,
+      message: `Node should be using a fill style from Astro`,
+      name,
+      node,
+    };
+  } else {
+    // check for manual fills
+    const fills = node.fills;
+    if (Array.isArray(fills) && fills.length > 0) {
+      return {
+        test,
+        pass: false,
+        message: `Node is not using a fill style from Astro`,
+        name,
+        node,
+      };
+    } else {
+      return {
+        test,
+        pass: true,
+        message: `Node is not using a fill style`,
+        name,
+        node,
+      };
+    }
   }
 };
 
@@ -59,18 +87,13 @@ const testPaintStyle = (
   astroComponentMeta: AstroComponent | undefined,
   sourceCounterpartNode: ComponentNode | null
 ) => {
-
   // Fail if node is in a component and not using the correct paint style
   if (sourceCounterpartNode) {
     const isUsingColorFromComponent = testIfUsingColorFromComponent(
       node,
       sourceCounterpartNode
     );
-    console.warn(
-      "node is in a component and using the correct paint style",
-      `Source Component: ${sourceCounterpartNode.name}`,
-      isUsingColorFromComponent,
-    );
+    console.warn("isUsingColorFromComponent", isUsingColorFromComponent);
   } else {
     // Fail if node is not in an Astro component,
     // IS using a fill style,
@@ -78,10 +101,9 @@ const testPaintStyle = (
     // const fillStyleId = node.fillStyleId;
     // const isUsingAstroColorIfUsingColor =
     //   typeof fillStyleId === "string" ? testIfUsingAstroColor(fillStyleId) : false;
-    const isUsingAstroColorIfUsingColor =
-      testIfUsingAstroColor(node);
+    const isUsingAstroColorIfUsingColor = testIfUsingAstroColor(node);
     console.warn(
-      "node is using an Astro paint style if using color",
+      "isUsingAstroColorIfUsingColor",
       isUsingAstroColorIfUsingColor
     );
   }

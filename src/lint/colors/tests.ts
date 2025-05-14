@@ -23,7 +23,7 @@ const testIfUsingColorFromComponent = (
   return {
     test: "testIfUsingColorFromComponent",
     pass: fillMatchesAstroSource,
-    message: `Node should be using a fill style from the source Astro component: ${sourceCounterpartNode?.name}`,
+    message: `Node should be using the same fill style as the source Astro component: ${sourceCounterpartNode?.name}`,
     name: node.name,
     node: node,
     sourceCounterpartNode: sourceCounterpartNode,
@@ -54,7 +54,7 @@ const testIfUsingAstroColor = (node: FillStyleNode): LintingResult => {
     return {
       test,
       pass: isUsingAstroColor,
-      message: `Node should be using a fill style from Astro`,
+      message: `Node is using a fill style but it's not from Astro`,
       name,
       node,
     };
@@ -62,10 +62,22 @@ const testIfUsingAstroColor = (node: FillStyleNode): LintingResult => {
     // check for manual fills
     const fills = node.fills;
     if (Array.isArray(fills) && fills.length > 0) {
+      const visibleFills = fills.filter((fill) => {
+        return fill.visible === true;
+      });
+      if (visibleFills.length === 0) {
+        return {
+          test,
+          pass: true,
+          message: `Node is filled invisibly`,
+          name,
+          node,
+        };
+      }
       return {
         test,
         pass: false,
-        message: `Node is not using a fill style from Astro`,
+        message: `Node is filled but not using a fill style from Astro`,
         name,
         node,
       };
@@ -88,7 +100,8 @@ const testPaintStyle = (
   sourceCounterpartNode: ComponentNode | null
 ) => {
   // Fail if node is in a component and not using the correct paint style
-  if (sourceCounterpartNode) {
+  if (sourceAstroComponent && sourceCounterpartNode) {
+    console.log('sourceCounterpartNode', sourceCounterpartNode)
     const isUsingColorFromComponent = testIfUsingColorFromComponent(
       node,
       sourceCounterpartNode

@@ -2,11 +2,12 @@ import { FillStyleNode } from "../../types";
 import { LintingResult } from "../types";
 import { stripToLoadableId } from "../../tokens";
 import { tokens } from "../../tokens";
+import { AstroComponent } from "../components/types";
 const { colorTokens } = tokens();
 
 const testIfUsingColorFromComponent = (
   node: FillStyleNode,
-  sourceCounterpartNode,
+  sourceCounterpartNode: FillStyleNode | undefined,
 ): LintingResult => {
   let fillMatchesAstroSource = false;
 
@@ -21,7 +22,7 @@ const testIfUsingColorFromComponent = (
   }
   return {
     pass: fillMatchesAstroSource,
-    message: `Node should be using a fill style from the source Astro component: ${sourceCounterpartNode.name}`,
+    message: `Node should be using a fill style from the source Astro component: ${sourceCounterpartNode?.name}`,
     name: node.name,
     node: node,
     sourceCounterpartNode: sourceCounterpartNode,
@@ -55,8 +56,8 @@ const testIfUsingAstroColor = (node: FillStyleNode): LintingResult => {
 const testPaintStyle = (
   node: FillStyleNode,
   sourceAstroComponent: ComponentNode | ComponentSetNode | null,
-  astroComponentMeta,
-  sourceCounterpartNode
+  astroComponentMeta: AstroComponent | undefined,
+  sourceCounterpartNode: ComponentNode | null
 ) => {
 
   // Fail if node is in a component and not using the correct paint style

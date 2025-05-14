@@ -1,4 +1,5 @@
 import { FillStyleNode } from "../../types";
+import { LintingResult } from "../types";
 import { stripToLoadableId } from "../../tokens";
 import { tokens } from "../../tokens";
 const { colorTokens } = tokens();
@@ -6,8 +7,8 @@ const { colorTokens } = tokens();
 const testIfUsingColorFromComponent = (
   node: FillStyleNode,
   sourceCounterpartNode,
-) => {
-  let fillMatchesAstroSource
+): LintingResult => {
+  let fillMatchesAstroSource = false;
 
   if (sourceCounterpartNode) {
     // Is this node using a paint style in the source Astro component?
@@ -21,11 +22,24 @@ const testIfUsingColorFromComponent = (
   return {
     pass: fillMatchesAstroSource,
     message: `Node should be using a fill style from the source Astro component: ${sourceCounterpartNode.name}`,
+    name: node.name,
+    node: node,
     sourceCounterpartNode: sourceCounterpartNode,
   };
 };
 
-const testIfUsingAstroColor = (fillStyleId: string) => {
+const testIfUsingAstroColor = (node: FillStyleNode): LintingResult => {
+  const fillStyleId = node.fillStyleId;
+
+  if (typeof fillStyleId !== "string") {
+    return {
+      pass: false,
+      message: `Node should be using a fill style from Astro`,
+      name: node.name,
+      node: node,
+    };
+  }
+
   let isUsingAstroColor = false;
   if (fillStyleId) {
     isUsingAstroColor = colorTokens.get(stripToLoadableId(fillStyleId)) ? true : false;
@@ -33,6 +47,8 @@ const testIfUsingAstroColor = (fillStyleId: string) => {
   return {
     pass: isUsingAstroColor,
     message: `Node should be using a fill style from Astro`,
+    name: node.name,
+    node: node,
   }
 };
 
@@ -58,9 +74,11 @@ const testPaintStyle = (
     // Fail if node is not in an Astro component,
     // IS using a fill style,
     // AND not using an Astro paint style
-    const fillStyleId = node.fillStyleId;
+    // const fillStyleId = node.fillStyleId;
+    // const isUsingAstroColorIfUsingColor =
+    //   typeof fillStyleId === "string" ? testIfUsingAstroColor(fillStyleId) : false;
     const isUsingAstroColorIfUsingColor =
-      typeof fillStyleId === "string" ? testIfUsingAstroColor(fillStyleId) : false;
+      testIfUsingAstroColor(node);
     console.warn(
       "node is using an Astro paint style if using color",
       isUsingAstroColorIfUsingColor

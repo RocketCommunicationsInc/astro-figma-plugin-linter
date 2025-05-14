@@ -47,6 +47,13 @@ const lintSelection = async () => {
   } else if (fillStyleNodes.length === 1) {
     console.log("Linting single node");
     lintSingleNode(fillStyleNodes[0]);
+    const childrenToLint = fillStyleNodes[0].findAll((node) => {
+      return findFillStyleNodes([node]).length > 0;
+    });
+    console.log('childrenToLint', childrenToLint)
+    childrenToLint.map((node) => {
+      lintSingleNode(node);
+    });
   } else {
     // Then lint any children
     // todo: this is incomplete. check chidren before failing

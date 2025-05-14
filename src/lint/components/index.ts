@@ -32,30 +32,36 @@ const componentLoaderFunction: (
  * @param node - The node to check.
  * @returns The source Astro component or null if not found.
  */
-const getSourceAstroComponent = async (node: InstanceNode) => {
-  const mainComponent = await node.getMainComponentAsync();
+const getSourceAstroComponent = async (
+  node: InstanceNode
+): Promise<{
+  sourceAstroComponent: ComponentNode | ComponentSetNode | null;
+  astroComponentMeta: AstroComponent | undefined;
+  sourceCounterpartNode: ComponentNode | null;
+}> => {
+  const sourceCounterpartNode = await node.getMainComponentAsync();
 
-  const mainComponentKey: string | undefined = mainComponent?.key;
-  // Check if mainComponent is one of the Astro components in components
-  let isAstroComponent: AstroComponent | undefined =
-    astroComponents.get(mainComponentKey);
+  const sourceCounterpartNodeKey: string | undefined = sourceCounterpartNode?.key;
+  // Check if sourceCounterpartNode is one of the Astro components in components
+  let astroComponentMeta: AstroComponent | undefined =
+    astroComponents.get(sourceCounterpartNodeKey);
 
-  if (!isAstroComponent && mainComponent?.parent?.type === "COMPONENT_SET") {
-    const mainComponentParentKey: string | undefined =
-      mainComponent?.parent?.key;
-    isAstroComponent = astroComponents.get(mainComponentParentKey);
+  if (!astroComponentMeta && sourceCounterpartNode?.parent?.type === "COMPONENT_SET") {
+    const sourceCounterpartNodeParentKey: string | undefined =
+      sourceCounterpartNode?.parent?.key;
+    astroComponentMeta = astroComponents.get(sourceCounterpartNodeParentKey);
   }
 
-  let astroComponent;
-  if (isAstroComponent) {
+  let sourceAstroComponent = null;
+  if (astroComponentMeta) {
     // Load the Astro component from Figma
-    astroComponent = await componentLoaderFunction(
-      isAstroComponent.type,
-      isAstroComponent.key
+    sourceAstroComponent = await componentLoaderFunction(
+      astroComponentMeta.type,
+      astroComponentMeta.key
     );
   }
 
-  return { astroComponent, isAstroComponent, mainComponent };
+  return { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode };
 };
 
 export { getSourceAstroComponent };

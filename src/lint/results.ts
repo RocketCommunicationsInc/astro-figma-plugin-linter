@@ -9,7 +9,7 @@ const clearResults = () => {
 
 const addResult = (result: LintingResult) => {
   results.push(result);
-  figma.ui.postMessage({ type: "add-result", result });
+  console.warn('result', result)
 }
 const getResults = () => {
   return results;

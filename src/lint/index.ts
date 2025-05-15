@@ -3,10 +3,10 @@ import { AstroTheme } from "./types";
 import { getSourceAstroComponent } from "./components";
 import { findFillStyleNodes, testPaintStyle } from "./colors";
 import { getFillStyleNode } from "./colors/helpers";
-import { clearResults } from "./results";
+import { clearResults, getResults } from "./results";
 
 const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme) => {
-  // Ger relevant data about this node
+  // Get relevant data about this node
   let sourceAstroComponent = null;
   let astroComponentMeta = undefined;
   let sourceCounterpartNode = null;
@@ -49,12 +49,19 @@ const lintSelection = async (theme: AstroTheme) => {
   if (fillStyleNodes.length === 0) {
     figma.notify("No nodes selected");
     return;
-  } else {
-    fillStyleNodes.map((selectionNode) => {
-      lintSingleNode(selectionNode, theme);
-      lintChildren(selectionNode, theme);
-    });
   }
+
+  const promises: Promise<void>[] = fillStyleNodes.map(async (selectionNode) => {
+    await lintSingleNode(selectionNode, theme);
+    await lintChildren(selectionNode, theme);
+  });
+
+  // Wait for all promises to resolve
+  await Promise.all(promises).then(() => {
+    const results = getResults();
+    console.log("all results", results);
+  });
+  console.log("Linting complete");
 
   figma.notify("Linting complete");
 };

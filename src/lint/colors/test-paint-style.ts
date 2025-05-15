@@ -1,7 +1,12 @@
 import { FillStyleNode } from "../../types";
-import { AstroTheme } from "../types";
+import { AstroTheme, LintingResult } from "../types";
 import { AstroComponent } from "../components/types";
-import { usingAstroColor, usingColorFromComponent, astroColorIsUsingCorrectTheme } from "./tests";
+import {
+  usingAstroColor,
+  usingColorFromComponent,
+  astroColorIsUsingCorrectTheme,
+} from "./tests";
+import { addResult } from "../results";
 
 const testPaintStyle = (
   node: FillStyleNode,
@@ -9,36 +14,37 @@ const testPaintStyle = (
   astroComponentMeta: AstroComponent | undefined,
   sourceCounterpartNode: ComponentNode | null,
   theme: AstroTheme
-) => {
-  console.log('sourceAstroComponent', sourceAstroComponent)
+): Promise<void[]> => {
+  const promises: Promise<LintingResult>[] = [];
   // Fail if node is in a component and not using the correct paint style
   if (sourceAstroComponent && sourceCounterpartNode) {
     const isUsingColorFromComponent = usingColorFromComponent(
       node,
       sourceCounterpartNode
     );
-    console.warn("isUsingColorFromComponent", isUsingColorFromComponent);
+    promises.push(isUsingColorFromComponent);
   } else {
     // Fail if node is not in an Astro component,
     // IS using a fill style,
     // AND not using an Astro paint style
-    // const fillStyleId = node.fillStyleId;
-    // const isUsingAstroColorIfUsingColor =
-    //   typeof fillStyleId === "string" ? usingAstroColor(fillStyleId) : false;
     const isUsingAstroColorIfUsingColor = usingAstroColor(node);
-    console.warn(
-      "isUsingAstroColorIfUsingColor",
-      isUsingAstroColorIfUsingColor
-    );
+    promises.push(isUsingAstroColorIfUsingColor);
   }
 
   // todo: Fail if node is using an Astro paint style but not the correct one for this theme
-  const isAstroColorIsUsingCorrectTheme =
-    astroColorIsUsingCorrectTheme(node, theme);
-  console.warn(
-    "isAstroColorIsUsingCorrectTheme",
-    isAstroColorIsUsingCorrectTheme
+  const isAstroColorIsUsingCorrectTheme = astroColorIsUsingCorrectTheme(
+    node,
+    theme
   );
+  promises.push(isAstroColorIsUsingCorrectTheme);
+
+  return Promise.all(promises).then((results) => {
+    results.forEach((result: LintingResult | undefined) => {
+      if (result) {
+      addResult(result);
+      }
+    });
+  }) as Promise<void[]>;
 };
 
 export { testPaintStyle };

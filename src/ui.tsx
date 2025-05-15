@@ -21,7 +21,6 @@ function App() {
   // Change the theme based on the selected radio button
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedTheme = event.target.value;
-    console.log('theme', theme)
     setTheme(selectedTheme);
   };
 

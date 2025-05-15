@@ -130,7 +130,6 @@ const testPaintStyle = (
 ) => {
   // Fail if node is in a component and not using the correct paint style
   if (sourceAstroComponent && sourceCounterpartNode) {
-    console.log('sourceCounterpartNode', sourceCounterpartNode)
     const isUsingColorFromComponent = testIfUsingColorFromComponent(
       node,
       sourceCounterpartNode

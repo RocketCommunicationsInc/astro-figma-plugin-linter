@@ -8,7 +8,7 @@ figma.showUI(__html__, { themeColors: true });
 // posted message.
 figma.ui.onmessage = (msg: { type: string; theme: AstroTheme }) => {
   console.clear();
-  console.log('msg', msg)
+
   if (msg.type === "lint-selection") {
     figma.notify("Linting Selection...");
     lintSelection(msg.theme);

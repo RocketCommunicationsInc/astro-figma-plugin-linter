@@ -3,6 +3,7 @@ import { AstroTheme } from "./types";
 import { getSourceAstroComponent } from "./components";
 import { findFillStyleNodes, testPaintStyle } from "./colors";
 import { getFillStyleNode } from "./colors/helpers";
+import { clearResults } from "./results";
 
 const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme) => {
   // Ger relevant data about this node
@@ -40,6 +41,7 @@ const lintChildren = async (node: FillStyleNode, theme: AstroTheme) => {
 };
 
 const lintSelection = async (theme: AstroTheme) => {
+  clearResults();
   const selection = figma.currentPage.selection;
   const fillStyleNodes = findFillStyleNodes(selection);
 

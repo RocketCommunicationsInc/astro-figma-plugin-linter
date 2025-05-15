@@ -1,9 +1,10 @@
 import { FillStyleNode } from "../types";
+import { AstroTheme } from "./types";
 import { getSourceAstroComponent } from "./components";
 import { findFillStyleNodes, testPaintStyle } from "./colors";
 import { getFillStyleNode } from "./colors/helpers";
 
-const lintSingleNode = async (node: FillStyleNode) => {
+const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme) => {
   // console.log("lintSingleNode", node);
 
   // Check if the node is a valid type
@@ -23,15 +24,15 @@ const lintSingleNode = async (node: FillStyleNode) => {
     node,
     sourceAstroComponent,
     astroComponentMeta,
-    sourceCounterpartNode
+    sourceCounterpartNode,
+    theme
   );
 };
 
-const lintSelection = async () => {
-  console.clear();
-
+const lintSelection = async (theme: AstroTheme) => {
   const selection = figma.currentPage.selection;
   const fillStyleNodes = findFillStyleNodes(selection);
+  console.log('theme', theme)
 
   // Check if there are any selected nodes
   if (fillStyleNodes.length === 0) {
@@ -39,7 +40,7 @@ const lintSelection = async () => {
     return;
   } else if (fillStyleNodes.length === 1) {
     // console.log("Linting single node");
-    lintSingleNode(fillStyleNodes[0]);
+    lintSingleNode(fillStyleNodes[0], theme);
     // Use a type guard to check if the node supports `findAll`
     if ("findAll" in fillStyleNodes[0]) {
       const childrenToLint = fillStyleNodes[0].findAll((node) => {
@@ -49,7 +50,7 @@ const lintSelection = async () => {
       childrenToLint.map((node) => {
         const fillStyleNode = getFillStyleNode(node);
         if (fillStyleNode) {
-          lintSingleNode(fillStyleNode);
+          lintSingleNode(fillStyleNode, theme);
         }
       });
     }
@@ -57,7 +58,7 @@ const lintSelection = async () => {
     // Then lint any children
     console.log("Linting multiple nodes");
     fillStyleNodes.map((selectionNode) => {
-      lintSingleNode(selectionNode);
+      lintSingleNode(selectionNode, theme);
       if ("findAll" in selectionNode) {
       const childrenToLint = selectionNode.findAll((node) => {
         return findFillStyleNodes([node]).length > 0;
@@ -66,7 +67,7 @@ const lintSelection = async () => {
       childrenToLint.map((node) => {
         const fillStyleNode = getFillStyleNode(node);
         if (fillStyleNode) {
-          lintSingleNode(fillStyleNode);
+          lintSingleNode(fillStyleNode, theme);
         }
       });
     }

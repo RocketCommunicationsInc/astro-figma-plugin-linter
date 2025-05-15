@@ -9,4 +9,8 @@ interface LintingResult {
   sourceCounterpartNode?: FillStyleNode | null;
 }
 
-export type { LintingResult };
+interface AstroTheme {
+  theme: "light" | "dark";
+}
+
+export type { LintingResult, AstroTheme };

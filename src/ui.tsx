@@ -2,11 +2,34 @@ import React, { useState, useEffect } from "react";
 import * as ReactDOM from "react-dom/client";
 import "./ui.css";
 
+const TestResult = ({ result }) => {
+  console.log('result', result)
+  return (
+    <div className="result">
+      <h3>{result.test}</h3>
+      <p>{result.name}</p>
+      <p>{result.message}</p>
+      <p>Pass: {result.pass}</p>
+    </div>
+  );
+}
+
+const TestResults = ({ results }) => {
+  return (
+    <div className="results">
+      {results.map((result, index) => (
+        <TestResult key={index} result={result} />
+      ))}
+    </div>
+  );
+};
+
 
 function App() {
   // Set up the state for the output
   const [output, setOutput] = useState<string>('');
   const [theme, setTheme] = useState<string>('dark');
+  const [results, setResults] = useState<any[]>([]);
 
   // Tell the plugin code to lint the selection
   const onLintSelection = () => {
@@ -31,8 +54,9 @@ function App() {
       const messageContent = event.data.pluginMessage.content;
       console.log("got this from the plugin code", messageType, messageContent);
       // Handle incoming message with exported JSON
-      if (messageType === "lint-report") {
-        setOutput(messageContent);
+      if (messageType === "lint-results") {
+        console.log('messageContent', messageContent)
+        setResults(messageContent);
       }
     };
 
@@ -50,7 +74,7 @@ function App() {
 
       <section className="feedback">
         <pre>
-          {output}
+          <TestResults results={results} />
         </pre>
       </section>
 

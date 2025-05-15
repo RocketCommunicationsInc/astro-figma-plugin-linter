@@ -11,6 +11,7 @@ const addResult = (result: LintingResult) => {
   results.push(result);
   console.warn('result', result)
 }
+
 const getResults = () => {
   return results;
 }

@@ -60,6 +60,7 @@ const lintSelection = async (theme: AstroTheme) => {
   await Promise.all(promises).then(() => {
     const results = getResults();
     console.log("all results", results);
+    figma.ui.postMessage({ type: "lint-results", content: results });
   });
   console.log("Linting complete");
 

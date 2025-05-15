@@ -1,5 +1,5 @@
 import { findFillStyleNodes } from "./helpers";
-import { testPaintStyle } from "./tests";
+import { testPaintStyle } from "./test-paint-style";
 
 export {
   findFillStyleNodes,

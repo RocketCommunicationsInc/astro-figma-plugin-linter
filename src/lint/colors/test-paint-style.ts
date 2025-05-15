@@ -1,9 +1,7 @@
 import { FillStyleNode } from "../../types";
 import { AstroTheme } from "../types";
 import { AstroComponent } from "../components/types";
-import { usingColorFromComponent } from "./tests/using-color-from-component";
-import { usingAstroColor } from "./tests/using-astro-color";
-import { astroColorIsUsingCorrectTheme } from "./tests/astro-color-is-using-correct-theme";
+import { usingAstroColor, usingColorFromComponent, astroColorIsUsingCorrectTheme } from "./tests";
 
 const testPaintStyle = (
   node: FillStyleNode,
@@ -12,6 +10,7 @@ const testPaintStyle = (
   sourceCounterpartNode: ComponentNode | null,
   theme: AstroTheme
 ) => {
+  console.log('sourceAstroComponent', sourceAstroComponent)
   // Fail if node is in a component and not using the correct paint style
   if (sourceAstroComponent && sourceCounterpartNode) {
     const isUsingColorFromComponent = usingColorFromComponent(

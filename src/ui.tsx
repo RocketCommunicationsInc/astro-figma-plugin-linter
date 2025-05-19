@@ -1,34 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as ReactDOM from "react-dom/client";
+import { TestResults } from "./ui/test-results";
 import "./ui.css";
-
-const TestResult = ({ result }) => {
-  console.log('result', result)
-  // Click on result name to select the node in Figma
-  const handleClick = () => {
-    console.log('result.node', result.node)
-    parent.postMessage({ pluginMessage: { type: 'select-node', nodeId: result.node.id } }, '*');
-  };
-  return (
-    <div className="result">
-      <h3>{result.test}</h3>
-      <p onClick={handleClick} >{result.name}</p>
-      <p>{result.message}</p>
-      <p>Pass: {(result.pass)? "true": "false"}</p>
-    </div>
-  );
-}
-
-const TestResults = ({ results }) => {
-  return (
-    <div className="results">
-      {results.map((result, index) => (
-        <TestResult key={index} result={result} />
-      ))}
-    </div>
-  );
-};
-
 
 function App() {
   // Set up the state for the output
@@ -78,9 +51,7 @@ function App() {
       </header>
 
       <section className="feedback">
-        <small>
-          <TestResults results={results} />
-        </small>
+        <TestResults results={results} />
       </section>
 
       <footer className="buttons">

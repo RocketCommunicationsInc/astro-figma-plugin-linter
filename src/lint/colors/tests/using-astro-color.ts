@@ -43,7 +43,7 @@ const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
         const visibleFills = fills.filter((fill) => {
           return fill.visible === true;
         });
-        if (visibleFills.length === 0) {
+        if (visibleFills.length === 0 ) {
           resolve({
             test,
             pass: true,

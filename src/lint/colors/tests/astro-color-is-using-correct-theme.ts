@@ -26,6 +26,19 @@ const astroColorIsUsingCorrectTheme = (
     } else if (Array.isArray(fills) && fills.length === 0) {
       pass = true;
       message = `Node has no fills`;
+    } else if (Array.isArray(fills) && fills.length > 0) {
+      const visibleFills = fills.filter((fill) => {
+          return fill.visible === true;
+        });
+        if (visibleFills.length === 0 ) {
+          resolve({
+            test,
+            pass: true,
+            message: `Node is filled invisibly`,
+            name,
+            node,
+          });
+        }
     } else {
       message = `Node is not using a fill style from Astro`;
     }

@@ -2,7 +2,6 @@ import React from "react";
 import { TestResultsProps, TestResultType } from "./types";
 
 const TestResult: React.FC<{ result: TestResultType }> = ({ result }) => {
-  console.log('result', result)
   // Click on result name to select the node in Figma
   const handleClick = () => {
     console.log('result.node', result.node)

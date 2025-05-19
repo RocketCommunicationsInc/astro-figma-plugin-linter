@@ -14,7 +14,7 @@ const testPaintStyle = (
   astroComponentMeta: AstroComponent | undefined,
   sourceCounterpartNode: ComponentNode | null,
   theme: AstroTheme
-): Promise<void[]> => {
+): Promise<void> => {
   const promises: Promise<LintingResult>[] = [];
   // Fail if node is in a component and not using the correct paint style
   if (sourceAstroComponent && sourceCounterpartNode) {
@@ -38,13 +38,17 @@ const testPaintStyle = (
   );
   promises.push(isAstroColorIsUsingCorrectTheme);
 
-  return Promise.all(promises).then((results) => {
+  return Promise.all(promises)
+  .then((results) => {
     results.forEach((result: LintingResult | undefined) => {
       if (result) {
       addResult(result);
       }
     });
-  }) as Promise<void[]>;
+  })
+  .catch((error) => {
+    console.error("Error in testPaintStyle:", error);
+  });
 };
 
 export { testPaintStyle };

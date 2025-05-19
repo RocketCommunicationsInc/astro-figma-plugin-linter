@@ -20,7 +20,7 @@ const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
       });
     }
 
-    if (fillStyleId) {
+    if (fillStyleId && typeof fillStyleId === "string") {
       const pass = colorTokens.get(stripToLoadableId(fillStyleId))
         ? true
         : false;

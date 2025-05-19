@@ -6,7 +6,7 @@ const { colorTokens } = tokens();
 
 const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
   return new Promise((resolve) => {
-    const test = "usingAstroColor";
+    const test = "Using an Astro Color";
     const name = node.name;
     const fillStyleId = node.fillStyleId;
 

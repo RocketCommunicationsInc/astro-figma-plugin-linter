@@ -6,6 +6,7 @@ const usingColorFromComponent = (
   sourceCounterpartNode: FillStyleNode | undefined
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
+    const test = "Using Color from a Component";
     let pass = false;
 
     if (sourceCounterpartNode) {
@@ -21,7 +22,7 @@ const usingColorFromComponent = (
       `Node is using the same fill style as the source Astro component: ${sourceCounterpartNode?.name}` :
       `Node is not using the same fill style as the source Astro component: ${sourceCounterpartNode?.name}`;
     resolve({
-      test: "usingColorFromComponent",
+      test,
       pass,
       message,
       name: node.name,

@@ -9,10 +9,11 @@ const astroColorIsUsingCorrectTheme = (
   theme: AstroTheme
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
-    const test = "astroColorIsUsingCorrectTheme";
+    const test = "Using Astro Color in Correct Theme";
     const name = node.name;
     const fillStyleId = (node.fillStyleId as string) || "";
     const astroColor = colorTokens.get(stripToLoadableId(fillStyleId));
+    const fills = node.fills;
     let pass = false;
     let message = "";
     if (astroColor?.name) {
@@ -22,6 +23,9 @@ const astroColorIsUsingCorrectTheme = (
       message = pass
         ? `Node is using a fill style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`
         : `Node is using a fill style (${astroColor.name}) from Astro in the correct theme (${theme})`;
+    } else if (Array.isArray(fills) && fills.length === 0) {
+      pass = true;
+      message = `Node has no fills`;
     } else {
       message = `Node is not using a fill style from Astro`;
     }

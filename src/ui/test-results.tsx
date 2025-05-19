@@ -8,19 +8,22 @@ const TestResult: React.FC<{ result: TestResultType }> = ({ result }) => {
     console.log('result.node', result.node)
     parent.postMessage({ pluginMessage: { type: 'select-node', nodeId: result.node.id } }, '*');
   };
+
+  const resultClass = result.pass ? "pass" : "fail";
+  // const message
   return (
-    <div className="result">
-      <h3>{result.test}</h3>
-      <p onClick={handleClick} >{result.name}</p>
-      <p>{result.message}</p>
-      <p>Pass: {(result.pass)? "true": "false"}</p>
+    <div className={`test-result ${resultClass}`} onClick={handleClick}>
+      <div className={`result-test ${resultClass}`}>{(result.pass)? "PASS": "FAIL"}</div>
+      <div className="result-test-name">{result.test}</div>
+      <div className="result-node">{result.name}</div>
+      <div className="result-message">{result.message}</div>
     </div>
   );
 }
 
 const TestResults: React.FC<TestResultsProps> = ({ results }) => {
   return (
-    <div className="results">
+    <div className="test-results">
       {results.map((result, index) => (
         <TestResult key={index} result={result} />
       ))}

@@ -58,7 +58,7 @@ function App() {
         <button className="primary" onClick={onLintSelection}>
           Test Selection
         </button>
-        <button onClick={onCancel}>Cancel</button>
+        <button onClick={onCancel}>Close</button>
         <div className="theme-selection">
           <label>
             <input type="radio" name="theme" value="light" checked={theme === "light"} onChange={handleThemeChange} />

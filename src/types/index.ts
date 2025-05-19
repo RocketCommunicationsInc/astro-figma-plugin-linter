@@ -16,7 +16,8 @@ type FillStyleNode =
   | (TextNode & BaseNodeMixin)
   | (FrameNode & BaseNodeMixin)
   | (ComponentNode & BaseNodeMixin)
-  | (InstanceNode & BaseNodeMixin);
+  | (InstanceNode & BaseNodeMixin)
+  | (BooleanOperationNode & BaseNodeMixin);
 
 interface InheritedStyleField {
   fillStyleId?: string;

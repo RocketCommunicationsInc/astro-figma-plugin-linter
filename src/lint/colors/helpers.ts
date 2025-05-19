@@ -26,6 +26,7 @@ const canNodeHaveFillStyle = (node: SceneNode): boolean => {
     "FRAME",
     "COMPONENT",
     "INSTANCE",
+    "BOOLEAN_OPERATION"
   ];
 
   return fillStyleSupportedTypes.includes(node.type);

@@ -4,12 +4,17 @@ import "./ui.css";
 
 const TestResult = ({ result }) => {
   console.log('result', result)
+  // Click on result name to select the node in Figma
+  const handleClick = () => {
+    console.log('result.node', result.node)
+    parent.postMessage({ pluginMessage: { type: 'select-node', nodeId: result.node.id } }, '*');
+  };
   return (
     <div className="result">
       <h3>{result.test}</h3>
-      <p>{result.name}</p>
+      <p onClick={handleClick} >{result.name}</p>
       <p>{result.message}</p>
-      <p>Pass: {result.pass}</p>
+      <p>Pass: {(result.pass)? "true": "false"}</p>
     </div>
   );
 }
@@ -73,9 +78,9 @@ function App() {
       </header>
 
       <section className="feedback">
-        <pre>
+        <small>
           <TestResults results={results} />
-        </pre>
+        </small>
       </section>
 
       <footer className="buttons">

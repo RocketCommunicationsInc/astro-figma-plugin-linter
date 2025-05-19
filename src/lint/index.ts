@@ -48,6 +48,7 @@ const lintSelection = async (theme: AstroTheme) => {
   // Check if there are any selected nodes
   if (fillStyleNodes.length === 0) {
     figma.notify("No nodes selected");
+    figma.ui.postMessage({ type: "lint-results", content: [] });
     return;
   }
 

@@ -1,5 +1,6 @@
 import { AstroComponent } from "./types";
 import { tokens } from "../../tokens";
+import { FillStyleNode } from "../../types";
 
 const { astroComponents } = tokens();
 
@@ -33,35 +34,44 @@ const componentLoaderFunction: (
  * @returns The source Astro component or null if not found.
  */
 const getSourceAstroComponent = async (
-  node: InstanceNode
+  node: FillStyleNode
 ): Promise<{
   sourceAstroComponent: ComponentNode | ComponentSetNode | null;
   astroComponentMeta: AstroComponent | undefined;
   sourceCounterpartNode: ComponentNode | null;
 }> => {
-  const sourceCounterpartNode = await node.getMainComponentAsync();
+  if (node.type === "INSTANCE") {
+    const sourceCounterpartNode: ComponentNode | null = await (node as InstanceNode).getMainComponentAsync();
 
-  const sourceCounterpartNodeKey: string | undefined = sourceCounterpartNode?.key;
-  // Check if sourceCounterpartNode is one of the Astro components in components
-  let astroComponentMeta: AstroComponent | undefined =
-    astroComponents.get(sourceCounterpartNodeKey);
+    const sourceCounterpartNodeKey: string | undefined = sourceCounterpartNode?.key;
+    // Check if sourceCounterpartNode is one of the Astro components in components
+    let astroComponentMeta: AstroComponent | undefined =
+      astroComponents.get(sourceCounterpartNodeKey);
 
-  if (!astroComponentMeta && sourceCounterpartNode?.parent?.type === "COMPONENT_SET") {
-    const sourceCounterpartNodeParentKey: string | undefined =
-      sourceCounterpartNode?.parent?.key;
-    astroComponentMeta = astroComponents.get(sourceCounterpartNodeParentKey);
+    if (!astroComponentMeta && sourceCounterpartNode?.parent?.type === "COMPONENT_SET") {
+      const sourceCounterpartNodeParentKey: string | undefined =
+        sourceCounterpartNode?.parent?.key;
+      astroComponentMeta = astroComponents.get(sourceCounterpartNodeParentKey);
+    }
+
+    let sourceAstroComponent = null;
+    if (astroComponentMeta) {
+      // Load the Astro component from Figma
+      sourceAstroComponent = await componentLoaderFunction(
+        astroComponentMeta.type,
+        astroComponentMeta.key
+      );
+    }
+
+    return { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode };
+  } else {
+    // If the node is not an instance, return null values
+    return {
+      sourceAstroComponent: null,
+      astroComponentMeta: undefined,
+      sourceCounterpartNode: null,
+    };
   }
-
-  let sourceAstroComponent = null;
-  if (astroComponentMeta) {
-    // Load the Astro component from Figma
-    sourceAstroComponent = await componentLoaderFunction(
-      astroComponentMeta.type,
-      astroComponentMeta.key
-    );
-  }
-
-  return { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode };
 };
 
 export { getSourceAstroComponent };

@@ -7,13 +7,8 @@ import { clearResults, getResults } from "./results";
 
 const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme) => {
   // Get relevant data about this node
-  let sourceAstroComponent = null;
-  let astroComponentMeta = undefined;
-  let sourceCounterpartNode = null;
-  if (node.type === "INSTANCE") {
-    ({ sourceAstroComponent, astroComponentMeta, sourceCounterpartNode } =
-      await getSourceAstroComponent(node));
-  }
+  const { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode } =
+    await getSourceAstroComponent(node);
 
   // Test paint style
   testPaintStyle(
@@ -52,14 +47,14 @@ const lintSelection = async (theme: AstroTheme) => {
     return;
   }
 
-  const promises: Promise<void>[] = [];
+  const lintingPromises: Promise<void>[] = [];
   await fillStyleNodes.map(async (selectionNode) => {
-    promises.push(
+    lintingPromises.push(
       lintSingleNode(selectionNode, theme).catch((error) => {
         console.error("Error in lintSingleNode:", error);
       })
     );
-    promises.push(
+    lintingPromises.push(
       lintChildren(selectionNode, theme).catch((error) => {
         console.error("Error in lintChildren:", error);
       })
@@ -67,9 +62,8 @@ const lintSelection = async (theme: AstroTheme) => {
   });
 
   // Wait for all promises to resolve
-  await Promise.all(promises).then(() => {
+  await Promise.all(lintingPromises).then(() => {
     const results = getResults();
-    console.log("asdfasdf all results", results);
     figma.ui.postMessage({ type: "lint-results", content: results });
   });
   console.log("Linting complete");

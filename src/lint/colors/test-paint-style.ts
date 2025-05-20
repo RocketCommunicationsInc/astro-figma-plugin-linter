@@ -39,16 +39,16 @@ const testPaintStyle = (
   promises.push(isAstroColorIsUsingCorrectTheme);
 
   return Promise.all(promises)
-  .then((results) => {
-    results.forEach((result: LintingResult | undefined) => {
-      if (result) {
-      addResult(result);
-      }
+    .then((results) => {
+      results.forEach((result: LintingResult | undefined) => {
+        if (result) {
+          addResult(result);
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Error in testPaintStyle:", error);
     });
-  })
-  .catch((error) => {
-    console.error("Error in testPaintStyle:", error);
-  });
 };
 
 export { testPaintStyle };

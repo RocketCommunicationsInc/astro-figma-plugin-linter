@@ -55,14 +55,21 @@ const lintSelection = async (theme: AstroTheme) => {
   const promises: Promise<void>[] = [];
   await fillStyleNodes.map(async (selectionNode) => {
     promises.push(
-      lintSingleNode(selectionNode, theme)
+      lintSingleNode(selectionNode, theme).catch((error) => {
+        console.error("Error in lintSingleNode:", error);
+      })
     );
-    promises.push(lintChildren(selectionNode, theme));
+    promises.push(
+      lintChildren(selectionNode, theme).catch((error) => {
+        console.error("Error in lintChildren:", error);
+      })
+    );
   });
 
   // Wait for all promises to resolve
   await Promise.all(promises).then(() => {
     const results = getResults();
+    console.log("asdfasdf all results", results);
     figma.ui.postMessage({ type: "lint-results", content: results });
   });
   console.log("Linting complete");

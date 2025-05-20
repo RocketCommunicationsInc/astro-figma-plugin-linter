@@ -8,6 +8,7 @@ function App() {
   const [output, setOutput] = useState<string>('');
   const [theme, setTheme] = useState<string>('dark');
   const [results, setResults] = useState<any[]>([]);
+  const [filteredResults, setFilteredResults] = useState<any[]>([]);
 
   // Tell the plugin code to lint the selection
   const onLintSelection = () => {
@@ -35,6 +36,7 @@ function App() {
       if (messageType === "lint-results") {
         console.log('messageContent', messageContent)
         setResults(messageContent);
+        setFilteredResults(messageContent);
       }
     };
 
@@ -46,30 +48,44 @@ function App() {
 
   return (
     <main>
-      <header>
-        <p>Select objects to test</p>
-      </header>
-
-      <section className="feedback">
-        <TestResults results={results} />
-      </section>
-
-      <footer className="buttons">
+      <header className="buttons">
+        {results.length === 0 && (
+          <div>Select objects to test</div>
+        )}
         <button className="primary" onClick={onLintSelection}>
           Test Selection
         </button>
         <button onClick={onCancel}>Close</button>
         <div className="theme-selection">
-          <label>
-            <input type="radio" name="theme" value="light" checked={theme === "light"} onChange={handleThemeChange} />
-            Light Theme
-          </label>
+          Astro Theme:
           <label>
             <input type="radio" name="theme" value="dark" checked={theme === "dark"} onChange={handleThemeChange} />
-            Dark Theme
+            Dark
+          </label>
+          <label>
+            <input type="radio" name="theme" value="light" checked={theme === "light"} onChange={handleThemeChange} />
+            Light
           </label>
         </div>
-      </footer>
+      </header>
+
+      <section className="feedback">
+        <TestResults results={filteredResults} />
+      </section>
+
+      {results.length > 0 && (
+        <footer className="meta-filters">
+          <button className="filter-button pass" onClick={() => setFilteredResults(results.filter(result => result.pass === true))}>
+            {results.filter(result => result.pass === true).length} passed
+          </button>
+          <button className="filter-button fail" onClick={() => setFilteredResults(results.filter(result => result.pass === false))}>
+            {results.filter(result => result.pass === false).length} failed
+          </button>
+          <button className="filter-button reset" onClick={() => setFilteredResults(results)}>
+            {results.length} total
+          </button>
+        </footer>
+      )}
     </main>
   );
 }

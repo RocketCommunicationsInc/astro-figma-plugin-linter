@@ -12,6 +12,8 @@ const addResult = (result: LintingResult) => {
 }
 
 const getResults = () => {
+  // Remove results that are marked as ignored
+  results = results.filter((result) => !result.ignore);
   return results;
 }
 

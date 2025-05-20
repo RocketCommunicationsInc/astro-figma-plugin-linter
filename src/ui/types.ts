@@ -1,16 +1,7 @@
-type TestResultType = {
-  test: string;
-  name: string;
-  message: string;
-  pass: boolean;
-  node: { id: string };
-};
+import { LintingResult } from "../lint/types";
 
 type TestResultsProps = {
-  results: TestResultType[];
+  results: LintingResult[];
 };
 
-export {
-  TestResultType,
-  TestResultsProps
-}
+export { TestResultsProps };

@@ -1,6 +1,7 @@
 import type { FillStyleNode } from '../types';
 
 interface LintingResult {
+  ignore?: boolean;
   test: string;
   pass: boolean;
   message: string;

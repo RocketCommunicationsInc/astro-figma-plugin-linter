@@ -10,7 +10,19 @@ const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
     const name = node.name;
     const fillStyleId = node.fillStyleId;
 
+    if (!fillStyleId) {
+      resolve({
+        ignore: true,
+        test,
+        pass: true,
+        message: `Node cannot have a fill`,
+        name,
+        node,
+      });
+    }
+
     if (typeof fillStyleId !== "string") {
+      console.log('node', node.name, node)
       resolve({
         test,
         pass: false,

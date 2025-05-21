@@ -1,15 +1,14 @@
 import React from "react";
-import { TestResultsProps, TestResultType } from "./types";
+import { TestResultsProps } from "./types";
+import { LintingResult } from "../lint/types";
 
-const TestResult: React.FC<{ result: TestResultType }> = ({ result }) => {
+const TestResult: React.FC<{ result: LintingResult }> = ({ result }) => {
   // Click on result name to select the node in Figma
   const handleClick = () => {
-    console.log('result.node', result.node)
     parent.postMessage({ pluginMessage: { type: 'select-node', nodeId: result.node.id } }, '*');
   };
 
   const resultClass = result.pass ? "pass" : "fail";
-  // const message
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
       <div className={`result-test ${resultClass}`}>{(result.pass)? "PASS": "FAIL"}</div>

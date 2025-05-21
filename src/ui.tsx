@@ -34,7 +34,6 @@ function App() {
       console.log("got this from the plugin code", messageType, messageContent);
       // Handle incoming message with exported JSON
       if (messageType === "lint-results") {
-        console.log('messageContent', messageContent)
         setResults(messageContent);
         setFilteredResults(messageContent);
       }

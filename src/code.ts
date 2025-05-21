@@ -15,10 +15,8 @@ figma.ui.onmessage = (msg: { type: string; theme: AstroTheme, nodeId: string }) 
   }
 
   if (msg.type === "select-node") {
-    console.log("Finding Node...", msg);
     figma.getNodeByIdAsync(msg.nodeId).then((node) => {
       if (node) {
-        console.log('node', node)
         figma.viewport.scrollAndZoomIntoView([node]);
         node.setRelaunchData({ open: "true" });
         if ("type" in node && (node as SceneNode).visible !== undefined) {

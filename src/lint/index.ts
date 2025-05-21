@@ -5,7 +5,7 @@ import { findFillStyleNodes, testPaintStyle } from "./colors";
 import { getFillStyleNode } from "./colors/helpers";
 import { clearResults, getResults } from "./results";
 
-const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme) => {
+const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme): Promise<void> => {
   return new Promise((resolve) => {
     (async () => {
       // Get relevant data about this node
@@ -13,20 +13,19 @@ const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme) => {
         await getSourceAstroComponent(node);
 
       // Test paint style
-      resolve(
-        testPaintStyle(
-          node,
-          sourceAstroComponent,
-          astroComponentMeta,
-          sourceCounterpartNode,
-          theme
-        )
+      await testPaintStyle(
+        node,
+        sourceAstroComponent,
+        astroComponentMeta,
+        sourceCounterpartNode,
+        theme
       );
+      resolve();
     })();
   });
 };
 
-const lintChildren = async (node: FillStyleNode, theme: AstroTheme) => {
+const lintChildren = async (node: FillStyleNode, theme: AstroTheme): Promise<void> => {
   const lintChildrenPromises: Promise<void>[] = [];
   // Use a type guard to check if the node supports `findAll`
   if ("findAll" in node) {
@@ -40,7 +39,7 @@ const lintChildren = async (node: FillStyleNode, theme: AstroTheme) => {
       }
     });
   }
-  return Promise.all(lintChildrenPromises);
+  await Promise.all(lintChildrenPromises);
 };
 
 const lintSelection = async (theme: AstroTheme) => {

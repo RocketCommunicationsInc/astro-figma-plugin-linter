@@ -73,7 +73,6 @@ const lintSelection = async (theme: AstroTheme) => {
     const results = getResults();
     figma.ui.postMessage({ type: "lint-results", content: results });
   });
-  console.log("Linting complete");
   figma.notify("Linting complete");
 };
 

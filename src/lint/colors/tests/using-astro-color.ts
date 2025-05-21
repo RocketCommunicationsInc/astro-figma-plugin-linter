@@ -48,7 +48,7 @@ const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
     }
 
     // Fallback: check for manual fills
-    const fills = (node as any).fills;
+    const fills = node.fills;
     if (Array.isArray(fills) && fills.length > 0) {
       const visibleFills = fills.filter((fill) => fill.visible === true);
       if (visibleFills.length === 0) {

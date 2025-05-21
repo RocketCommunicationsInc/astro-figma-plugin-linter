@@ -6,21 +6,23 @@ import { getFillStyleNode } from "./colors/helpers";
 import { clearResults, getResults } from "./results";
 
 const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme) => {
-  return new Promise(async (resolve) => {
-    // Get relevant data about this node
-    const { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode } =
-      await getSourceAstroComponent(node);
+  return new Promise((resolve) => {
+    (async () => {
+      // Get relevant data about this node
+      const { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode } =
+        await getSourceAstroComponent(node);
 
-    // Test paint style
-    resolve(
-      testPaintStyle(
-        node,
-        sourceAstroComponent,
-        astroComponentMeta,
-        sourceCounterpartNode,
-        theme
-      )
-    );
+      // Test paint style
+      resolve(
+        testPaintStyle(
+          node,
+          sourceAstroComponent,
+          astroComponentMeta,
+          sourceCounterpartNode,
+          theme
+        )
+      );
+    })();
   });
 };
 

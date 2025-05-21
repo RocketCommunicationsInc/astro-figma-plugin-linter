@@ -5,13 +5,13 @@ import { tokens } from "../../../tokens";
 const { colorTokens } = tokens();
 
 const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
-  return new Promise((resolve) => {
-    const test = "Using an Astro Color";
-    const name = node.name;
-    const fillStyleId = node.fillStyleId;
+  const test = "Using an Astro Color";
+  const name = node.name;
+  const fillStyleId = node.fillStyleId;
 
+  return new Promise((resolve) => {
     if (!fillStyleId) {
-      resolve({
+      return resolve({
         ignore: true,
         test,
         pass: true,
@@ -22,8 +22,7 @@ const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
     }
 
     if (typeof fillStyleId !== "string") {
-      console.log('node', node.name, node)
-      resolve({
+      return resolve({
         test,
         pass: false,
         message: `Node is not using a fill style from Astro`,
@@ -33,54 +32,50 @@ const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
     }
 
     if (fillStyleId && typeof fillStyleId === "string") {
-      const pass = colorTokens.get(stripToLoadableId(fillStyleId))
-        ? true
-        : false;
+      const token = colorTokens.get(stripToLoadableId(fillStyleId));
+      const pass = !!token;
       const message = pass
-        ? `Node is using a fill style from Astro (${
-            colorTokens.get(stripToLoadableId(fillStyleId))?.name
-          })`
+        ? `Node is using a fill style from Astro (${token?.name})`
         : `Node is using a fill style but it's not from Astro)`;
-      resolve({
+
+      return resolve({
         test,
         pass,
         message,
         name,
         node,
       });
-    } else {
-      // check for manual fills
-      const fills = node.fills;
-      if (Array.isArray(fills) && fills.length > 0) {
-        const visibleFills = fills.filter((fill) => {
-          return fill.visible === true;
-        });
-        if (visibleFills.length === 0 ) {
-          resolve({
-            test,
-            pass: true,
-            message: `Node is filled invisibly`,
-            name,
-            node,
-          });
-        }
-        resolve({
-          test,
-          pass: false,
-          message: `Node is filled but not using a fill style from Astro`,
-          name,
-          node,
-        });
-      } else {
-        resolve({
+    }
+
+    // Fallback: check for manual fills
+    const fills = (node as any).fills;
+    if (Array.isArray(fills) && fills.length > 0) {
+      const visibleFills = fills.filter((fill) => fill.visible === true);
+      if (visibleFills.length === 0) {
+        return resolve({
           test,
           pass: true,
-          message: `Node is not using a fill style`,
+          message: `Node is filled invisibly`,
           name,
           node,
         });
       }
+      return resolve({
+        test,
+        pass: false,
+        message: `Node is filled but not using a fill style from Astro`,
+        name,
+        node,
+      });
     }
+
+    return resolve({
+      test,
+      pass: true,
+      message: `Node is not using a fill style`,
+      name,
+      node,
+    });
   });
 };
 

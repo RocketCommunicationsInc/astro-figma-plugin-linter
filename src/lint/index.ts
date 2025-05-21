@@ -6,21 +6,26 @@ import { getFillStyleNode } from "./colors/helpers";
 import { clearResults, getResults } from "./results";
 
 const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme) => {
-  // Get relevant data about this node
-  const { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode } =
-    await getSourceAstroComponent(node);
+  return new Promise(async (resolve) => {
+    // Get relevant data about this node
+    const { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode } =
+      await getSourceAstroComponent(node);
 
-  // Test paint style
-  testPaintStyle(
-    node,
-    sourceAstroComponent,
-    astroComponentMeta,
-    sourceCounterpartNode,
-    theme
-  );
+    // Test paint style
+    resolve(
+      testPaintStyle(
+        node,
+        sourceAstroComponent,
+        astroComponentMeta,
+        sourceCounterpartNode,
+        theme
+      )
+    );
+  });
 };
 
 const lintChildren = async (node: FillStyleNode, theme: AstroTheme) => {
+  const lintChildrenPromises: Promise<void>[] = [];
   // Use a type guard to check if the node supports `findAll`
   if ("findAll" in node) {
     const childrenToLint = node.findAll((node) => {
@@ -29,10 +34,11 @@ const lintChildren = async (node: FillStyleNode, theme: AstroTheme) => {
     childrenToLint.map((node) => {
       const fillStyleNode = getFillStyleNode(node);
       if (fillStyleNode) {
-        lintSingleNode(fillStyleNode, theme);
+        lintChildrenPromises.push(lintSingleNode(fillStyleNode, theme));
       }
     });
   }
+  return Promise.all(lintChildrenPromises);
 };
 
 const lintSelection = async (theme: AstroTheme) => {

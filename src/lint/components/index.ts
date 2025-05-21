@@ -40,7 +40,8 @@ const getSourceAstroComponent = async (
   astroComponentMeta: AstroComponent | undefined;
   sourceCounterpartNode: ComponentNode | null;
 }> => {
-  if (node.type === "INSTANCE") {
+  return new Promise(async (resolve) => {
+if (node.type === "INSTANCE") {
     const sourceCounterpartNode: ComponentNode | null = await (node as InstanceNode).getMainComponentAsync();
 
     const sourceCounterpartNodeKey: string | undefined = sourceCounterpartNode?.key;
@@ -63,15 +64,17 @@ const getSourceAstroComponent = async (
       );
     }
 
-    return { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode };
+    resolve({ sourceAstroComponent, astroComponentMeta, sourceCounterpartNode });
   } else {
     // If the node is not an instance, return null values
-    return {
+    resolve({
       sourceAstroComponent: null,
       astroComponentMeta: undefined,
       sourceCounterpartNode: null,
-    };
+    });
   }
+  });
+
 };
 
 export { getSourceAstroComponent };

@@ -8,43 +8,43 @@ import {
 } from "./tests";
 import { addResult } from "../results";
 
-const testPaintStyle = (
+const testPaintStyle = async (
   node: FillStyleNode,
   sourceAstroComponent: ComponentNode | ComponentSetNode | null,
   astroComponentMeta: AstroComponent | undefined,
   sourceCounterpartNode: ComponentNode | null,
   theme: AstroTheme
 ): Promise<void> => {
-  const promises: Promise<LintingResult>[] = [];
+  const paintStylePromises: Promise<LintingResult>[] = [];
+
   // Fail if node is in a component and not using the correct paint style
   if (sourceAstroComponent && sourceCounterpartNode) {
-    const isUsingColorFromComponent = usingColorFromComponent(
+    paintStylePromises.push(usingColorFromComponent(
       node,
       sourceCounterpartNode
-    );
-    promises.push(isUsingColorFromComponent);
+    ));
   } else {
     // Fail if node is not in an Astro component,
     // IS using a fill style,
     // AND not using an Astro paint style
-    const isUsingAstroColorIfUsingColor = usingAstroColor(node);
-    promises.push(isUsingAstroColorIfUsingColor);
+    // const isUsingAstroColorIfUsingColor = usingAstroColor(node);
+    paintStylePromises.push(usingAstroColor(node));
   }
 
-  // todo: Fail if node is using an Astro paint style but not the correct one for this theme
-  const isAstroColorIsUsingCorrectTheme = astroColorIsUsingCorrectTheme(
+  // Fail if node is using an Astro paint style but not the correct one for this theme
+  paintStylePromises.push(astroColorIsUsingCorrectTheme(
     node,
     theme
-  );
-  promises.push(isAstroColorIsUsingCorrectTheme);
+  ));
 
-  return Promise.all(promises)
+  await Promise.all(paintStylePromises)
     .then((results) => {
       results.forEach((result: LintingResult | undefined) => {
         if (result) {
           addResult(result);
         }
       });
+      return Promise.resolve();
     })
     .catch((error) => {
       console.error("Error in testPaintStyle:", error);

@@ -1,5 +1,6 @@
-import { FillStyleNode } from "../../../types";
-import { LintingResult, AstroTheme } from "../../types";
+import { AstroTheme } from "../../../types/tokens";
+import { FillStyleNode } from "../../../types/figma";
+import { LintingResult } from "../../../types/results";
 import { stripToLoadableId } from "../../../tokens";
 import { tokens } from "../../../tokens";
 const { colorTokens } = tokens();

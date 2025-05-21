@@ -1,4 +1,4 @@
-import { LintingResult } from "../lint/types";
+import { LintingResult } from "./results";
 
 type TestResultsProps = {
   results: LintingResult[];

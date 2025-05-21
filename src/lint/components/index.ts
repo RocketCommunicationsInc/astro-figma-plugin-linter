@@ -1,6 +1,6 @@
-import { AstroComponent } from "./types";
+import { AstroComponent } from "../../types/astro";
+import { FillStyleNode } from "../../types/figma";
 import { tokens } from "../../tokens";
-import { FillStyleNode } from "../../types";
 
 const { astroComponents } = tokens();
 

@@ -1,5 +1,5 @@
-import { FillStyleNode } from "../../../types";
-import { LintingResult } from "../../types";
+import { FillStyleNode } from "../../../types/figma";
+import { LintingResult } from "../../../types/results";
 import { stripToLoadableId } from "../../../tokens";
 import { tokens } from "../../../tokens";
 const { colorTokens } = tokens();

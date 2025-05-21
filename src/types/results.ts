@@ -1,4 +1,4 @@
-import type { FillStyleNode } from '../types';
+import type { FillStyleNode } from './figma';
 
 interface LintingResult {
   ignore?: boolean;
@@ -10,8 +10,4 @@ interface LintingResult {
   sourceCounterpartNode?: FillStyleNode | null;
 }
 
-interface AstroTheme {
-  theme: "light" | "dark";
-}
-
-export type { LintingResult, AstroTheme };
+export type { LintingResult };

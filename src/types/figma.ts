@@ -1,12 +1,3 @@
-type TokensJSON = {
-  "color-tokens": {
-    dark: Record<string, unknown>;
-    light: Record<string, unknown>;
-  };
-  "type-tokens": Record<string, unknown>;
-  "components": Record<string, unknown>;
-};
-
 type FillStyleNode =
   | (RectangleNode & BaseNodeMixin)
   | (EllipseNode & BaseNodeMixin)
@@ -27,7 +18,6 @@ interface InheritedStyleField {
 }
 
 export {
-  TokensJSON,
   FillStyleNode,
   InheritedStyleField,
 };

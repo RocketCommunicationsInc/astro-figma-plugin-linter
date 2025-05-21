@@ -1,5 +1,5 @@
 import { lintSelection } from "./lint";
-import { AstroTheme } from "./lint/types";
+import { AstroTheme } from "./types/tokens";
 
 figma.showUI(__html__, { themeColors: true, width: 400, height: 600 });
 

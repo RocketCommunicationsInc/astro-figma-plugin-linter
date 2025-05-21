@@ -1,6 +1,6 @@
 import React from "react";
-import { TestResultsProps } from "./types";
-import { LintingResult } from "../lint/types";
+import { TestResultsProps } from "../types/ui";
+import { LintingResult } from "../types/results";
 
 const TestResult: React.FC<{ result: LintingResult }> = ({ result }) => {
   // Click on result name to select the node in Figma

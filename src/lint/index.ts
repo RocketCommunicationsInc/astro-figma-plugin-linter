@@ -1,6 +1,6 @@
-import { AstroTheme } from "./types";
+import { AstroTheme } from "../types/tokens";
 import { clearResults, getResults } from "./results";
-import { FillStyleNode } from "../types";
+import { FillStyleNode } from "../types/figma";
 import { findFillStyleNodes, getFillStyleNode } from "./colors/helpers";
 import { getSourceAstroComponent } from "./components";
 import { testPaintStyle } from "./colors/test-paint-style";

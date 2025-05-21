@@ -1,9 +1,9 @@
-import { FillStyleNode } from "../types";
 import { AstroTheme } from "./types";
-import { getSourceAstroComponent } from "./components";
-import { findFillStyleNodes, testPaintStyle } from "./colors";
-import { getFillStyleNode } from "./colors/helpers";
 import { clearResults, getResults } from "./results";
+import { FillStyleNode } from "../types";
+import { findFillStyleNodes, getFillStyleNode } from "./colors/helpers";
+import { getSourceAstroComponent } from "./components";
+import { testPaintStyle } from "./colors/test-paint-style";
 
 const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme): Promise<void> => {
   return new Promise((resolve) => {

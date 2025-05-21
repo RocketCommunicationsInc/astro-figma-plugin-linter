@@ -1,12 +1,10 @@
-import { FillStyleNode } from "../../types";
-import { AstroTheme, LintingResult } from "../types";
-import { AstroComponent } from "../components/types";
-import {
-  usingAstroColor,
-  usingColorFromComponent,
-  astroColorIsUsingCorrectTheme,
-} from "./tests";
 import { addResult } from "../results";
+import { astroColorIsUsingCorrectTheme } from "./tests/astro-color-is-using-correct-theme";
+import { AstroComponent } from "../components/types";
+import { AstroTheme, LintingResult } from "../types";
+import { FillStyleNode } from "../../types";
+import { usingAstroColor } from "./tests/using-astro-color";
+import { usingColorFromComponent } from "./tests/using-color-from-component";
 
 const testPaintStyle = async (
   node: FillStyleNode,

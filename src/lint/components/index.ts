@@ -1,4 +1,5 @@
-import { AstroComponent } from "./types";
+import { AstroComponent } from "../../types/astro";
+import { FillStyleNode } from "../../types/figma";
 import { tokens } from "../../tokens";
 
 const { astroComponents } = tokens();
@@ -32,28 +33,45 @@ const componentLoaderFunction: (
  * @param node - The node to check.
  * @returns The source Astro component or null if not found.
  */
-const getSourceAstroComponent = async (node: InstanceNode): Promise<ComponentNode | ComponentSetNode | null> => {
-  const mainComponent = await node.getMainComponentAsync();
+const getSourceAstroComponent = async (
+  node: FillStyleNode
+): Promise<{
+  sourceAstroComponent: ComponentNode | ComponentSetNode | null;
+  astroComponentMeta: AstroComponent | undefined;
+  sourceCounterpartNode: ComponentNode | null;
+}> => {
+  if (node.type === "INSTANCE") {
+    const sourceCounterpartNode: ComponentNode | null = await (node as InstanceNode).getMainComponentAsync();
 
-  const mainComponentKey: string | undefined = mainComponent?.key;
-  // Check if mainComponent is one of the Astro components in components
-  let isAstroComponent: AstroComponent | undefined = astroComponents.get(mainComponentKey);
-  if (!isAstroComponent && mainComponent?.parent?.type === "COMPONENT_SET") {
-    const mainComponentParentKey: string | undefined = mainComponent?.parent?.key;
-    isAstroComponent = astroComponents.get(mainComponentParentKey);
+    const sourceCounterpartNodeKey: string | undefined = sourceCounterpartNode?.key;
+    // Check if sourceCounterpartNode is one of the Astro components in components
+    let astroComponentMeta: AstroComponent | undefined =
+      astroComponents.get(sourceCounterpartNodeKey);
+
+    if (!astroComponentMeta && sourceCounterpartNode?.parent?.type === "COMPONENT_SET") {
+      const sourceCounterpartNodeParentKey: string | undefined =
+        sourceCounterpartNode?.parent?.key;
+      astroComponentMeta = astroComponents.get(sourceCounterpartNodeParentKey);
+    }
+
+    let sourceAstroComponent = null;
+    if (astroComponentMeta) {
+      // Load the Astro component from Figma
+      sourceAstroComponent = await componentLoaderFunction(
+        astroComponentMeta.type,
+        astroComponentMeta.key
+      );
+    }
+
+    return { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode };
+  } else {
+    // If the node is not an instance, return null values
+    return {
+      sourceAstroComponent: null,
+      astroComponentMeta: undefined,
+      sourceCounterpartNode: null,
+    };
   }
-
-  if (!isAstroComponent) {
-    console.log("Not an Astro component");
-    return null;
-  }
-
-  // Load the Astro component from Figma
-  const astroComponent = await componentLoaderFunction(
-    isAstroComponent.type,
-    isAstroComponent.key
-  );
-  return astroComponent;
 };
 
-export { getSourceAstroComponent}
+export { getSourceAstroComponent };

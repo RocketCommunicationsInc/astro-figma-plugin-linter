@@ -1,4 +1,4 @@
-import { TokensJSON } from '../types';
+import { TokensJSON } from '../types/tokens';
 import tokensJson from './tokens.json';
 
 const stripToLoadableId: (input: string) => string | undefined = (

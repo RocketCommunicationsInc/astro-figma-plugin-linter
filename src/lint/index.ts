@@ -55,7 +55,7 @@ const lintSelection = async (theme: AstroTheme) => {
   }
 
   const lintingPromises: Promise<void>[] = [];
-  await fillStyleNodes.map(async (selectionNode) => {
+  for (const selectionNode of fillStyleNodes) {
     lintingPromises.push(
       lintSingleNode(selectionNode, theme).catch((error) => {
         console.error("Error in lintSingleNode:", error);
@@ -66,7 +66,7 @@ const lintSelection = async (theme: AstroTheme) => {
         console.error("Error in lintChildren:", error);
       })
     );
-  });
+  }
 
   // Wait for all promises to resolve
   await Promise.all(lintingPromises).then(() => {

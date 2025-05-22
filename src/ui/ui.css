@@ -115,10 +115,6 @@ button.primary {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);
-  /* padding: var(--spacing-2); */
-  /* border-radius: 0.25rem; */
-  /* background-color: var(--color-bg); */
-  /* border: 1px solid var(--color-border); */
 }
 
 .test-result {

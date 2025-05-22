@@ -26,37 +26,52 @@ const astroColorIsUsingCorrectTheme = (
       node,
     };
 
-    if (astroColor?.name) {
-      const astroColorNameWithTheme = `${theme}/${astroColor?.name}`;
-      const astroColorWithTheme = colorTokens.get(astroColorNameWithTheme);
-      pass = astroColor?.id === astroColorWithTheme?.id ? true : false;
-      message = pass
-        ? `Node is using a fill style (${astroColor.name}) from Astro in the correct theme (${theme})`
-        : `Node is using a fill style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`;
-    } else if (Array.isArray(fills) && fills.length === 0) {
-      pass = true;
-      message = `Node has no fills`;
-    } else if (Array.isArray(fills) && fills.length > 0) {
-      const visibleFills = fills.filter((fill) => {
-        return fill.visible === true;
-      });
-      if (visibleFills.length === 0) {
+    // Switch logic based on node state
+    switch (true) {
+      case !!astroColor?.name: {
+        const astroColorNameWithTheme = `${theme}/${astroColor?.name}`;
+        const astroColorWithTheme = colorTokens.get(astroColorNameWithTheme);
+        pass = astroColor?.id === astroColorWithTheme?.id;
+        message = pass
+          ? `Node is using a fill style (${astroColor.name}) from Astro in the correct theme (${theme})`
+          : `Node is using a fill style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`;
+        break;
+      }
+
+      case Array.isArray(fills) && fills.length === 0: {
+        pass = true;
+        message = `Node has no fills`;
+        break;
+      }
+
+      case Array.isArray(fills) && fills.length > 0: {
+        const visibleFills = fills.filter((fill) => fill.visible === true);
+        if (visibleFills.length === 0) {
+          resolve({
+            ...testResult,
+            pass: true,
+            message: `Node is filled invisibly`,
+          });
+          return;
+        }
+        break;
+      }
+
+      case !fillStyleId: {
         resolve({
           ...testResult,
+          ignore: true,
           pass: true,
-          message: `Node is filled invisibly`,
+          message: `Node cannot have a fill`,
         });
+        return;
       }
-    } else if (!fillStyleId) {
-      resolve({
-        ...testResult,
-        ignore: true,
-        pass: true,
-        message: `Node cannot have a fill`,
-      });
-    } else {
-      message = `Node is not using a fill style from Astro`;
+
+      default: {
+        message = `Node is not using a fill style from Astro`;
+      }
     }
+
     resolve({
       ...testResult,
       pass,

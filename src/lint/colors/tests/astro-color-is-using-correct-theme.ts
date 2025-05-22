@@ -17,13 +17,22 @@ const astroColorIsUsingCorrectTheme = (
     const fills = node.fills;
     let pass = false;
     let message = "";
+
+    const testResult: LintingResult = {
+      test,
+      pass,
+      message,
+      name,
+      node,
+    };
+
     if (astroColor?.name) {
       const astroColorNameWithTheme = `${theme}/${astroColor?.name}`;
       const astroColorWithTheme = colorTokens.get(astroColorNameWithTheme);
       pass = astroColor?.id === astroColorWithTheme?.id ? true : false;
       message = pass
-        ? `Node is using a fill style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`
-        : `Node is using a fill style (${astroColor.name}) from Astro in the correct theme (${theme})`;
+        ? `Node is using a fill style (${astroColor.name}) from Astro in the correct theme (${theme})`
+        : `Node is using a fill style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`;
     } else if (Array.isArray(fills) && fills.length === 0) {
       pass = true;
       message = `Node has no fills`;
@@ -33,33 +42,26 @@ const astroColorIsUsingCorrectTheme = (
       });
       if (visibleFills.length === 0) {
         resolve({
-          test,
+          ...testResult,
           pass: true,
           message: `Node is filled invisibly`,
-          name,
-          node,
         });
       }
     } else if (!fillStyleId) {
       resolve({
+        ...testResult,
         ignore: true,
-        test,
         pass: true,
         message: `Node cannot have a fill`,
-        name,
-        node,
       });
     } else {
       message = `Node is not using a fill style from Astro`;
     }
-    const result: LintingResult = {
-      test,
+    resolve({
+      ...testResult,
       pass,
       message,
-      name,
-      node,
-    };
-    resolve(result);
+    });
   });
 };
 

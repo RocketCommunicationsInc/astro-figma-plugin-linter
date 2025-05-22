@@ -69,10 +69,27 @@ main {
 }
 
 /* Buttons */
+.header {
+    display: grid;
+    gap: inherit;
+    grid-area: header;
+    justify-content: space-between;
+    grid-template-areas:
+        "logo buttons"
+        "logo theme";
+    justify-items: end;
+    align-items: center;
+}
+
+.logo {
+  width: 4rem;
+  grid-area: logo;
+}
+
 .buttons {
+  grid-area: buttons;
   display: flex;
   gap: inherit;
-  grid-area: header;
   justify-content: flex-end;
   align-items: baseline;
   flex-wrap: wrap;
@@ -108,6 +125,10 @@ button.primary {
   --color-bg-active: var(--color-bg-brand-active);
   --color-border: transparent;
   --color-border-focus: var(--color-border-brand-focus);
+}
+
+.theme-selection {
+  grid-area: theme;
 }
 
 /* Test Results */

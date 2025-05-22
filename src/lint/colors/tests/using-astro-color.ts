@@ -8,42 +8,46 @@ const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
   const test = "Using an Astro Color";
   const name = node.name;
   const fillStyleId = node.fillStyleId;
+  let pass = false;
+  let message = "";
+
+  const testResult: LintingResult = {
+      test,
+      pass,
+      message,
+      name,
+      node,
+    };
 
   return new Promise((resolve) => {
     if (!fillStyleId) {
       return resolve({
+        ...testResult,
         ignore: true,
-        test,
         pass: true,
         message: `Node cannot have a fill`,
-        name,
-        node,
       });
     }
 
     if (typeof fillStyleId !== "string") {
       return resolve({
-        test,
+        ...testResult,
         pass: false,
         message: `Node is not using a fill style from Astro`,
-        name,
-        node,
       });
     }
 
     if (fillStyleId && typeof fillStyleId === "string") {
       const token = colorTokens.get(stripToLoadableId(fillStyleId));
-      const pass = !!token;
-      const message = pass
+      pass = !!token;
+      message = pass
         ? `Node is using a fill style from Astro (${token?.name})`
-        : `Node is using a fill style but it's not from Astro)`;
+        : `Node is using a fill style but it's not from Astro`;
 
       return resolve({
-        test,
+        ...testResult,
         pass,
         message,
-        name,
-        node,
       });
     }
 
@@ -53,28 +57,22 @@ const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
       const visibleFills = fills.filter((fill) => fill.visible === true);
       if (visibleFills.length === 0) {
         return resolve({
-          test,
+          ...testResult,
           pass: true,
           message: `Node is filled invisibly`,
-          name,
-          node,
         });
       }
       return resolve({
-        test,
+        ...testResult,
         pass: false,
         message: `Node is filled but not using a fill style from Astro`,
-        name,
-        node,
       });
     }
 
     return resolve({
-      test,
+      ...testResult,
       pass: true,
       message: `Node is not using a fill style`,
-      name,
-      node,
     });
   });
 };

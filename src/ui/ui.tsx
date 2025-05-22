@@ -3,9 +3,6 @@ import { TestResults } from "./test-results";
 import React, { useState, useEffect } from "react";
 import "./ui.css";
 
-import logo from "../logo.svg";
-
-
 const LinterUi = () => {
   // Set up the state for the output
   const [theme, setTheme] = useState<string>('dark');
@@ -49,7 +46,7 @@ const LinterUi = () => {
   return (
     <main>
       <header className="header">
-        <img src={logo} alt="Logo" className="logo" />
+        <img src={require("../logo.svg")} alt="Logo" className="logo" />
 
         <div className="buttons">
           <button className="primary" onClick={onLintSelection}>

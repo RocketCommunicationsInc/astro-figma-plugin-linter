@@ -3,13 +3,13 @@ import { LintingResult } from "../../../../types/results";
 
 const usingFillFromComponent = (
   node: FillStyleNode,
-  sourceCounterpartNode: FillStyleNode | undefined
+  sourceCounterpartNode: FillStyleNode | null
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Fill from a Component";
     const name = node.name;
-    let pass = false;
-    let message = "";
+    const pass = false;
+    const message = "";
 
     const testResult: LintingResult = {
       test,
@@ -21,23 +21,40 @@ const usingFillFromComponent = (
       sourceCounterpartNode,
     };
 
-    if (sourceCounterpartNode) {
-      // Is this node using a paint style in the source Astro component?
-      const fillStyleId = "fillStyleId" in node ? node.fillStyleId : undefined;
-      const sourceFillStyleId =
-        "fillStyleId" in sourceCounterpartNode
-          ? sourceCounterpartNode.fillStyleId
-          : undefined;
-      pass = fillStyleId === sourceFillStyleId;
+    switch (true) {
+      case !!sourceCounterpartNode: {
+        const fillStyleId =
+          "fillStyleId" in node ? node.fillStyleId : undefined;
+        const sourceFillStyleId =
+          "fillStyleId" in sourceCounterpartNode
+            ? sourceCounterpartNode.fillStyleId
+            : undefined;
+        const pass = fillStyleId === sourceFillStyleId;
+        const message = pass
+          ? `Node is using the same fill style as the source Astro component: ${sourceCounterpartNode?.name}`
+          : `Node is not using the same fill style as the source Astro component: ${sourceCounterpartNode?.name}`;
+        resolve({
+          ...testResult,
+          id: `${test}-1`,
+          pass,
+          message,
+        });
+        break;
+      }
+      default: {
+        resolve({
+          ...testResult,
+          id: `${test}-2`,
+          ignore: true,
+          message: "No source Astro component to compare fill style.",
+        });
+        break;
+      }
     }
-    message = pass
-      ? `Node is using the same fill style as the source Astro component: ${sourceCounterpartNode?.name}`
-      : `Node is not using the same fill style as the source Astro component: ${sourceCounterpartNode?.name}`;
+
     resolve({
       ...testResult,
-      id: `${test}-1`,
-      pass,
-      message,
+      message: `An unexpected error occurred when linting fills`,
     });
   });
 };

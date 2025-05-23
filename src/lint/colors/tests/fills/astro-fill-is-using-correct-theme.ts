@@ -32,24 +32,20 @@ const astroFillIsUsingCorrectTheme = (
       case !!astroColor?.name: {
         const astroColorNameWithTheme = `${theme}/${astroColor?.name}`;
         const astroColorWithTheme = colorTokens.get(astroColorNameWithTheme);
-        // pass = astroColor?.id === astroColorWithTheme?.id;
-        // message = pass
-        // ? `Node is using a fill style (${astroColor.name}) from Astro in the correct theme (${theme})`
-        // : `Node is using a fill style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`;
+        const pass = astroColor?.id === astroColorWithTheme?.id;
+        const message = pass
+          ? `Node is using a fill style (${astroColor.name}) from Astro in the correct theme (${theme})`
+          : `Node is using a fill style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`;
         resolve({
           ...testResult,
           id: `${test}-1`,
-          pass: astroColor?.id === astroColorWithTheme?.id,
-          message: pass
-            ? `Node is using a fill style (${astroColor.name}) from Astro in the correct theme (${theme})`
-            : `Node is using a fill style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`,
+          pass,
+          message,
         });
         break;
       }
 
       case Array.isArray(fills) && fills.length === 0: {
-        // pass = true;
-        // message = `Node has no fills`;
         resolve({
           ...testResult,
           id: `${test}-2`,

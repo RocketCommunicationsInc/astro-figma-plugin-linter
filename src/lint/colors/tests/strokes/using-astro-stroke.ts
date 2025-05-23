@@ -4,10 +4,10 @@ import { stripToLoadableId } from "../../../../tokens";
 import { tokens } from "../../../../tokens";
 const { colorTokens } = tokens();
 
-const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
-  const test = "Using an Astro Color Fill";
+const usingAstroStroke = (node: FillStyleNode): Promise<LintingResult> => {
+  const test = "Using an Astro Color Stroke";
   const name = node.name;
-  const fillStyleId = node.fillStyleId;
+  const strokeStyleId = node.strokeStyleId;
   let pass = false;
   let message = "";
 
@@ -21,21 +21,21 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
   };
 
   return new Promise((resolve) => {
-    const fills = node.fills;
+    const strokes = node.strokes;
 
     switch (true) {
-      case !fillStyleId: {
+      case !strokeStyleId: {
         resolve({
           ...testResult,
           id: `${test}-1`,
           ignore: true,
           pass: true,
-          message: `Node is not using a fill style`,
+          message: `Node is not using a stroke style`,
         });
         break;
       }
 
-      case typeof fillStyleId !== "string": {
+      case typeof strokeStyleId !== "string": {
         resolve({
           ...testResult,
           id: `${test}-2`,
@@ -45,12 +45,12 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
         break;
       }
 
-      case !!fillStyleId && typeof fillStyleId === "string": {
-        const token = colorTokens.get(stripToLoadableId(fillStyleId));
+      case !!strokeStyleId && typeof strokeStyleId === "string": {
+        const token = colorTokens.get(stripToLoadableId(strokeStyleId));
         pass = !!token;
         message = pass
-          ? `Node is using a fill style from Astro (${token?.name})`
-          : `Node is using a fill style but it's not from Astro`;
+          ? `Node is using a stroke style from Astro (${token?.name})`
+          : `Node is using a stroke style but it's not from Astro`;
         resolve({
           ...testResult,
           id: `${test}-3`,
@@ -60,21 +60,21 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
         break;
       }
 
-      case Array.isArray(fills) && fills.length > 0: {
-        const visibleFills = fills.filter((fill) => fill.visible === true);
-        if (visibleFills.length === 0) {
+      case Array.isArray(strokes) && strokes.length > 0: {
+        const visibleStrokes = strokes.filter((stroke) => stroke.visible === true);
+        if (visibleStrokes.length === 0) {
           resolve({
             ...testResult,
             id: `${test}-4`,
             pass: true,
-            message: `Node is filled invisibly`,
+            message: `Node has an invisible stroke`,
           });
         } else {
           resolve({
             ...testResult,
             id: `${test}-5`,
             pass: false,
-            message: `Node is filled but not using a color style from Astro`,
+            message: `Node has a stroke but not using a color style from Astro`,
           });
         }
         break;
@@ -85,11 +85,11 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
           ...testResult,
           id: `${test}-6`,
           pass: true,
-          message: `Node is not using a fill style`,
+          message: `Node is not using a stroke style`,
         });
       }
     }
   });
 };
 
-export { usingAstroFill };
+export { usingAstroStroke };

@@ -15,6 +15,7 @@ const TestResult: React.FC<{ result: LintingResult }> = ({ result }) => {
       <div className="result-test-name">{result.test}</div>
       <div className="result-node">{result.name}</div>
       <div className="result-message">{result.message}</div>
+      <div className="result-id">{result.id}</div>
     </div>
   );
 }

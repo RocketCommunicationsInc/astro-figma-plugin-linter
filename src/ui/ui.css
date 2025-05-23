@@ -6,6 +6,7 @@
   --color-border: var(--figma-color-border);
   --color-border-focus: var(--figma-color-border-selected);
   --color-text: var(--figma-color-text);
+  --color-text-secondary: var(--figma-color-text-secondary);
   --color-bg-brand: var(--figma-color-bg-brand);
   --color-bg-brand-hover: var(--figma-color-bg-brand-hover);
   --color-bg-brand-active: var(--figma-color-bg-brand-pressed);
@@ -140,9 +141,9 @@ button.primary {
 
 .test-result {
   display: grid;
-  grid-template-areas: "test-result node""test-name test-name""message message";
+  grid-template-areas: "test-result node""test-name test-name""message message""id id";
   grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto auto;
   gap: var(--spacing-2);
   padding: var(--spacing-2);
   border-radius: 0.25rem;
@@ -186,6 +187,13 @@ button.primary {
 .result-message {
   grid-area: message;
   color: var(--color-text);
+}
+
+.result-id {
+  grid-area: id;
+  color: var(--color-text-secondary);
+  font-family: monospace;
+  font-size: small;
 }
 
 

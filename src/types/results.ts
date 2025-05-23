@@ -3,6 +3,7 @@ import type { FillStyleNode } from './figma';
 interface LintingResult {
   ignore?: boolean;
   test: string;
+  id: string;
   pass: boolean;
   message: string;
   name: string;

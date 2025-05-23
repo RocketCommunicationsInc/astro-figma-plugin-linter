@@ -1,12 +1,12 @@
 import { FillStyleNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 
-const usingFillFromComponent = (
+const usingStrokeFromComponent = (
   node: FillStyleNode,
   sourceCounterpartNode: FillStyleNode | undefined
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
-    const test = "Using Color Fill from a Component";
+    const test = "Using Color Stroke from a Component";
     const name = node.name;
     let pass = false;
     let message = "";
@@ -23,16 +23,16 @@ const usingFillFromComponent = (
 
     if (sourceCounterpartNode) {
       // Is this node using a paint style in the source Astro component?
-      const fillStyleId = "fillStyleId" in node ? node.fillStyleId : undefined;
-      const sourceFillStyleId =
-        "fillStyleId" in sourceCounterpartNode
-          ? sourceCounterpartNode.fillStyleId
+      const strokeStyleId = "strokeStyleId" in node ? node.strokeStyleId : undefined;
+      const sourceStrokeStyleId =
+        "strokeStyleId" in sourceCounterpartNode
+          ? sourceCounterpartNode.strokeStyleId
           : undefined;
-      pass = fillStyleId === sourceFillStyleId;
+      pass = strokeStyleId === sourceStrokeStyleId;
     }
     message = pass
-      ? `Node is using the same fill style as the source Astro component: ${sourceCounterpartNode?.name}`
-      : `Node is not using the same fill style as the source Astro component: ${sourceCounterpartNode?.name}`;
+      ? `Node is using the same stroke style as the source Astro component: ${sourceCounterpartNode?.name}`
+      : `Node is not using the same stroke style as the source Astro component: ${sourceCounterpartNode?.name}`;
     resolve({
       ...testResult,
       id: `${test}-1`,
@@ -42,4 +42,4 @@ const usingFillFromComponent = (
   });
 };
 
-export { usingFillFromComponent };
+export { usingStrokeFromComponent };

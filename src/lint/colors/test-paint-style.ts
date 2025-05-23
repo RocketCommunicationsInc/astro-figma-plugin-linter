@@ -1,11 +1,11 @@
 import { addResult } from "../results";
-import { astroColorIsUsingCorrectTheme } from "./tests/astro-color-is-using-correct-theme";
+import { astroColorIsUsingCorrectTheme } from "./tests/fills/astro-color-is-using-correct-theme";
 import { AstroComponent } from "../../types/astro";
 import { AstroTheme } from "../../types/tokens";
 import { FillStyleNode } from "../../types/figma";
 import { LintingResult } from "../../types/results";
-import { usingAstroColor } from "./tests/using-astro-color";
-import { usingColorFromComponent } from "./tests/using-color-from-component";
+import { usingAstroColor } from "./tests/fills/using-astro-color";
+import { usingColorFromComponent } from "./tests/fills/using-color-from-component";
 
 const testPaintStyle = async (
   node: FillStyleNode,

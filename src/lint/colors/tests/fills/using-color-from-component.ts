@@ -1,12 +1,12 @@
-import { FillStyleNode } from "../../../types/figma";
-import { LintingResult } from "../../../types/results";
+import { FillStyleNode } from "../../../../types/figma";
+import { LintingResult } from "../../../../types/results";
 
 const usingColorFromComponent = (
   node: FillStyleNode,
   sourceCounterpartNode: FillStyleNode | undefined
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
-    const test = "Using Color from a Component";
+    const test = "Using Color Fill from a Component";
     const name = node.name;
     let pass = false;
     let message = "";

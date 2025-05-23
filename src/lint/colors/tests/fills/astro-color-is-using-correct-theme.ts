@@ -1,8 +1,8 @@
-import { AstroTheme } from "../../../types/tokens";
-import { FillStyleNode } from "../../../types/figma";
-import { LintingResult } from "../../../types/results";
-import { stripToLoadableId } from "../../../tokens";
-import { tokens } from "../../../tokens";
+import { AstroTheme } from "../../../../types/tokens";
+import { FillStyleNode } from "../../../../types/figma";
+import { LintingResult } from "../../../../types/results";
+import { stripToLoadableId } from "../../../../tokens";
+import { tokens } from "../../../../tokens";
 const { colorTokens } = tokens();
 
 const astroColorIsUsingCorrectTheme = (
@@ -10,7 +10,7 @@ const astroColorIsUsingCorrectTheme = (
   theme: AstroTheme
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
-    const test = "Using Astro Color in Correct Theme";
+    const test = "Using Astro Color Fill in Correct Theme";
     const name = node.name;
     const fillStyleId = (node.fillStyleId as string) || "";
     const astroColor = colorTokens.get(stripToLoadableId(fillStyleId));

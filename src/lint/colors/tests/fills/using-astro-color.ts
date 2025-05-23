@@ -1,11 +1,11 @@
-import { FillStyleNode } from "../../../types/figma";
-import { LintingResult } from "../../../types/results";
-import { stripToLoadableId } from "../../../tokens";
-import { tokens } from "../../../tokens";
+import { FillStyleNode } from "../../../../types/figma";
+import { LintingResult } from "../../../../types/results";
+import { stripToLoadableId } from "../../../../tokens";
+import { tokens } from "../../../../tokens";
 const { colorTokens } = tokens();
 
 const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
-  const test = "Using an Astro Color";
+  const test = "Using an Astro Color Fill";
   const name = node.name;
   const fillStyleId = node.fillStyleId;
   let pass = false;

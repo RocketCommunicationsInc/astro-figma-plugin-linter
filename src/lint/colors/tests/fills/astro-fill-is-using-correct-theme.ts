@@ -5,7 +5,7 @@ import { stripToLoadableId } from "../../../../tokens";
 import { tokens } from "../../../../tokens";
 const { colorTokens } = tokens();
 
-const astroColorIsUsingCorrectTheme = (
+const astroFillIsUsingCorrectTheme = (
   node: FillStyleNode,
   theme: AstroTheme
 ): Promise<LintingResult> => {
@@ -80,4 +80,4 @@ const astroColorIsUsingCorrectTheme = (
   });
 };
 
-export { astroColorIsUsingCorrectTheme };
+export { astroFillIsUsingCorrectTheme };

@@ -1,7 +1,7 @@
 import { FillStyleNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 
-const usingColorFromComponent = (
+const usingFillFromComponent = (
   node: FillStyleNode,
   sourceCounterpartNode: FillStyleNode | undefined
 ): Promise<LintingResult> => {
@@ -40,4 +40,4 @@ const usingColorFromComponent = (
   });
 };
 
-export { usingColorFromComponent };
+export { usingFillFromComponent };

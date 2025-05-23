@@ -1,11 +1,11 @@
 import { addResult } from "../results";
-import { astroColorIsUsingCorrectTheme } from "./tests/fills/astro-color-is-using-correct-theme";
+import { astroFillIsUsingCorrectTheme } from "./tests/fills/astro-fill-is-using-correct-theme";
 import { AstroComponent } from "../../types/astro";
 import { AstroTheme } from "../../types/tokens";
 import { FillStyleNode } from "../../types/figma";
 import { LintingResult } from "../../types/results";
-import { usingAstroColor } from "./tests/fills/using-astro-color";
-import { usingColorFromComponent } from "./tests/fills/using-color-from-component";
+import { usingAstroFill } from "./tests/fills/using-astro-fill";
+import { usingFillFromComponent } from "./tests/fills/using-fill-from-component";
 
 const testPaintStyle = async (
   node: FillStyleNode,
@@ -18,7 +18,7 @@ const testPaintStyle = async (
 
   // Fail if node is in a component and not using the correct paint style
   if (sourceAstroComponent && sourceCounterpartNode) {
-    paintStylePromises.push(usingColorFromComponent(
+    paintStylePromises.push(usingFillFromComponent(
       node,
       sourceCounterpartNode
     ));
@@ -26,12 +26,12 @@ const testPaintStyle = async (
     // Fail if node is not in an Astro component,
     // IS using a fill style,
     // AND not using an Astro paint style
-    // const isUsingAstroColorIfUsingColor = usingAstroColor(node);
-    paintStylePromises.push(usingAstroColor(node));
+    // const isusingAstroFillIfUsingColor = usingAstroFill(node);
+    paintStylePromises.push(usingAstroFill(node));
   }
 
   // Fail if node is using an Astro paint style but not the correct one for this theme
-  paintStylePromises.push(astroColorIsUsingCorrectTheme(
+  paintStylePromises.push(astroFillIsUsingCorrectTheme(
     node,
     theme
   ));

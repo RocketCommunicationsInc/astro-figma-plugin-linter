@@ -4,7 +4,7 @@ import { stripToLoadableId } from "../../../../tokens";
 import { tokens } from "../../../../tokens";
 const { colorTokens } = tokens();
 
-const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
+const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
   const test = "Using an Astro Color Fill";
   const name = node.name;
   const fillStyleId = node.fillStyleId;
@@ -85,4 +85,4 @@ const usingAstroColor = (node: FillStyleNode): Promise<LintingResult> => {
   });
 };
 
-export { usingAstroColor };
+export { usingAstroFill };

@@ -46,7 +46,7 @@ const LinterUi = () => {
   return (
     <main>
       <header className="header">
-        <img src={require("../logo.svg")} alt="Logo" className="logo" />
+        <img src={require("../logo-circle.svg")} alt="Logo" className="logo" />
 
         <div className="buttons">
           <button className="primary" onClick={onLintSelection}>

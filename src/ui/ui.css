@@ -14,9 +14,13 @@
   --color-border-brand-focus: var(--figma-color-border-selected-strong);
   --color-text-brand: var(--figma-color-text-onbrand);
   --color-border-success: var(--figma-color-border-success);
+  --color-border-success-strong: var(--figma-color-border-success-strong);
   --color-border-danger: var(--figma-color-border-danger);
+  --color-border-danger-strong: var(--figma-color-border-danger-strong);
   --color-text-success: var(--figma-color-text-success);
+  --color-text-success-strong: var(--figma-color-text-success);
   --color-text-danger: var(--figma-color-text-danger);
+  --color-text-danger-strong: var(--figma-color-text-danger);
   --color-border-brand: var(--figma-color-border-brand);
   --color-bg-brand: var(--figma-color-bg-brand);
   --spacing-1: 0.25rem;
@@ -71,15 +75,15 @@ main {
 
 /* Buttons */
 .header {
-    display: grid;
-    gap: inherit;
-    grid-area: header;
-    justify-content: space-between;
-    grid-template-areas:
-        "logo buttons"
-        "logo theme";
-    justify-items: end;
-    align-items: center;
+  display: grid;
+  gap: inherit;
+  grid-area: header;
+  justify-content: space-between;
+  grid-template-areas:
+    "logo buttons"
+    "logo theme";
+  justify-items: end;
+  align-items: center;
 }
 
 .logo {
@@ -141,7 +145,12 @@ button.primary {
 
 .test-result {
   display: grid;
-  grid-template-areas: "test-result node""test-name test-name""message message""id id";
+  grid-template-areas:
+    "test-result node"
+    "test-name test-name"
+    "message message"
+    "token token"
+    "id id";
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto auto auto;
   gap: var(--spacing-2);
@@ -153,12 +162,23 @@ button.primary {
   cursor: pointer;
 }
 
+.test-result:hover {
+  background-color: var(--color-bg-hover);
+}
+
 .test-result.pass {
   border-color: var(--color-border-success);
 }
 
+.test-result.pass:hover {
+  border-color: var(--color-border-success-strong);
+}
+
 .test-result.fail {
   border-color: var(--color-border-danger);
+}
+.test-result.fail:hover {
+  border-color: var(--color-border-danger-strong);
 }
 
 .result-test {
@@ -167,11 +187,16 @@ button.primary {
 
 .result-test.pass {
   color: var(--color-text-success);
-
+}
+.test-result:hover .result-test.pass {
+  color: var(--color-text-success-strong);
 }
 
 .result-test.fail {
   color: var(--color-text-danger);
+}
+.test-result:hover .result-test.fail {
+  color: var(--color-text-danger-strong);
 }
 
 .result-node {
@@ -189,13 +214,45 @@ button.primary {
   color: var(--color-text);
 }
 
+.result-color-token{
+  grid-area: token;
+  display: grid;
+  grid-template-areas:
+  "token-swatch token-name"
+  "token-swatch token-description";
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  gap: var(--spacing-1);
+}
+
+.color-swatch {
+  grid-area: token-swatch;
+  width: 1.5rem;
+  height: 100%;
+  display: inline-block;
+  margin-right: 2px;
+  margin-left: -4px;
+  border-radius: var(--spacing-1);
+}
+
+.color-swatch-name{
+  grid-area: token-name;
+  font-weight: bold;
+  font-size: small;
+}
+
+.color-swatch-description{
+  grid-area: token-description;
+  color: var(--color-text-secondary);
+  font-size: smaller;
+}
+
 .result-id {
   grid-area: id;
   color: var(--color-text-secondary);
   font-family: monospace;
   font-size: small;
 }
-
 
 /* footer */
 .meta-filters {

@@ -23,26 +23,44 @@ const TestResult: React.FC<{ result: LintingResult }> = ({ result }) => {
   const resultClass = result.pass ? "pass" : "fail";
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
-      <div className={`result-test ${resultClass}`}>{(result.pass)? "PASS": "FAIL"}</div>
+      <div className={`result-test ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>
       <div className="result-test-name">{result.test}</div>
       <div className="result-node">{result.name}</div>
       <div className="result-message">{result.message}</div>
-      {result.colorToken && (
-        <div className="result-color-token">
-          <span
-            className="color-swatch"
-            style={{
-              backgroundColor: convertFigmaPaintToCSS(result.colorToken.paints[0]),
-            }}
-          ></span>
-          <span className="color-swatch-name">
-            {result.colorToken.name}
-          </span>
-          <span className="color-swatch-description">
-            {result.colorToken.description}
-          </span>
-        </div>
-      )}
+      <div className="result-references">
+        {result.usedColorToken && (
+          <div className="result-color-token used">
+            <span
+              className="color-swatch"
+              style={{
+                backgroundColor: convertFigmaPaintToCSS(result.usedColorToken.paints[0]),
+              }}
+            ></span>
+            <span className="color-swatch-name">
+              Tested: {result.usedColorToken.name}
+            </span>
+            <span className="color-swatch-description">
+              {result.usedColorToken.description}
+            </span>
+          </div>
+        )}
+        {result.sourceColorToken && (
+          <div className="result-color-token source">
+            <span
+              className="color-swatch"
+              style={{
+                backgroundColor: convertFigmaPaintToCSS(result.sourceColorToken.paints[0]),
+              }}
+            ></span>
+            <span className="color-swatch-name">
+              Astro: {result.sourceColorToken.name}
+            </span>
+            <span className="color-swatch-description">
+              {result.sourceColorToken.description}
+            </span>
+          </div>
+        )}
+      </div>
       <div className="result-id">{result.id}</div>
     </div>
   );

@@ -1,4 +1,5 @@
 import type { FillStyleNode } from './figma';
+import { PaintColorToken } from './tokens';
 
 interface LintingResult {
   ignore?: boolean;
@@ -9,6 +10,8 @@ interface LintingResult {
   name: string;
   node: FillStyleNode;
   sourceCounterpartNode?: FillStyleNode | null;
+  usedColorToken?: PaintColorToken;
+  sourceColorToken?: PaintColorToken;
 }
 
 export type { LintingResult };

@@ -4,16 +4,11 @@
   "api": "1.0.0",
   "capabilities": [],
   "documentAccess": "dynamic-page",
-  "editorType": [
-    "figma"
-  ],
+  "editorType": ["figma"],
   "enableProposedApi": false,
   "main": "./dist/code.js",
   "ui": "./dist/ui.html",
   "networkAccess": {
-    "allowedDomains": [
-      "https://api.figma.com"
-    ]
-  },
-  "permissions": ["teamlibrary"]
+    "allowedDomains": ["https://api.figma.com"]
+  }
 }

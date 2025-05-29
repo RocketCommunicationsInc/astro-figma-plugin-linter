@@ -1,5 +1,4 @@
 import React from "react";
-import { TestResultsProps } from "../types/ui";
 import { LintingResult } from "../types/results";
 
 // We need to convert them to 0-255 for css.
@@ -14,7 +13,7 @@ function convertFigmaPaintToCSS(paint) {
 
 // function
 
-const TestResult: React.FC<{ result: LintingResult }> = ({ result }) => {
+const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ result, debug }) => {
   // Click on result name to select the node in Figma
   const handleClick = () => {
     parent.postMessage({ pluginMessage: { type: 'select-node', nodeId: result.node.id } }, '*');
@@ -61,16 +60,18 @@ const TestResult: React.FC<{ result: LintingResult }> = ({ result }) => {
           </div>
         )}
       </div>
-      <div className="result-id">{result.id}</div>
+      {debug && (
+        <div className="result-id">{result.id}</div>
+      )}
     </div>
   );
 }
 
-const TestResults: React.FC<TestResultsProps> = ({ results }) => {
+const TestResults: React.FC<{results: LintingResult[], debug: boolean}> = ({ results, debug }) => {
   return (
     <div className="test-results">
       {results.map((result, index) => (
-        <TestResult key={index} result={result} />
+        <TestResult key={index} result={result} debug={debug} />
       ))}
     </div>
   );

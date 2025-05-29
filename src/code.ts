@@ -26,8 +26,4 @@ figma.ui.onmessage = (msg: { type: string; theme: AstroTheme, nodeId: string }) 
       figma.notify("Node Found");
     });
   }
-
-  if (msg.type === "cancel") {
-    figma.closePlugin();
-  }
 };

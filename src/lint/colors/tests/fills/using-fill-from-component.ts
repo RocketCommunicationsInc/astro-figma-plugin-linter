@@ -5,8 +5,7 @@ import { PaintColorToken } from "../../../../types/tokens";
 
 const usingFillFromComponent = (
   node: FillStyleNode,
-  sourceCounterpartNode: FillStyleNode | null,
-  astroComponentMeta
+  sourceCounterpartNode: FillStyleNode | null
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Fill from a Component";

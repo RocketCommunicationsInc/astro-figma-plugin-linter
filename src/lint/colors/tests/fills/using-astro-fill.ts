@@ -6,13 +6,13 @@ import { PaintColorToken } from "../../../../types/tokens";
 const { colorTokens } = tokens();
 
 type UsedColorResult = {
-  usedColor: PaintColorToken | Paint | null;
-  usedColorType: "astroToken" | "paintStyle" | "paint" | null;
+  usedColor: PaintColorToken | Paint | undefined;
+  usedColorType: "astroToken" | "paintStyle" | "paint" | undefined;
 };
 
 const getFirstColorFill = (
   node: FillStyleNode
-): Promise<UsedColorResult> => {
+): UsedColorResult => {
   // 1. Using an Astro Color Fill Token
   // 2. Using a Figma Paint Style (not an Astro Token)
   // 3. Using a Figma Paint (not a style, just a paint object)
@@ -24,7 +24,7 @@ const getFirstColorFill = (
       : null;
   console.log("fillStyleId", fillStyleId);
   const fills = node.fills;
-  const color = fills.length > 0 ? fills[0] : null;
+  const color = Array.isArray(fills) && fills.length > 0 ? fills[0] : null;
 
   switch (true) {
     case !!astroToken: {
@@ -35,13 +35,13 @@ const getFirstColorFill = (
       // If the color is a PaintColorToken
       return {usedColor: color as Paint, usedColorType: "paintStyle"};
     }
-    case !!color && "color" in color: {
+    case !!color && "color" in color && color.visible === true: {
       // If the color is a Figma Paint (not a PaintColorToken)
       return {usedColor: color, usedColorType: "paint"};
     }
     default: {
       // If no fill style or fills are present, return null
-      return {usedColor: null, usedColorType: null};
+      return {usedColor: undefined, usedColorType: undefined};
     }
   }
 };
@@ -93,6 +93,7 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
       case !!usedColor && usedColorType === "paint": {
         // If the usedColor is a Paint (Figma Paint) but not an Astro PaintColorToken
         // This is not a style, just a paint object
+        // debugger;
         resolve({
           ...testResult,
           id: `${test}-3`,
@@ -102,7 +103,8 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
         break;
       }
 
-      case !usedColor && fills.length === 0: {
+      case !usedColor: {
+        // debugger;
         // If no fill style or fills are present, return null
         resolve({
           ...testResult,
@@ -114,6 +116,7 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
       }
 
       default: {
+        // debugger;
         resolve({
           ...testResult,
           // id: `${test}-6`,

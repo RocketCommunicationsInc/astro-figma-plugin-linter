@@ -19,13 +19,13 @@ const usingFillFromComponent = (
         ? sourceCounterpartNode.fillStyleId
         : undefined;
     const { colorTokens } = tokens();
-    let usedColorToken,
-      sourceColorToken: PaintColorToken | undefined = undefined;
+    let usedColor,
+      sourceColor: PaintColorToken | undefined = undefined;
     if (typeof fillStyleId === "string") {
-      usedColorToken = colorTokens.get(stripToLoadableId(fillStyleId));
+      usedColor = colorTokens.get(stripToLoadableId(fillStyleId));
     }
     if (typeof sourceFillStyleId === "string") {
-      sourceColorToken = colorTokens.get(stripToLoadableId(sourceFillStyleId));
+      sourceColor = colorTokens.get(stripToLoadableId(sourceFillStyleId));
     }
 
     const testResult: LintingResult = {
@@ -35,13 +35,14 @@ const usingFillFromComponent = (
       message,
       name,
       node,
+      type: node.type,
       sourceCounterpartNode,
-      usedColorToken,
-      sourceColorToken,
+      usedColor,
+      sourceColor,
     };
 
     switch (true) {
-      case !!usedColorToken && !!sourceColorToken: {
+      case !!usedColor && !!sourceColor: {
         let pass = false
         let message = "";
         if (fillStyleId === sourceFillStyleId) {

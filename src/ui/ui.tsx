@@ -70,12 +70,7 @@ const LinterUi = () => {
       </section>
 
       <footer className="meta-filters">
-        <div className="debug-switch">
-          <label>
-            <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
-            Debug Mode
-          </label>
-        </div>
+
         <button className="filter-button pass" onClick={() => setFilteredResults(results.filter(result => result.pass === true))}>
           {results.filter(result => result.pass === true).length} pass
         </button>
@@ -85,6 +80,56 @@ const LinterUi = () => {
         <button className="filter-button reset" onClick={() => setFilteredResults(results)}>
           {results.length} total
         </button>
+
+        <div className="advanced">
+          <div className="debug-switch">
+            <label>
+              <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
+              Debug
+            </label>
+          </div>
+
+          {/* Dropdown list to filter results based on result.id */}
+          <select
+            value=""
+            onChange={e => {
+              const id = e.target.value;
+              if (id === "") {
+                setFilteredResults(results);
+              } else {
+                setFilteredResults(results.filter(result => result.id === id));
+              }
+            }}
+          >
+            <option value="">All IDs</option>
+            {[...new Set(results.map(result => result.id))].map(id => (
+              <option key={id} value={id}>
+                {id}
+              </option>
+            ))}
+          </select>
+
+          {/* Dropdown list to filter results based on result.type */}
+          <select
+            value=""
+            onChange={e => {
+              const type = e.target.value;
+              if (type === "") {
+                setFilteredResults(results);
+              } else {
+                setFilteredResults(results.filter(result => result.type === type));
+              }
+            }}
+          >
+            <option value="">All Types</option>
+            {[...new Set(results.map(result => result.type))].map(type => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
+
       </footer>
     </main>
   );

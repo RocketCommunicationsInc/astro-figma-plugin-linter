@@ -21,7 +21,6 @@ function convertFigmaColorToCSS(color, opacity) {
 
 const ColorReference: React.FC<{ colorReference: PaintColorToken | PaintStyle | Paint }> = ({ colorReference }) => {
   try {
-    debugger;
     let backgroundColor;
     if ('name' in colorReference) {
       // It's a PaintColorToken

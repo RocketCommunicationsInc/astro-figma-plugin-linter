@@ -35,11 +35,9 @@ const ColorReference: React.FC<{ colorReference: PaintColorToken | PaintStyle | 
     if ('name' in colorReference) {
       // It's a PaintColorToken
       backgroundColor = convertFigmaPaintToCSS(colorReference.paints[0] as Paint);
-      console.log('colorReference is a PaintColorToken', colorReference);
     } else if ('color' in colorReference) {
       // It's a Figma Paint
       backgroundColor = convertFigmaColorToCSS(colorReference.color, colorReference.opacity ?? 1);
-      console.log('colorReference is a Figma Paint', colorReference);
     } else {
       throw new Error("Invalid color reference type");
     }

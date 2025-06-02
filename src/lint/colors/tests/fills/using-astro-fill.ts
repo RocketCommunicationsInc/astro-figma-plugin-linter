@@ -22,7 +22,6 @@ const getFirstColorFill = (
     typeof fillStyleId === "string"
       ? colorTokens.get(stripToLoadableId(fillStyleId))
       : null;
-  console.log("fillStyleId", fillStyleId);
   const fills = node.fills;
   const color = Array.isArray(fills) && fills.length > 0 ? fills[0] : null;
 
@@ -93,7 +92,6 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
       case !!usedColor && usedColorType === "paint": {
         // If the usedColor is a Paint (Figma Paint) but not an Astro PaintColorToken
         // This is not a style, just a paint object
-        // debugger;
         resolve({
           ...testResult,
           id: `${test}-3`,
@@ -104,7 +102,6 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
       }
 
       case !usedColor: {
-        // debugger;
         // If no fill style or fills are present, return null
         resolve({
           ...testResult,
@@ -116,7 +113,6 @@ const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
       }
 
       default: {
-        // debugger;
         resolve({
           ...testResult,
           // id: `${test}-6`,

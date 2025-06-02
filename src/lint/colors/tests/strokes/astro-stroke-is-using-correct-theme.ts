@@ -97,7 +97,6 @@ const astroStrokeIsUsingCorrectTheme = (
       }
     }
 
-    // console.log('node', node)
     resolve({
       ...testResult,
       message: `An unexpected error occurred when linting strokes`,

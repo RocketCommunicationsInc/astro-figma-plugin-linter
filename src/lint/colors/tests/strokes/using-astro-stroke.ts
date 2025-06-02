@@ -18,6 +18,7 @@ const usingAstroStroke = (node: FillStyleNode): Promise<LintingResult> => {
     message,
     name,
     node,
+    type: node.type,
   };
 
   return new Promise((resolve) => {

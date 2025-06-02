@@ -25,6 +25,7 @@ const astroStrokeIsUsingCorrectTheme = (
       message,
       name,
       node,
+      type: node.type,
     };
 
     // Switch logic based on node state
@@ -96,7 +97,7 @@ const astroStrokeIsUsingCorrectTheme = (
       }
     }
 
-    console.log('node', node)
+    // console.log('node', node)
     resolve({
       ...testResult,
       message: `An unexpected error occurred when linting strokes`,

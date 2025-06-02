@@ -25,6 +25,7 @@ const astroFillIsUsingCorrectTheme = (
       message,
       name,
       node,
+      type: node.type,
     };
 
     // Switch logic based on node state

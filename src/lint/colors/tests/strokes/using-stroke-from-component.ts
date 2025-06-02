@@ -19,13 +19,13 @@ const usingStrokeFromComponent = (
         ? sourceCounterpartNode.strokeStyleId
         : undefined;
     const { colorTokens } = tokens();
-    let usedColorToken,
-      sourceColorToken: PaintColorToken | undefined = undefined;
+    let usedColor,
+      sourceColor: PaintColorToken | undefined = undefined;
     if (typeof strokeStyleId === "string") {
-      usedColorToken = colorTokens.get(stripToLoadableId(strokeStyleId));
+      usedColor = colorTokens.get(stripToLoadableId(strokeStyleId));
     }
     if (typeof sourceStrokeStyleId === "string") {
-      sourceColorToken = colorTokens.get(stripToLoadableId(sourceStrokeStyleId));
+      sourceColor = colorTokens.get(stripToLoadableId(sourceStrokeStyleId));
     }
 
     const testResult: LintingResult = {
@@ -35,13 +35,14 @@ const usingStrokeFromComponent = (
       message,
       name,
       node,
+      type: node.type,
       sourceCounterpartNode,
-      usedColorToken,
-      sourceColorToken,
+      usedColor,
+      sourceColor,
     };
 
     switch (true) {
-      case !!usedColorToken && !!sourceColorToken: {
+      case !!usedColor && !!sourceColor: {
         let pass = false
         let message = "";
         if (strokeStyleId === sourceStrokeStyleId) {

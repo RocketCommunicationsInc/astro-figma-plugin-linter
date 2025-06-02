@@ -1,4 +1,4 @@
-import { FillStyleNode } from "../../types/figma";
+import { FillStyleNode } from "../../../types/figma";
 
 // Return the node or null if it is a fillStyleNode
 const getFillStyleNode = (node: SceneNode): FillStyleNode | null => {

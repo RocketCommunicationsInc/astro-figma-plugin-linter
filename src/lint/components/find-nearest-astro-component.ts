@@ -1,27 +1,21 @@
 import { isFillStyleNode } from "./is-fill-style-node";
 import { tokens } from "../../tokens";
+import { FillStyleNode } from "../../types/figma";
 const { astroComponents } = tokens();
 
 const findNearestAstroComponent = (
   node: FillStyleNode,
   history: { name: string; id: string }[] = []
 ) => {
-  console.log('history', history)
   if (node.type === "INSTANCE" && astroComponents.has(node.name)) {
     // If the node is an instance and has a corresponding Astro component, return it
-    // try {
-    //   const nn = node.getMainComponentAsync();
-    //   debugger;
-    // } catch (error) {
-    //   console.error("Error getting main component:", error);
-    // }
-    // console.log('node.getMainComponentAsync', node.getMainComponentAsync)
-    // const asdf = (node.getMainComponentAsync)
     const nearestAstroComponentLocal = node as InstanceNode;
-    const astroComponentMeta = astroComponents.get(node.name);
+    const nearestAstroComponentMeta = astroComponents.get(node.name);
+    const nn = node.name;
     history.push({name: node.name, id: node.id});
+    const nearestSourceHistory = history;
     debugger;
-    return {nearestAstroComponentLocal, astroComponentMeta, history};
+    return {nearestAstroComponentLocal, nearestAstroComponentMeta, nearestSourceHistory};
   }
   if (node.parent) {
     // If the node has a parent, recursively search in the parent

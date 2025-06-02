@@ -4,15 +4,25 @@ import { PaintColorToken } from "../types/tokens";
 
 // We need to convert them to 0-255 for css.
 // Figma stores rgb values in a 0-1 range.
-function convertFigmaPaintToCSS(paint) {
-  const rgbInput = paint.color
-  const r = Math.round(255 * rgbInput.r)
-  const g = Math.round(255 * rgbInput.g)
-  const b = Math.round(255 * rgbInput.b)
-  return `rgba(${r},${g},${b},${paint.opacity})`
+function convertFigmaPaintToCSS(paint: Paint) {
+  if (paint.type === 'SOLID') {
+    const rgbInput = paint.color;
+    const r = Math.round(255 * rgbInput.r);
+    const g = Math.round(255 * rgbInput.g);
+    const b = Math.round(255 * rgbInput.b);
+    return `rgba(${r},${g},${b},${paint.opacity ?? 1})`;
+  }
+  // Fallback for non-solid paints
+  return 'transparent';
 }
 
-function convertFigmaColorToCSS(color, opacity) {
+interface FigmaRGB {
+  r: number;
+  g: number;
+  b: number;
+}
+
+function convertFigmaColorToCSS(color: FigmaRGB, opacity: number): string {
   const r = Math.round(255 * color.r)
   const g = Math.round(255 * color.g)
   const b = Math.round(255 * color.b)
@@ -24,11 +34,11 @@ const ColorReference: React.FC<{ colorReference: PaintColorToken | PaintStyle | 
     let backgroundColor;
     if ('name' in colorReference) {
       // It's a PaintColorToken
-      backgroundColor = convertFigmaPaintToCSS(colorReference.paints[0]);
+      backgroundColor = convertFigmaPaintToCSS(colorReference.paints[0] as Paint);
       console.log('colorReference is a PaintColorToken', colorReference);
     } else if ('color' in colorReference) {
       // It's a Figma Paint
-      backgroundColor = convertFigmaColorToCSS(colorReference.color, colorReference.opacity);
+      backgroundColor = convertFigmaColorToCSS(colorReference.color, colorReference.opacity ?? 1);
       console.log('colorReference is a Figma Paint', colorReference);
     } else {
       throw new Error("Invalid color reference type");
@@ -58,7 +68,9 @@ const ColorReference: React.FC<{ colorReference: PaintColorToken | PaintStyle | 
     console.error("Error in ColorReference:", error);
     return (
       <div className="result-color-token error">
-        <span className="color-swatch error">Error: {error.message}</span>
+        <span className="color-swatch error">
+          Error: {error instanceof Error ? error.message : String(error)}
+        </span>
       </div>
     );
   }
@@ -86,7 +98,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
             <span
               className="color-swatch"
               style={{
-                backgroundColor: convertFigmaPaintToCSS(result.sourceColor.paints[0]),
+                backgroundColor: convertFigmaPaintToCSS(result.sourceColor.paints[0] as Paint),
               }}
             ></span>
             <span className="color-swatch-name">

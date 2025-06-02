@@ -9,9 +9,10 @@ interface LintingResult {
   message: string;
   name: string;
   node: FillStyleNode;
+  type: string;
   sourceCounterpartNode?: FillStyleNode | null;
-  usedColorToken?: PaintColorToken;
-  sourceColorToken?: PaintColorToken;
+  usedColor?: PaintColorToken | PaintStyle | Paint;
+  sourceColor?: PaintColorToken;
 }
 
 export type { LintingResult };

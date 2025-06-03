@@ -13,6 +13,8 @@ import { usingStrokeFromComponent } from "./tests/strokes/using-stroke-from-comp
 const testPaintStyle = async (
   node: FillStyleNode,
   sourceAstroComponent: ComponentNode | ComponentSetNode | null,
+  nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null,
+  nearestSourceHistory: { name: string; id: string }[],
   astroComponentMeta: AstroComponent | undefined,
   sourceCounterpartNode: ComponentNode | null,
   theme: AstroTheme

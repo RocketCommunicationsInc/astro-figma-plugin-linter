@@ -13,6 +13,7 @@ interface LintingResult {
   sourceCounterpartNode?: FillStyleNode | null;
   usedColor?: PaintColorToken | Paint;
   sourceColor?: PaintColorToken;
+  correspondingColor?: PaintColorToken;
 }
 
 export type { LintingResult };

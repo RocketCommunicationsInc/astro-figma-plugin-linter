@@ -1,21 +1,34 @@
 import { AstroTheme } from "../types/tokens";
 import { clearResults, getResults } from "./results";
 import { FillStyleNode } from "../types/figma";
-import { findFillStyleNodes, getFillStyleNode } from "./colors/helpers/type-checks";
+import {
+  findFillStyleNodes,
+  getFillStyleNode,
+} from "./colors/helpers/type-checks";
 import { getSourceAstroComponent } from "./components";
 import { testPaintStyle } from "./colors/test-paint-style";
 
-const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme): Promise<void> => {
+const lintSingleNode = async (
+  node: FillStyleNode,
+  theme: AstroTheme
+): Promise<void> => {
   return new Promise((resolve) => {
     (async () => {
       // Get relevant data about this node
-      const { sourceAstroComponent, astroComponentMeta, sourceCounterpartNode } =
-        await getSourceAstroComponent(node);
+      const {
+        sourceAstroComponent,
+        nearestSourceAstroComponent,
+        nearestSourceHistory,
+        astroComponentMeta,
+        sourceCounterpartNode,
+      } = await getSourceAstroComponent(node);
 
       // Test paint style
       await testPaintStyle(
         node,
         sourceAstroComponent,
+        nearestSourceAstroComponent,
+        nearestSourceHistory,
         astroComponentMeta,
         sourceCounterpartNode,
         theme
@@ -25,7 +38,10 @@ const lintSingleNode = async (node: FillStyleNode, theme: AstroTheme): Promise<v
   });
 };
 
-const lintChildren = async (node: FillStyleNode, theme: AstroTheme): Promise<void> => {
+const lintChildren = async (
+  node: FillStyleNode,
+  theme: AstroTheme
+): Promise<void> => {
   const lintChildrenPromises: Promise<void>[] = [];
   // Use a type guard to check if the node supports `findAll`
   if ("findAll" in node) {

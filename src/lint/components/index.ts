@@ -31,18 +31,30 @@ const getSourceAstroComponent = async (
   let nearestSourceHistory;
   if (!(node.type === "INSTANCE")) {
     // Get the nearest ancestor that has a masterComponent
-    ({
-      nearestAstroComponentLocal,
-      nearestAstroComponentMeta,
-      nearestSourceHistory,
-    } = findNearestAstroComponent(node));
-    console.log(
-      "nearestAstroComponentLocal, history",
-      nearestAstroComponentLocal,
-      nearestSourceHistory
-    );
+    // try {
+      ({
+        nearestAstroComponentLocal,
+        nearestAstroComponentMeta,
+        nearestSourceHistory,
+      } = findNearestAstroComponent(node));
+    // } catch (error) {
+    //   console.error(
+    //     "Error finding nearest Astro component:",
+    //     nearestAstroComponentLocal,
+    //     nearestAstroComponent,
+    //     nearestAstroComponentMeta,
+    //     nearestSourceAstroComponent,
+    //     nearestSourceHistory,
+    //     error
+    //   );
+    // }
+    // console.log(
+    //   "nearestAstroComponentLocal, history",
+    //   nearestAstroComponentLocal,
+    //   nearestSourceHistory
+    // );
     const n = node as BooleanOperationNode;
-    debugger;
+    // debugger;
   }
   if (node.type === "INSTANCE") {
     const sourceCounterpartNode: ComponentNode | null = await (
@@ -73,7 +85,7 @@ const getSourceAstroComponent = async (
         astroComponentMeta.key
       );
     }
-    debugger;
+    // debugger;
     return {
       sourceAstroComponent,
       nearestSourceAstroComponent: null,
@@ -98,7 +110,7 @@ const getSourceAstroComponent = async (
 
       // const nearestAstroComponent = await (node).getMainComponentAsync();
       // const n = node;
-      debugger;
+      // debugger;
       return {
         sourceAstroComponent: null,
         nearestSourceAstroComponent,
@@ -109,7 +121,7 @@ const getSourceAstroComponent = async (
     } catch (error) {
       console.error("Error getting main component:", error);
       // If there's an error, return null values
-      debugger;
+      // debugger;
       return {
         sourceAstroComponent: null,
         nearestSourceAstroComponent: null,
@@ -121,7 +133,7 @@ const getSourceAstroComponent = async (
   } else {
     // If the node is not an instance, return null values
     const n = node;
-    debugger;
+    // debugger;
     return {
       sourceAstroComponent: null,
       nearestSourceAstroComponent: null,

@@ -10,9 +10,7 @@ type UsedColorResult = {
   usedColorType: "astroToken" | "paintStyle" | "paint" | undefined;
 };
 
-const getFirstColorFill = (
-  node: FillStyleNode
-): UsedColorResult => {
+const getFirstColorFill = (node: FillStyleNode): UsedColorResult => {
   // 1. Using an Astro Color Fill Token
   // 2. Using a Figma Paint Style (not an Astro Token)
   // 3. Using a Figma Paint (not a style, just a paint object)
@@ -28,31 +26,51 @@ const getFirstColorFill = (
   switch (true) {
     case !!astroToken: {
       // If the color is a PaintColorToken
-      return {usedColor: astroToken as PaintColorToken, usedColorType: "astroToken"};
+      return {
+        usedColor: astroToken as PaintColorToken,
+        usedColorType: "astroToken",
+      };
     }
     case !!fillStyleId && !astroToken: {
       // If the color is a PaintColorToken
-      return {usedColor: color as Paint, usedColorType: "paintStyle"};
+      return { usedColor: color as Paint, usedColorType: "paintStyle" };
     }
     case !!color && "color" in color && color.visible === true: {
       // If the color is a Figma Paint (not a PaintColorToken)
-      return {usedColor: color, usedColorType: "paint"};
+      return { usedColor: color, usedColorType: "paint" };
     }
     default: {
       // If no fill style or fills are present, return null
-      return {usedColor: undefined, usedColorType: undefined};
+      return { usedColor: undefined, usedColorType: undefined };
     }
   }
 };
 
-const usingAstroFill = (node: FillStyleNode): Promise<LintingResult> => {
+interface UsingAstroFill {
+  (
+    node: FillStyleNode,
+    nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null,
+    nearestSourceHistory: { name: string; id: string }[]
+  ): Promise<LintingResult>;
+}
+
+const usingAstroFill: UsingAstroFill = (
+  node,
+  nearestSourceAstroComponent,
+  nearestSourceHistory
+): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using an Astro Color Fill";
     const name = node.name;
     // const fillStyleId = node.fillStyleId;
     const pass = false;
     const message = "";
-    const {usedColor, usedColorType} = getFirstColorFill(node);
+    const { usedColor, usedColorType } = getFirstColorFill(node);
+    console.log(
+      "nearestSourceAstroComponent, nearestSourceHistory",
+      nearestSourceAstroComponent,
+      nearestSourceHistory
+    );
 
     const testResult: LintingResult = {
       test,

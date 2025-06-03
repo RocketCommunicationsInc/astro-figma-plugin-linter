@@ -107,6 +107,22 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
             </span>
           </div>
         )}
+        {result.correspondingColor && (
+          <div className="result-color-token source">
+            <span
+              className="color-swatch"
+              style={{
+                backgroundColor: convertFigmaPaintToCSS(result.correspondingColor.paints[0] as Paint),
+              }}
+            ></span>
+            <span className="color-swatch-name">
+              Astro: {result.correspondingColor.name}
+            </span>
+            <span className="color-swatch-description">
+              {result.correspondingColor.description}
+            </span>
+          </div>
+        )}
       </div>
       {debug && (
         <div className="result-id">Test ID: {result.id}</div>

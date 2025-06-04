@@ -14,57 +14,52 @@ const { astroComponents } = tokens();
 const getSourceAstroComponent = async (
   node: FillStyleNode
 ): Promise<{
-  sourceAstroComponent: ComponentNode | ComponentSetNode | null;
+  astroComponentMeta: AstroComponent | undefined;
+  instanceOverrides?: Record<string, any>;
   nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null;
   nearestSourceHistory: { name: string; id: string }[];
-  astroComponentMeta: AstroComponent | undefined;
+  sourceAstroComponent: ComponentNode | ComponentSetNode | null;
   sourceCounterpartNode: ComponentNode | null;
 }> => {
-  // if (node.name === "Check Mark" && node.type === "BOOLEAN_OPERATION") {
-  //   const n = node as BooleanOperationNode;
-  //   debugger;
-  // }
+  let astroComponentMeta: AstroComponent | undefined = undefined;
+  let instanceOverrides = undefined;
+  // let nearestAstroComponent;
   let nearestAstroComponentLocal;
-  let nearestAstroComponent;
   let nearestAstroComponentMeta;
   let nearestSourceAstroComponent = null;
-  let nearestSourceHistory;
+  let nearestSourceHistory = [];
+  let sourceAstroComponent = null;
+  let sourceCounterpartNode = null;
+
+  const returnObject = {
+    astroComponentMeta,
+    instanceOverrides,
+    nearestSourceAstroComponent,
+    nearestSourceHistory,
+    sourceAstroComponent,
+    sourceCounterpartNode,
+  };
+
   if (!(node.type === "INSTANCE")) {
     // Get the nearest ancestor that has a masterComponent
-    // try {
-      ({
-        nearestAstroComponentLocal,
-        nearestAstroComponentMeta,
-        nearestSourceHistory,
-      } = findNearestAstroComponent(node));
-    // } catch (error) {
-    //   console.error(
-    //     "Error finding nearest Astro component:",
-    //     nearestAstroComponentLocal,
-    //     nearestAstroComponent,
-    //     nearestAstroComponentMeta,
-    //     nearestSourceAstroComponent,
-    //     nearestSourceHistory,
-    //     error
-    //   );
-    // }
-    // console.log(
-    //   "nearestAstroComponentLocal, history",
-    //   nearestAstroComponentLocal,
-    //   nearestSourceHistory
-    // );
-    const n = node as BooleanOperationNode;
-    // debugger;
+    ({
+      nearestAstroComponentLocal,
+      nearestAstroComponentMeta,
+      nearestSourceHistory,
+    } = findNearestAstroComponent(node));
   }
   if (node.type === "INSTANCE") {
     const sourceCounterpartNode: ComponentNode | null = await (
       node as InstanceNode
     ).getMainComponentAsync();
 
+    instanceOverrides = (node as InstanceNode).overrides;
+    console.log("instanceOverrides", instanceOverrides);
+
     const sourceCounterpartNodeKey: string | undefined =
       sourceCounterpartNode?.key;
     // Check if sourceCounterpartNode is one of the Astro components in components
-    let astroComponentMeta: AstroComponent | undefined = astroComponents.get(
+    astroComponentMeta = astroComponents.get(
       sourceCounterpartNodeKey
     );
 
@@ -85,21 +80,16 @@ const getSourceAstroComponent = async (
         astroComponentMeta.key
       );
     }
-    // debugger;
+
     return {
-      sourceAstroComponent,
-      nearestSourceAstroComponent: null,
-      nearestSourceHistory: [],
+      ...returnObject,
       astroComponentMeta,
+      instanceOverrides,
+      sourceAstroComponent,
       sourceCounterpartNode,
     };
   } else if (nearestAstroComponentLocal) {
     try {
-      const sourceCounterpartNode: ComponentNode | null = await (
-        nearestAstroComponentLocal as InstanceNode
-      ).getMainComponentAsync();
-
-      let nearestSourceAstroComponent;
       if (nearestAstroComponentMeta) {
         // Load the Astro component from Figma
         nearestSourceAstroComponent = await componentLoaderFunction(
@@ -108,38 +98,23 @@ const getSourceAstroComponent = async (
         );
       }
 
-      // const nearestAstroComponent = await (node).getMainComponentAsync();
-      // const n = node;
-      // debugger;
       return {
-        sourceAstroComponent: null,
+        ...returnObject,
         nearestSourceAstroComponent,
         nearestSourceHistory,
-        astroComponentMeta: undefined,
-        sourceCounterpartNode: null,
       };
     } catch (error) {
       console.error("Error getting main component:", error);
       // If there's an error, return null values
       // debugger;
       return {
-        sourceAstroComponent: null,
-        nearestSourceAstroComponent: null,
-        nearestSourceHistory: [],
-        astroComponentMeta: undefined,
-        sourceCounterpartNode: null,
+        ...returnObject,
       };
     }
   } else {
     // If the node is not an instance, return null values
-    const n = node;
-    // debugger;
     return {
-      sourceAstroComponent: null,
-      nearestSourceAstroComponent: null,
-      nearestSourceHistory: [],
-      astroComponentMeta: undefined,
-      sourceCounterpartNode: null,
+      ...returnObject,
     };
   }
 };

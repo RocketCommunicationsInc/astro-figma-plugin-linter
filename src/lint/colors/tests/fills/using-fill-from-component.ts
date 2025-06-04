@@ -83,8 +83,6 @@ const usingFillFromComponent: UsingFillFromComponent = (
       correspondingColor,
     };
 
-    debugger;
-
     switch (true) {
       case !!usedColor && !!correspondingColor: {
         let pass = false;

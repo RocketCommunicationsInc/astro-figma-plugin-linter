@@ -49,7 +49,7 @@ const getSourceAstroComponent = async (
     } = findNearestAstroComponent(node));
   }
   if (node.type === "INSTANCE") {
-    sourceCounterpartNode: ComponentNode | null = await (
+    sourceCounterpartNode = await (
       node as InstanceNode
     ).getMainComponentAsync();
 

@@ -49,7 +49,7 @@ const getSourceAstroComponent = async (
     } = findNearestAstroComponent(node));
   }
   if (node.type === "INSTANCE") {
-    const sourceCounterpartNode: ComponentNode | null = await (
+    sourceCounterpartNode: ComponentNode | null = await (
       node as InstanceNode
     ).getMainComponentAsync();
 
@@ -72,7 +72,6 @@ const getSourceAstroComponent = async (
       astroComponentMeta = astroComponents.get(sourceCounterpartNodeParentKey);
     }
 
-    let sourceAstroComponent = null;
     if (astroComponentMeta) {
       // Load the Astro component from Figma
       sourceAstroComponent = await componentLoaderFunction(

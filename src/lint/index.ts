@@ -30,7 +30,8 @@ const lintSingleNode = async (
         nearestSourceAstroComponent,
         astroComponentMeta,
         sourceCounterpartNode,
-        theme
+        theme,
+        instanceOverrides
       );
       resolve();
     })();

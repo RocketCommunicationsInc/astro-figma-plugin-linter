@@ -16,7 +16,8 @@ const testPaintStyle = async (
   nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null,
   astroComponentMeta: AstroComponent | undefined,
   sourceCounterpartNode: ComponentNode | null,
-  theme: AstroTheme
+  theme: AstroTheme,
+  instanceOverrides
 ): Promise<void> => {
   const paintStylePromises: Promise<LintingResult>[] = [];
 
@@ -24,7 +25,7 @@ const testPaintStyle = async (
   // todo: correstponding node in a source Astro component
 
   // Fail if node is in a component and not using the correct paint style
-  paintStylePromises.push(usingFillFromComponent(node, sourceCounterpartNode, nearestSourceAstroComponent));
+  paintStylePromises.push(usingFillFromComponent(node, sourceCounterpartNode, nearestSourceAstroComponent, instanceOverrides));
   // paintStylePromises.push(
   //   usingStrokeFromComponent(node, sourceCounterpartNode)
   // );

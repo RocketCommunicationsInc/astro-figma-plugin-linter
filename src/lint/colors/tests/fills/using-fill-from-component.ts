@@ -3,6 +3,7 @@ import { LintingResult } from "../../../../types/results";
 import { tokens, stripToLoadableId } from "../../../../tokens";
 import { PaintColorToken } from "../../../../types/tokens";
 import { findCorrespondingAstroNode } from "../../../components/find-corresponding-astro-node";
+import { getInstanceOverride } from "../../../overrides";
 
 interface UsingFillFromComponent {
   (
@@ -15,7 +16,8 @@ interface UsingFillFromComponent {
 const usingFillFromComponent: UsingFillFromComponent = (
   node,
   sourceCounterpartNode,
-  nearestSourceAstroComponent
+  nearestSourceAstroComponent,
+  instanceOverrides
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Fill from a Component";
@@ -25,7 +27,10 @@ const usingFillFromComponent: UsingFillFromComponent = (
 
     const scn = sourceCounterpartNode;
     const nsac = nearestSourceAstroComponent;
-    console.log("scn, nsac", scn, nsac);
+    const io = instanceOverrides;
+    const instanceOverridesFROMMAP = getInstanceOverride(node.id);
+    console.log("scn, nsac, io", scn, nsac, io, instanceOverridesFROMMAP);
+    debugger;
     const correspondingAstroNode = findCorrespondingAstroNode(
       node,
       nearestSourceAstroComponent,

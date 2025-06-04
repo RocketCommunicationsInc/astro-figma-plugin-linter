@@ -1,8 +1,9 @@
+import { addInstanceOverride } from "../overrides";
 import { AstroComponent } from "../../types/astro";
-import { FillStyleNode } from "../../types/figma";
-import { tokens } from "../../tokens";
 import { componentLoaderFunction } from "./component-loader";
+import { FillStyleNode } from "../../types/figma";
 import { findNearestAstroComponent } from "./find-nearest-astro-component";
+import { tokens } from "../../tokens";
 
 const { astroComponents } = tokens();
 
@@ -51,6 +52,11 @@ const getSourceAstroComponent = async (
 
     instanceOverrides = (node as InstanceNode).overrides;
     console.log("instanceOverrides", instanceOverrides);
+    // debugger;
+    instanceOverrides.map((instanceOverride) => {
+      console.log('instanceOverride', instanceOverride)
+      addInstanceOverride(instanceOverride, sourceCounterpartNode)
+    });
 
     const sourceCounterpartNodeKey: string | undefined =
       sourceCounterpartNode?.key;

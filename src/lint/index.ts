@@ -5,7 +5,7 @@ import {
   findFillStyleNodes,
   getFillStyleNode,
 } from "./colors/helpers/type-checks";
-import { getSourceAstroComponent } from "./components";
+import { getSourceAstroComponent } from "./components/get-source-astro-component";
 import { testPaintStyle } from "./colors/test-paint-style";
 
 const lintSingleNode = async (

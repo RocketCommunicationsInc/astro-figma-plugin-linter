@@ -17,7 +17,6 @@ const getSourceAstroComponent = async (
   astroComponentMeta: AstroComponent | undefined;
   instanceOverrides?: Record<string, any>;
   nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null;
-  nearestSourceHistory: { name: string; id: string }[];
   sourceAstroComponent: ComponentNode | ComponentSetNode | null;
   sourceCounterpartNode: ComponentNode | null;
 }> => {
@@ -27,7 +26,6 @@ const getSourceAstroComponent = async (
   let nearestAstroComponentLocal;
   let nearestAstroComponentMeta;
   let nearestSourceAstroComponent = null;
-  let nearestSourceHistory = [];
   let sourceAstroComponent = null;
   let sourceCounterpartNode = null;
 
@@ -35,7 +33,6 @@ const getSourceAstroComponent = async (
     astroComponentMeta,
     instanceOverrides,
     nearestSourceAstroComponent,
-    nearestSourceHistory,
     sourceAstroComponent,
     sourceCounterpartNode,
   };
@@ -44,8 +41,7 @@ const getSourceAstroComponent = async (
     // Get the nearest ancestor that has a masterComponent
     ({
       nearestAstroComponentLocal,
-      nearestAstroComponentMeta,
-      nearestSourceHistory,
+      nearestAstroComponentMeta
     } = findNearestAstroComponent(node));
   }
   if (node.type === "INSTANCE") {
@@ -99,8 +95,7 @@ const getSourceAstroComponent = async (
 
       return {
         ...returnObject,
-        nearestSourceAstroComponent,
-        nearestSourceHistory,
+        nearestSourceAstroComponent
       };
     } catch (error) {
       console.error("Error getting main component:", error);

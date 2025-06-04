@@ -11,6 +11,7 @@ const findCorrespondingAstroNode = (
   // This means we can use the last segment of the ID
   // to find the corresponding Astro component.
   // We will use a regex to extract the last segment of the ID.
+  const nsac = nearestSourceAstroComponent;
   const regexMatchableIdSegments = /(\d+:\d+)(?!.*\d+:\d+)/;
   const targetNodeName = node.name;
   const targetIdSegments = node.id.match(regexMatchableIdSegments);
@@ -18,10 +19,13 @@ const findCorrespondingAstroNode = (
   const correspondingAstroNode = nearestSourceAstroComponent?.findOne(
     (node) => {
       const searchIdSegments = node.id.match(regexMatchableIdSegments);
-      const searchLastSegment = searchIdSegments ? searchIdSegments[1] : undefined;
+      const searchLastSegment = searchIdSegments
+        ? searchIdSegments[1]
+        : undefined;
       return searchLastSegment === lastSegment && node.name === targetNodeName;
     }
   );
+
   return correspondingAstroNode && isFillStyleNode(correspondingAstroNode)
     ? correspondingAstroNode
     : null;

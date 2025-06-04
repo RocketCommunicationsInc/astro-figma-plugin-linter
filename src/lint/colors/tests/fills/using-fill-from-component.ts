@@ -8,16 +8,14 @@ interface UsingFillFromComponent {
   (
     node: FillStyleNode,
     sourceCounterpartNode: FillStyleNode | null,
-    nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null,
-    nearestSourceHistory: { name: string; id: string }[]
+    nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null
   ): Promise<LintingResult>;
 }
 
 const usingFillFromComponent: UsingFillFromComponent = (
   node,
   sourceCounterpartNode,
-  nearestSourceAstroComponent,
-  nearestSourceHistory
+  nearestSourceAstroComponent
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Fill from a Component";
@@ -25,10 +23,19 @@ const usingFillFromComponent: UsingFillFromComponent = (
     const pass = false;
     const message = "";
 
+    const scn = sourceCounterpartNode;
+    const nsac = nearestSourceAstroComponent;
+    console.log("scn, nsac", scn, nsac);
     const correspondingAstroNode = findCorrespondingAstroNode(
       node,
       nearestSourceAstroComponent,
     );
+    const correspondingAstroNodeSCN = findCorrespondingAstroNode(
+      node,
+      sourceCounterpartNode,
+    );
+    console.log('correspondingAstroNode', node.name, node.id, correspondingAstroNode)
+    console.log('correspondingAstroNodeSCN', node.name, node.id, correspondingAstroNodeSCN)
 
     const fillStyleId = "fillStyleId" in node ? node.fillStyleId : undefined;
     const sourceFillStyleId =

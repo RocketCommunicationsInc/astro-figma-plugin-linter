@@ -49,15 +49,13 @@ const getFirstColorFill = (node: FillStyleNode): UsedColorResult => {
 interface UsingAstroFill {
   (
     node: FillStyleNode,
-    nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null,
-    nearestSourceHistory: { name: string; id: string }[]
+    nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null
   ): Promise<LintingResult>;
 }
 
 const usingAstroFill: UsingAstroFill = (
   node,
-  nearestSourceAstroComponent,
-  nearestSourceHistory
+  nearestSourceAstroComponent
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using an Astro Color Fill";
@@ -66,11 +64,6 @@ const usingAstroFill: UsingAstroFill = (
     const pass = false;
     const message = "";
     const { usedColor, usedColorType } = getFirstColorFill(node);
-    console.log(
-      "nearestSourceAstroComponent, nearestSourceHistory",
-      nearestSourceAstroComponent,
-      nearestSourceHistory
-    );
 
     const testResult: LintingResult = {
       test,

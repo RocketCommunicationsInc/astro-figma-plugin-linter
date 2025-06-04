@@ -14,32 +14,30 @@ const testPaintStyle = async (
   node: FillStyleNode,
   sourceAstroComponent: ComponentNode | ComponentSetNode | null,
   nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null,
-  nearestSourceHistory: { name: string; id: string }[],
   astroComponentMeta: AstroComponent | undefined,
   sourceCounterpartNode: ComponentNode | null,
   theme: AstroTheme
 ): Promise<void> => {
   const paintStylePromises: Promise<LintingResult>[] = [];
 
+  // TODO: Use the nearestSourceAstroComponent to determine the
+  // todo: correstponding node in a source Astro component
+
   // Fail if node is in a component and not using the correct paint style
-  if (sourceAstroComponent && sourceCounterpartNode) {
-    paintStylePromises.push(
-      usingFillFromComponent(node, sourceCounterpartNode)
-    );
-    paintStylePromises.push(
-      usingStrokeFromComponent(node, sourceCounterpartNode)
-    );
-  } else {
-    // Fail if node is not in an Astro component,
-    // IS using a fill/stroke style,
-    // AND not using an Astro paint style
-    paintStylePromises.push(usingAstroFill(node));
-    paintStylePromises.push(usingAstroStroke(node));
-  }
+  paintStylePromises.push(usingFillFromComponent(node, sourceCounterpartNode, nearestSourceAstroComponent));
+  // paintStylePromises.push(
+  //   usingStrokeFromComponent(node, sourceCounterpartNode)
+  // );
+  // Fail if node is not in an Astro component,
+  // IS using a fill/stroke style,
+  // AND not using an Astro paint style
+  // console.log('nearestSourceAstroComponent', node.name, nearestSourceAstroComponent?.name, nearestSourceAstroComponent)
+  // paintStylePromises.push(usingAstroFill(node, nearestSourceAstroComponent));
+  // paintStylePromises.push(usingAstroStroke(node));
 
   // Fail if node is using an Astro paint style but not the correct one for this theme
-  paintStylePromises.push(astroFillIsUsingCorrectTheme(node, theme));
-  paintStylePromises.push(astroStrokeIsUsingCorrectTheme(node, theme));
+  // paintStylePromises.push(astroFillIsUsingCorrectTheme(node, theme));
+  // paintStylePromises.push(astroStrokeIsUsingCorrectTheme(node, theme));
 
   await Promise.all(paintStylePromises)
     .then((results) => {

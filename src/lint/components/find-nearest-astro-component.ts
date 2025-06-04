@@ -7,37 +7,28 @@ const { astroComponents } = tokens();
 interface FindNearestAstroComponentResult {
   nearestAstroComponentLocal: InstanceNode | null;
   nearestAstroComponentMeta: AstroComponent | undefined | null;
-  nearestSourceHistory: { name: string; id: string }[];
 }
 
-const findNearestAstroComponent = (
-  node: FillStyleNode,
-  history: { name: string; id: string }[] = []
-): FindNearestAstroComponentResult | null => {
+const findNearestAstroComponent = (node: FillStyleNode): FindNearestAstroComponentResult | null => {
   const returnNull = {
     nearestAstroComponentLocal: null,
     nearestAstroComponentMeta: null,
-    nearestSourceHistory: [],
   };
   if (node.type === "INSTANCE" && astroComponents.has(node.name)) {
     // If the node is an instance and has a corresponding Astro component, return it
     const nearestAstroComponentLocal = node as InstanceNode;
     const nearestAstroComponentMeta = astroComponents.get(node.name);
-    history.push({ name: node.name, id: node.id });
-    const nearestSourceHistory = history;
 
     return {
       nearestAstroComponentLocal,
       nearestAstroComponentMeta,
-      nearestSourceHistory,
     };
   }
   if (node.parent) {
     // If the node has a parent, recursively search in the parent
-    history.push({ name: node.name, id: node.id });
     // Ensure node.parent is a FillStyleNode before recursion
     if (isFillStyleNode(node.parent)) {
-      return findNearestAstroComponent(node.parent, history);
+      return findNearestAstroComponent(node.parent);
     } else {
       return returnNull;
     }

@@ -19,7 +19,6 @@ const lintSingleNode = async (
         astroComponentMeta,
         instanceOverrides,
         nearestSourceAstroComponent,
-        nearestSourceHistory,
         sourceAstroComponent,
         sourceCounterpartNode,
       } = await getSourceAstroComponent(node);
@@ -29,7 +28,6 @@ const lintSingleNode = async (
         node,
         sourceAstroComponent,
         nearestSourceAstroComponent,
-        nearestSourceHistory,
         astroComponentMeta,
         sourceCounterpartNode,
         theme

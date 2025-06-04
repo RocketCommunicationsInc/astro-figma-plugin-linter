@@ -16,10 +16,11 @@ const lintSingleNode = async (
     (async () => {
       // Get relevant data about this node
       const {
-        sourceAstroComponent,
+        astroComponentMeta,
+        instanceOverrides,
         nearestSourceAstroComponent,
         nearestSourceHistory,
-        astroComponentMeta,
+        sourceAstroComponent,
         sourceCounterpartNode,
       } = await getSourceAstroComponent(node);
 

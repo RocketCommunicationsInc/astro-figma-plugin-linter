@@ -7,54 +7,8 @@ import {
 } from "./colors/helpers/type-checks";
 import { getSourceAstroComponent } from "./components/get-source-astro-component";
 import { testPaintStyle } from "./colors/test-paint-style";
-
-const lintSingleNode = async (
-  node: FillStyleNode,
-  theme: AstroTheme
-): Promise<void> => {
-  return new Promise((resolve) => {
-    (async () => {
-      // Get relevant data about this node
-      const {
-        astroComponentMeta,
-        nearestSourceAstroComponent,
-        sourceAstroComponent,
-        sourceCounterpartNode,
-      } = await getSourceAstroComponent(node);
-
-      // Test paint style
-      await testPaintStyle(
-        node,
-        sourceAstroComponent,
-        nearestSourceAstroComponent,
-        astroComponentMeta,
-        sourceCounterpartNode,
-        theme,
-      );
-      resolve();
-    })();
-  });
-};
-
-const lintChildren = async (
-  node: FillStyleNode,
-  theme: AstroTheme
-): Promise<void> => {
-  const lintChildrenPromises: Promise<void>[] = [];
-  // Use a type guard to check if the node supports `findAll`
-  if ("findAll" in node) {
-    const childrenToLint = node.findAll((node) => {
-      return findFillStyleNodes([node]).length > 0;
-    });
-    childrenToLint.map((node) => {
-      const fillStyleNode = getFillStyleNode(node);
-      if (fillStyleNode) {
-        lintChildrenPromises.push(lintSingleNode(fillStyleNode, theme));
-      }
-    });
-  }
-  await Promise.all(lintChildrenPromises);
-};
+import { collectOverrides } from "./components/collect-overrides";
+import { getNearestAstroComponent } from "./components/get-nearest-astro-component";
 
 const lintSelection = async (theme: AstroTheme) => {
   clearResults();
@@ -88,6 +42,57 @@ const lintSelection = async (theme: AstroTheme) => {
     figma.ui.postMessage({ type: "lint-results", content: results });
   });
   figma.notify("Linting complete");
+};
+
+const lintChildren = async (
+  node: FillStyleNode,
+  theme: AstroTheme
+): Promise<void> => {
+  const lintChildrenPromises: Promise<void>[] = [];
+  // Use a type guard to check if the node supports `findAll`
+  if ("findAll" in node) {
+    const childrenToLint = node.findAll((node) => {
+      return findFillStyleNodes([node]).length > 0;
+    });
+    childrenToLint.map((node) => {
+      const fillStyleNode = getFillStyleNode(node);
+      if (fillStyleNode) {
+        lintChildrenPromises.push(lintSingleNode(fillStyleNode, theme));
+      }
+    });
+  }
+  await Promise.all(lintChildrenPromises);
+};
+
+const lintSingleNode = async (
+  node: FillStyleNode,
+  theme: AstroTheme
+): Promise<void> => {
+  return new Promise((resolve) => {
+    (async () => {
+      // Get relevant data about this node
+      // const {
+      //   astroComponentMeta,
+      //   nearestSourceAstroComponent,
+      //   sourceAstroComponent,
+      //   sourceCounterpartNode,
+      // } = await getSourceAstroComponent(node);
+
+      await collectOverrides(node);
+      await getNearestAstroComponent(node);
+
+      // Test paint style
+      // await testPaintStyle(
+      //   node,
+      //   sourceAstroComponent,
+      //   nearestSourceAstroComponent,
+      //   astroComponentMeta,
+      //   sourceCounterpartNode,
+      //   theme,
+      // );
+      resolve();
+    })();
+  });
 };
 
 // Listen for messages from the UI

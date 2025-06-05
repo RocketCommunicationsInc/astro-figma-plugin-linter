@@ -17,7 +17,6 @@ const lintSingleNode = async (
       // Get relevant data about this node
       const {
         astroComponentMeta,
-        instanceOverrides,
         nearestSourceAstroComponent,
         sourceAstroComponent,
         sourceCounterpartNode,
@@ -31,7 +30,6 @@ const lintSingleNode = async (
         astroComponentMeta,
         sourceCounterpartNode,
         theme,
-        instanceOverrides
       );
       resolve();
     })();

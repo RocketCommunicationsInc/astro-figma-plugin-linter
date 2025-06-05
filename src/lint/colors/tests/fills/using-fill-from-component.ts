@@ -17,7 +17,6 @@ const usingFillFromComponent: UsingFillFromComponent = (
   node,
   sourceCounterpartNode,
   nearestSourceAstroComponent,
-  instanceOverrides
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Fill from a Component";
@@ -27,9 +26,8 @@ const usingFillFromComponent: UsingFillFromComponent = (
 
     const scn = sourceCounterpartNode;
     const nsac = nearestSourceAstroComponent;
-    const io = instanceOverrides;
     const instanceOverridesFROMMAP = getInstanceOverride(node.id);
-    console.log("scn, nsac, io", scn, nsac, io, instanceOverridesFROMMAP);
+    console.log("scn, nsac", scn, nsac, instanceOverridesFROMMAP);
     debugger;
     const correspondingAstroNode = findCorrespondingAstroNode(
       node,

@@ -16,11 +16,11 @@ const getSourceAstroComponent = async (
   node: FillStyleNode
 ): Promise<{
   astroComponentMeta: AstroComponent | undefined;
-  instanceOverrides?: Record<string, any>;
   nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null;
   sourceAstroComponent: ComponentNode | ComponentSetNode | null;
   sourceCounterpartNode: ComponentNode | null;
 }> => {
+  // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
   let instanceOverrides = undefined;
   // let nearestAstroComponent;
@@ -32,7 +32,6 @@ const getSourceAstroComponent = async (
 
   const returnObject = {
     astroComponentMeta,
-    instanceOverrides,
     nearestSourceAstroComponent,
     sourceAstroComponent,
     sourceCounterpartNode,
@@ -51,10 +50,8 @@ const getSourceAstroComponent = async (
     ).getMainComponentAsync();
 
     instanceOverrides = (node as InstanceNode).overrides;
-    console.log("instanceOverrides", instanceOverrides);
     // debugger;
     instanceOverrides.map((instanceOverride) => {
-      console.log('instanceOverride', instanceOverride)
       addInstanceOverride(instanceOverride, sourceCounterpartNode)
     });
 
@@ -85,7 +82,6 @@ const getSourceAstroComponent = async (
     return {
       ...returnObject,
       astroComponentMeta,
-      instanceOverrides,
       sourceAstroComponent,
       sourceCounterpartNode,
     };

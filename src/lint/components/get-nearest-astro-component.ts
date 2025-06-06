@@ -1,4 +1,4 @@
-import { addInstanceOverride, getInstanceOverride } from "../overrides";
+import { addInstanceOverride, getInstanceOverride } from "../collect-data/overrides";
 import { AstroComponent } from "../../types/astro";
 import { componentLoaderFunction } from "./component-loader";
 import { findNearestAstroComponent } from "./find-nearest-astro-component";

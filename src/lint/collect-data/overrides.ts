@@ -1,5 +1,5 @@
-import { AstroComponent } from "../types/astro";
-import { InstanceOverride } from "../types/overrides";
+import { AstroComponent } from "../../types/astro";
+import { InstanceOverride } from "../../types/overrides";
 
 // const instanceOverrides = new Map<string, InstanceOverride>();
 const instanceOverrides = new Map();

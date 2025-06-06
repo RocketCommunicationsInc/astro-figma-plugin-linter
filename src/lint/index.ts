@@ -1,5 +1,5 @@
 import { AstroTheme } from "../types/tokens";
-import { clearResults, getResults } from "./results";
+import { clearResults, getResults } from "./collect-data/results";
 import { FillStyleNode } from "../types/figma";
 import {
   findFillStyleNodes,
@@ -9,7 +9,7 @@ import { getSourceAstroComponent } from "./components/get-source-astro-component
 import { testPaintStyle } from "./colors/test-paint-style";
 import { collectOverrides } from "./components/collect-overrides";
 import { getNearestAstroComponent } from "./components/get-nearest-astro-component";
-import { clearInstanceOverrides } from "./overrides";
+import { clearInstanceOverrides } from "./collect-data/overrides";
 
 const lintSelection = async (theme: AstroTheme) => {
   clearResults();

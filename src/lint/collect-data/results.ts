@@ -1,4 +1,4 @@
-import { LintingResult } from "../types/results";
+import { LintingResult } from "../../types/results";
 
 let results: LintingResult[] = [];
 

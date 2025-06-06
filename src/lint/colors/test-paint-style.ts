@@ -1,4 +1,4 @@
-import { addResult } from "../results";
+import { addResult } from "../collect-data/results";
 import { AstroComponent } from "../../types/astro";
 import { astroFillIsUsingCorrectTheme } from "./tests/fills/astro-fill-is-using-correct-theme";
 import { astroStrokeIsUsingCorrectTheme } from "./tests/strokes/astro-stroke-is-using-correct-theme";

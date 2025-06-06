@@ -3,7 +3,7 @@ import { LintingResult } from "../../../../types/results";
 import { tokens, stripToLoadableId } from "../../../../tokens";
 import { PaintColorToken } from "../../../../types/tokens";
 import { findCorrespondingAstroNode } from "../../../components/find-corresponding-astro-node";
-import { getInstanceOverride } from "../../../overrides";
+import { getInstanceOverride } from "../../../collect-data/overrides";
 
 const getColorFill = (node: FillStyleNode) => {
   console.log("getColorFill node", node);

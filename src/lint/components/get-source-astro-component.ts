@@ -1,4 +1,4 @@
-import { addInstanceOverride } from "../overrides";
+import { addInstanceOverride } from "../collect-data/overrides";
 import { AstroComponent } from "../../types/astro";
 import { componentLoaderFunction } from "./component-loader";
 import { FillStyleNode } from "../../types/figma";

@@ -4,7 +4,6 @@ let results: LintingResult[] = [];
 
 const clearResults = () => {
   results = [];
-  figma.ui.postMessage({ type: "clear-results" });
 };
 
 const addResult = (result: LintingResult) => {

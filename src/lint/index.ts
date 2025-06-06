@@ -10,6 +10,7 @@ import { testPaintStyle } from "./colors/test-paint-style";
 import { collectOverrides } from "./components/collect-overrides";
 import { getNearestAstroComponent } from "./components/get-nearest-astro-component";
 import { clearInstanceOverrides } from "./collect-data/overrides";
+import { collectAssociations } from "./components/collect-associations";
 
 const lintSelection = async (theme: AstroTheme) => {
   clearResults();
@@ -26,7 +27,7 @@ const lintSelection = async (theme: AstroTheme) => {
 
   // Collect all the overrides
   const overridesPromises: Promise<boolean | void>[] = [];
-  const nearestAstroComponentPromises: Promise<boolean | void>[] = [];
+  const associationsPromises: Promise<boolean | void>[] = [];
   const lintingPromises: Promise<void>[] = [];
 
   // collect all nodes to pre-screen
@@ -57,14 +58,14 @@ const lintSelection = async (theme: AstroTheme) => {
   await Promise.all(overridesPromises).then(() => {
     // collect all nearest Astro components
     for (const selectionNode of fillStyleNodes) {
-      nearestAstroComponentPromises.push(
-        getNearestAstroComponent(selectionNode).catch((error) => {
+      associationsPromises.push(
+        collectAssociations(selectionNode).catch((error) => {
           console.error("Error in getNearestAstroComponent:", error);
         })
       );
       childrenToCheckForOverrides.map((node) => {
-        nearestAstroComponentPromises.push(
-          getNearestAstroComponent(node).catch((error) => {
+        associationsPromises.push(
+          collectAssociations(node).catch((error) => {
             console.error("Error in getNearestAstroComponent:", error);
           })
         );
@@ -72,7 +73,7 @@ const lintSelection = async (theme: AstroTheme) => {
     }
   });
 
-  await Promise.all(nearestAstroComponentPromises).then(() => {
+  await Promise.all(associationsPromises).then(() => {
     for (const selectionNode of fillStyleNodes) {
       lintingPromises.push(
         lintSingleNode(selectionNode, theme).catch((error) => {

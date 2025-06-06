@@ -6,7 +6,6 @@ import { findCorrespondingAstroNode } from "../../../components/find-correspondi
 import { getInstanceOverride } from "../../../collect-data/overrides";
 
 const getColorFill = (node: FillStyleNode) => {
-  console.log("getColorFill node", node);
   let color: PaintColorToken | undefined = undefined;
   const { colorTokens } = tokens();
   const fillStyleId = "fillStyleId" in node ? node.fillStyleId : undefined;
@@ -44,7 +43,6 @@ const usingFillFromComponent: UsingFillFromComponent = (
     const message = "";
 
     const instanceOverrides = getInstanceOverride(node.id);
-    // console.log("instanceOverrides", instanceOverrides);
     const {
       overriddenFields,
       sourceCounterpartNode,
@@ -81,7 +79,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
 
     switch (true) {
       case !!overriddenFields && overriddenFields.includes("fillStyleId"): {
-        debugger;
+        // debugger;
         resolve({
           ...testResult,
           id: `${test}-1`,
@@ -93,7 +91,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       }
 
       case (!overriddenFields): {
-        debugger;
+        // debugger;
         resolve({
           ...testResult,
           id: `${test}-2`,
@@ -105,7 +103,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       }
 
       default: {
-        debugger;
+        // debugger;
         resolve({
           ...testResult,
           id: `${test}-3`,
@@ -117,7 +115,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       }
     }
 
-    debugger;
+    // debugger;
     resolve({
       ...testResult,
       message: `An unexpected error occurred when linting fills`,

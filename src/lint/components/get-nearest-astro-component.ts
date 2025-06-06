@@ -1,4 +1,7 @@
-import { addInstanceOverride, getInstanceOverride } from "../collect-data/overrides";
+import {
+  addInstanceOverride,
+  getInstanceOverride,
+} from "../collect-data/overrides";
 import { AstroComponent } from "../../types/astro";
 import { componentLoaderFunction } from "./component-loader";
 import { findNearestAstroComponent } from "./find-nearest-astro-component";
@@ -9,13 +12,13 @@ const { astroComponents } = tokens();
 
 const getNearestAstroComponent = async (
   node: FillStyleNode
-): Promise<boolean> => {
-  console.log("getNearestAstroComponent", node.id, node.name);
+): Promise<ComponentNode | ComponentSetNode | null> => {
   if (node.type === "INSTANCE") {
-    return false;
+    return null;
   }
 
-  let nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null = null;
+  let nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null =
+    null;
 
   const nearestAstroComponentResult = findNearestAstroComponent(node);
 
@@ -33,26 +36,11 @@ const getNearestAstroComponent = async (
       );
     }
 
-    console.log(
-      "nearestSourceAstroComponent",
-      node.id,
-      nearestSourceAstroComponent
-    );
-
     if (nearestSourceAstroComponent) {
-      const relatedOverride = getInstanceOverride(node.id);
-      const updatedOverride = {
-        ...relatedOverride,
-        nearestSourceAstroComponent,
-      };
-      console.log('relatedOverride', relatedOverride, node.id)
-      console.log('updatedOverride', updatedOverride)
-      // addInstanceOverride(updatedOverride);
+      return nearestSourceAstroComponent;
     }
-
-    return true;
   }
-  return false;
+  return null;
 };
 
 export { getNearestAstroComponent };

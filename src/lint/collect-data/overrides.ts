@@ -1,8 +1,16 @@
 import { AstroComponent } from "../../types/astro";
 import { InstanceOverride } from "../../types/overrides";
 
-// const instanceOverrides = new Map<string, InstanceOverride>();
-const instanceOverrides = new Map();
+const instanceOverrides: Map<
+  string,
+  {
+    overriddenFields: InstanceOverride["overriddenFields"];
+    sourceCounterpartNode: ComponentNode | null;
+    astroComponentMeta: AstroComponent | undefined;
+    sourceAstroComponent: ComponentNode | ComponentSetNode | null;
+    nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null;
+  }
+> = new Map();
 
 const clearInstanceOverrides = () => {
   instanceOverrides.clear();

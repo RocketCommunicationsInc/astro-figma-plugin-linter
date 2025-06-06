@@ -5,18 +5,37 @@ import { PaintColorToken } from "../../../../types/tokens";
 import { findCorrespondingAstroNode } from "../../../components/find-corresponding-astro-node";
 import { getInstanceOverride } from "../../../overrides";
 
+const getColorFill = (node: FillStyleNode) => {
+  console.log("getColorFill node", node);
+  let color: PaintColorToken | undefined = undefined;
+  const { colorTokens } = tokens();
+  const fillStyleId = "fillStyleId" in node ? node.fillStyleId : undefined;
+  if (typeof fillStyleId === "string") {
+    color = colorTokens.get(stripToLoadableId(fillStyleId));
+  }
+  if (!color) {
+    // If no fillStyleId, check for fills
+    const fills = "fills" in node ? node.fills : undefined;
+    if (Array.isArray(fills) && fills.length > 0) {
+      const firstFill = fills[0];
+      if (firstFill.type === "SOLID") {
+        color = {
+          type: "SOLID",
+          color: firstFill.color,
+          opacity: firstFill.opacity,
+        };
+      }
+    }
+  }
+  return color;
+};
+
 interface UsingFillFromComponent {
-  (
-    node: FillStyleNode,
-    sourceCounterpartNode: FillStyleNode | null,
-    nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null
-  ): Promise<LintingResult>;
+  (node: FillStyleNode): Promise<LintingResult>;
 }
 
 const usingFillFromComponent: UsingFillFromComponent = (
-  node,
-  sourceCounterpartNode,
-  nearestSourceAstroComponent,
+  node
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Fill from a Component";
@@ -24,61 +43,28 @@ const usingFillFromComponent: UsingFillFromComponent = (
     const pass = false;
     const message = "";
 
-    const scn = sourceCounterpartNode;
-    const nsac = nearestSourceAstroComponent;
-    const instanceOverridesFROMMAP = getInstanceOverride(node.id);
-    console.log("scn, nsac", scn, nsac, instanceOverridesFROMMAP);
-    debugger;
+    const instanceOverrides = getInstanceOverride(node.id);
+    // console.log("instanceOverrides", instanceOverrides);
+    const {
+      overriddenFields,
+      sourceCounterpartNode,
+      astroComponentMeta,
+      sourceAstroComponent,
+      nearestSourceAstroComponent,
+    } = instanceOverrides || {};
+
+    const usedColor = getColorFill(node);
+    const sourceColor = sourceCounterpartNode
+      ? getColorFill(sourceCounterpartNode)
+      : undefined;
+
     const correspondingAstroNode = findCorrespondingAstroNode(
       node,
-      nearestSourceAstroComponent,
+      nearestSourceAstroComponent
     );
-    const correspondingAstroNodeSCN = findCorrespondingAstroNode(
-      node,
-      sourceCounterpartNode,
-    );
-    console.log('correspondingAstroNode', node.name, node.id, correspondingAstroNode)
-    console.log('correspondingAstroNodeSCN', node.name, node.id, correspondingAstroNodeSCN)
-
-    const fillStyleId = "fillStyleId" in node ? node.fillStyleId : undefined;
-    const sourceFillStyleId =
-      sourceCounterpartNode && "fillStyleId" in sourceCounterpartNode
-        ? sourceCounterpartNode.fillStyleId
-        : undefined;
-    const correspondingFillStyleId =
-      correspondingAstroNode && "fillStyleId" in correspondingAstroNode
-        ? correspondingAstroNode.fillStyleId
-        : undefined;
-
-
-    const { colorTokens } = tokens();
-
-    let usedColor,
-      sourceColor: PaintColorToken | undefined = undefined,
-      correspondingColor: PaintColorToken | undefined = undefined;
-    if (typeof fillStyleId === "string") {
-      usedColor = colorTokens.get(stripToLoadableId(fillStyleId));
-    }
-    if (typeof sourceFillStyleId === "string") {
-      sourceColor = colorTokens.get(stripToLoadableId(sourceFillStyleId));
-    }
-    if (typeof correspondingFillStyleId === "string") {
-      correspondingColor = colorTokens.get(
-        stripToLoadableId(correspondingFillStyleId),
-      );
-    }
-
-
-
-
-
-
-    console.log(
-      "node, sourceCounterpartNode, correspondingAstroNode",
-      node,
-      sourceCounterpartNode,
-      correspondingAstroNode,
-    );
+    const correspondingColor = correspondingAstroNode
+      ? getColorFill(correspondingAstroNode)
+      : undefined;
 
     const testResult: LintingResult = {
       test,
@@ -94,37 +80,44 @@ const usingFillFromComponent: UsingFillFromComponent = (
     };
 
     switch (true) {
-      case !!usedColor && !!correspondingColor: {
-        let pass = false;
-        let message = "";
-        if (fillStyleId === correspondingFillStyleId) {
-          pass = true;
-          message =
-            "Node is using the same fill style as the source Astro component.";
-        } else {
-          message =
-            "Node is not using the same fill style as the source Astro component.";
-        }
+      case !!overriddenFields && overriddenFields.includes("fillStyleId"): {
+        debugger;
         resolve({
           ...testResult,
           id: `${test}-1`,
-          pass: pass,
-          message: message,
+          pass: false,
+          message:
+            "Node is not using the same fill style as the source Astro component.",
+        });
+        break;
+      }
+
+      case (!overriddenFields): {
+        debugger;
+        resolve({
+          ...testResult,
+          id: `${test}-2`,
+          pass: true,
+          message:
+            "Node is using the same fill style as the source Astro component.",
         });
         break;
       }
 
       default: {
+        debugger;
         resolve({
           ...testResult,
-          id: `${test}-2`,
-          // ignore: true,
-          message: "No source Astro component to compare fill style.",
+          id: `${test}-3`,
+          ignore: true,
+          pass: true,
+          message: "Something is overridden, but not fillStyleId.",
         });
         break;
       }
     }
 
+    debugger;
     resolve({
       ...testResult,
       message: `An unexpected error occurred when linting fills`,

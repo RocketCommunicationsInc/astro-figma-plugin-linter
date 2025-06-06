@@ -50,7 +50,6 @@ const getSourceAstroComponent = async (
     ).getMainComponentAsync();
 
     instanceOverrides = (node as InstanceNode).overrides;
-    // debugger;
     instanceOverrides.map((instanceOverride) => {
       addInstanceOverride(instanceOverride, sourceCounterpartNode)
     });
@@ -102,7 +101,6 @@ const getSourceAstroComponent = async (
     } catch (error) {
       console.error("Error getting main component:", error);
       // If there's an error, return null values
-      // debugger;
       return {
         ...returnObject,
       };

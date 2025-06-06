@@ -4,6 +4,7 @@ import { tokens, stripToLoadableId } from "../../../../tokens";
 import { PaintColorToken } from "../../../../types/tokens";
 import { findCorrespondingAstroNode } from "../../../components/find-corresponding-astro-node";
 import { getInstanceOverride } from "../../../collect-data/overrides";
+import { getAssociation } from "../../../collect-data/associations";
 
 const getColorFill = (node: FillStyleNode) => {
   let color: PaintColorToken | undefined = undefined;
@@ -43,23 +44,21 @@ const usingFillFromComponent: UsingFillFromComponent = (
     const message = "";
 
     const instanceOverrides = getInstanceOverride(node.id);
+    const overriddenFields = instanceOverrides || null;
+
     const {
-      overriddenFields,
       sourceCounterpartNode,
       astroComponentMeta,
       sourceAstroComponent,
       nearestSourceAstroComponent,
-    } = instanceOverrides || {};
+    } = getAssociation(node.id);
 
     const usedColor = getColorFill(node);
     const sourceColor = sourceCounterpartNode
       ? getColorFill(sourceCounterpartNode)
       : undefined;
 
-    const correspondingAstroNode = findCorrespondingAstroNode(
-      node,
-      nearestSourceAstroComponent
-    );
+    const correspondingAstroNode = findCorrespondingAstroNode(node);
     const correspondingColor = correspondingAstroNode
       ? getColorFill(correspondingAstroNode)
       : undefined;
@@ -79,7 +78,6 @@ const usingFillFromComponent: UsingFillFromComponent = (
 
     switch (true) {
       case !!overriddenFields && overriddenFields.includes("fillStyleId"): {
-        // debugger;
         resolve({
           ...testResult,
           id: `${test}-1`,
@@ -90,8 +88,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
         break;
       }
 
-      case (!overriddenFields): {
-        // debugger;
+      case !overriddenFields: {
         resolve({
           ...testResult,
           id: `${test}-2`,
@@ -103,7 +100,6 @@ const usingFillFromComponent: UsingFillFromComponent = (
       }
 
       default: {
-        // debugger;
         resolve({
           ...testResult,
           id: `${test}-3`,
@@ -115,7 +111,6 @@ const usingFillFromComponent: UsingFillFromComponent = (
       }
     }
 
-    // debugger;
     resolve({
       ...testResult,
       message: `An unexpected error occurred when linting fills`,

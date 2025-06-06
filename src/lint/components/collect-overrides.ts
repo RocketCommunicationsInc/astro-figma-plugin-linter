@@ -43,7 +43,6 @@ const collectOverrides = async (node: FillStyleNode): Promise<boolean> => {
   }
 
   instanceOverrides = (node as InstanceNode).overrides;
-  // debugger;
   instanceOverrides.map((instanceOverride) => {
     addInstanceOverride(
       instanceOverride,

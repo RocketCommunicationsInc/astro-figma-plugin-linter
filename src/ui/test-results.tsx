@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { LintingResult } from "../types/results";
 import { PaintColorToken } from "../types/tokens";
 
@@ -81,6 +81,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
   };
 
   const resultClass = result.pass ? "pass" : "fail";
+  const { usedColor, sourceColor, correspondingColor } = result;
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
       <div className={`result-test ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>
@@ -88,38 +89,43 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
       <div className="result-node">{result.name} <span className="result-node-type">{result.type}</span></div>
       <div className="result-message">{result.message}</div>
       <div className="result-references">
-        {result.usedColor && (
-          <ColorReference colorReference={result.usedColor} />
+        {usedColor && (
+          <ColorReference colorReference={usedColor} />
         )}
-        {result.sourceColor && (
+        {sourceColor?.paints && (
           <div className="result-color-token source">
             <span
               className="color-swatch"
               style={{
-                backgroundColor: convertFigmaPaintToCSS(result.sourceColor.paints[0] as Paint),
+                backgroundColor: convertFigmaPaintToCSS(sourceColor.paints[0] as Paint),
               }}
             ></span>
             <span className="color-swatch-name">
-              Astro: {result.sourceColor.name}
+              Astro: {sourceColor.name}
             </span>
             <span className="color-swatch-description">
-              {result.sourceColor.description}
+              {sourceColor.description}
             </span>
           </div>
         )}
-        {result.correspondingColor && (
+        {usedColor && !correspondingColor && (
+          <div className="result-color-token source error">
+            <span className="color-swatch-name error">No corresponding Astro color found</span>
+          </div>
+        )}
+        {correspondingColor?.paints && (
           <div className="result-color-token source">
             <span
               className="color-swatch"
               style={{
-                backgroundColor: convertFigmaPaintToCSS(result.correspondingColor.paints[0] as Paint),
+                backgroundColor: convertFigmaPaintToCSS(correspondingColor.paints[0] as Paint),
               }}
             ></span>
             <span className="color-swatch-name">
-              Astro: {result.correspondingColor.name}
+              Astro: {correspondingColor.name}
             </span>
             <span className="color-swatch-description">
-              {result.correspondingColor.description}
+              {correspondingColor.description}
             </span>
           </div>
         )}

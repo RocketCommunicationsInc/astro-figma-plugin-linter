@@ -34,9 +34,6 @@ const astroStrokeIsUsingCorrectTheme = (
         const astroColorNameWithTheme = `${theme}/${astroColor?.name}`;
         const astroColorWithTheme = colorTokens.get(astroColorNameWithTheme);
         const pass = astroColor?.id === astroColorWithTheme?.id;
-        // message = pass
-        //   ? `Node is using a stroke style (${astroColor.name}) from Astro in the correct theme (${theme})`
-        //   : `Node is using a stroke style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`;
         resolve({
           ...testResult,
           id: `${test}-1`,
@@ -49,8 +46,6 @@ const astroStrokeIsUsingCorrectTheme = (
       }
 
       case Array.isArray(strokes) && strokes.length === 0: {
-        // pass = true;
-        // message = `Node has no strokes`;
         resolve({
           ...testResult,
           id: `${test}-2`,

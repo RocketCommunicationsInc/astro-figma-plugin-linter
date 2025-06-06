@@ -126,7 +126,6 @@ const usingAstroFill: UsingAstroFill = (
       default: {
         resolve({
           ...testResult,
-          // id: `${test}-6`,
           message: `An unexpected error occurred when linting fills`,
         });
       }

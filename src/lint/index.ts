@@ -11,10 +11,12 @@ import { collectOverrides } from "./components/collect-overrides";
 import { getNearestAstroComponent } from "./components/get-nearest-astro-component";
 import { clearInstanceOverrides } from "./collect-data/overrides";
 import { collectAssociations } from "./components/collect-associations";
+import { clearAssociations } from "./collect-data/associations";
 
 const lintSelection = async (theme: AstroTheme) => {
   clearResults();
   clearInstanceOverrides();
+  clearAssociations();
   const selection = figma.currentPage.selection;
   const fillStyleNodes = findFillStyleNodes(selection);
 
@@ -122,26 +124,8 @@ const lintSingleNode = async (
 ): Promise<void> => {
   return new Promise((resolve) => {
     (async () => {
-      // Get relevant data about this node
-      // const {
-      //   astroComponentMeta,
-      //   nearestSourceAstroComponent,
-      //   sourceAstroComponent,
-      //   sourceCounterpartNode,
-      // } = await getSourceAstroComponent(node);
-
-      // await collectOverrides(node);
-      // await getNearestAstroComponent(node);
-
       // Test paint style
-      await testPaintStyle(
-        node,
-        // sourceAstroComponent,
-        // nearestSourceAstroComponent,
-        // astroComponentMeta,
-        // sourceCounterpartNode,
-        theme,
-      );
+      await testPaintStyle(node, theme);
       resolve();
     })();
   });

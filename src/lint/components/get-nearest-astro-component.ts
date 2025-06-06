@@ -13,12 +13,22 @@ const { astroComponents } = tokens();
 const getNearestAstroComponent = async (
   node: FillStyleNode
 ): Promise<ComponentNode | ComponentSetNode | null> => {
+  let nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null =
+    null;
+
   if (node.type === "INSTANCE") {
+    const nnn = node;
+    const nn = node.name;
+    const nt = node.type;
+    nearestSourceAstroComponent = await (
+      node as InstanceNode
+    ).getMainComponentAsync();
+    if (nearestSourceAstroComponent) {
+      return nearestSourceAstroComponent;
+    }
     return null;
   }
 
-  let nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null =
-    null;
 
   const nearestAstroComponentResult = findNearestAstroComponent(node);
 

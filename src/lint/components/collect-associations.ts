@@ -10,10 +10,6 @@ import { getNearestAstroComponent } from "./get-nearest-astro-component";
 const { astroComponents } = tokens();
 
 const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
-  // if (node.type !== "INSTANCE") {
-  //   return false;
-  // }
-
   // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
   let sourceCounterpartNode: ComponentNode | null = null;
@@ -55,10 +51,6 @@ const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
     nearestSourceAstroComponent,
   };
 
-  const nn = node.name;
-  const nt = node.type;
-  const nodeId = node.id;
-  // debugger;
   addAssociation(node.id, associationSet);
 
   return true;

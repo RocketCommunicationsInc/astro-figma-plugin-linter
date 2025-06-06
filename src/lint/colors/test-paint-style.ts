@@ -12,16 +12,9 @@ import { usingStrokeFromComponent } from "./tests/strokes/using-stroke-from-comp
 
 const testPaintStyle = async (
   node: FillStyleNode,
-  // sourceAstroComponent: ComponentNode | ComponentSetNode | null,
-  // nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null,
-  // astroComponentMeta: AstroComponent | undefined,
-  // sourceCounterpartNode: ComponentNode | null,
   theme: AstroTheme
 ): Promise<void> => {
   const paintStylePromises: Promise<LintingResult>[] = [];
-
-  // TODO: Use the nearestSourceAstroComponent to determine the
-  // todo: correstponding node in a source Astro component
 
   // Fail if node is in a component and not using the correct paint style
   paintStylePromises.push(usingFillFromComponent(node));
@@ -31,7 +24,6 @@ const testPaintStyle = async (
   // Fail if node is not in an Astro component,
   // IS using a fill/stroke style,
   // AND not using an Astro paint style
-  // console.log('nearestSourceAstroComponent', node.name, nearestSourceAstroComponent?.name, nearestSourceAstroComponent)
   // paintStylePromises.push(usingAstroFill(node, nearestSourceAstroComponent));
   // paintStylePromises.push(usingAstroStroke(node));
 

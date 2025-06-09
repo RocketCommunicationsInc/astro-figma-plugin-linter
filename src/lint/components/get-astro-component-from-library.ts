@@ -2,7 +2,7 @@ import { addInstanceOverride } from "../collect-data/overrides";
 import { AstroComponent } from "../../types/astro";
 import { componentLoaderFunction } from "./component-loader";
 import { FillStyleNode } from "../../types/figma";
-import { findNearestAstroComponent } from "./find-nearest-astro-component";
+import { findNearestLocalParentAstroComponent } from "./find-nearest-local-parent-astro-component";
 import { tokens } from "../../tokens";
 
 const { astroComponents } = tokens();
@@ -24,8 +24,8 @@ const getAstroComponentFromLibrary = async (
   let astroComponentMeta: AstroComponent | undefined = undefined;
   let instanceOverrides = undefined;
   // let nearestAstroComponent;
-  let nearestAstroComponentLocal;
-  let nearestAstroComponentMeta;
+  let nearestLocalParentAstroComponentLocal;
+  let nearestLocalParentAstroComponentMeta;
   let nearestSourceAstroComponent = null;
   let astroComponentFromLibrary = null;
   let sourceCounterpartNode = null;
@@ -40,9 +40,9 @@ const getAstroComponentFromLibrary = async (
   if (!(node.type === "INSTANCE")) {
     // Get the nearest ancestor that has a masterComponent
     ({
-      nearestAstroComponentLocal,
-      nearestAstroComponentMeta
-    } = findNearestAstroComponent(node));
+      nearestLocalParentAstroComponentLocal,
+      nearestLocalParentAstroComponentMeta
+    } = findNearestLocalParentAstroComponent(node));
   }
   if (node.type === "INSTANCE") {
     sourceCounterpartNode = await (
@@ -84,13 +84,13 @@ const getAstroComponentFromLibrary = async (
       astroComponentFromLibrary,
       sourceCounterpartNode,
     };
-  } else if (nearestAstroComponentLocal) {
+  } else if (nearestLocalParentAstroComponentLocal) {
     try {
-      if (nearestAstroComponentMeta) {
+      if (nearestLocalParentAstroComponentMeta) {
         // Load the Astro component from Figma
         nearestSourceAstroComponent = await componentLoaderFunction(
-          nearestAstroComponentMeta.type,
-          nearestAstroComponentMeta.key
+          nearestLocalParentAstroComponentMeta.type,
+          nearestLocalParentAstroComponentMeta.key
         );
       }
 

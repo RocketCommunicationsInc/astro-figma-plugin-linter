@@ -4,7 +4,7 @@ import {
 } from "../collect-data/overrides";
 import { AstroComponent } from "../../types/astro";
 import { componentLoaderFunction } from "./component-loader";
-import { findNearestAstroComponent } from "./find-nearest-astro-component";
+import { findNearestLocalParentAstroComponent } from "./find-nearest-local-parent-astro-component";
 import { FillStyleNode } from "../../types/figma";
 import { tokens } from "../../tokens";
 
@@ -30,19 +30,19 @@ const getNearestAstroComponent = async (
   }
 
 
-  const nearestAstroComponentResult = findNearestAstroComponent(node);
+  const nearestAstroComponentResult = findNearestLocalParentAstroComponent(node);
 
   if (
     nearestAstroComponentResult &&
-    nearestAstroComponentResult.nearestAstroComponentLocal
+    nearestAstroComponentResult.nearestLocalParentAstroComponentLocal
   ) {
-    const { nearestAstroComponentLocal, nearestAstroComponentMeta } =
+    const { nearestLocalParentAstroComponentLocal, nearestLocalParentAstroComponentMeta } =
       nearestAstroComponentResult;
-    if (nearestAstroComponentMeta) {
+    if (nearestLocalParentAstroComponentMeta) {
       // Load the Astro component from Figma
       nearestSourceAstroComponent = await componentLoaderFunction(
-        nearestAstroComponentMeta.type,
-        nearestAstroComponentMeta.key
+        nearestLocalParentAstroComponentMeta.type,
+        nearestLocalParentAstroComponentMeta.key
       );
     }
 

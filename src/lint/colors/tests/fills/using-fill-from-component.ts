@@ -50,7 +50,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       sourceCounterpartNode,
       astroComponentMeta,
       astroComponentFromLibrary,
-      nearestSourceAstroComponent,
+      nearestLibraryParentAstroComponent,
     } = getAssociation(node.id);
 
     const usedColor = getColorFill(node);

@@ -16,7 +16,7 @@ const getAstroComponentFromLibrary = async (
   node: FillStyleNode
 ): Promise<{
   astroComponentMeta: AstroComponent | undefined;
-  nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null;
+  nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null;
   astroComponentFromLibrary: ComponentNode | ComponentSetNode | null;
   sourceCounterpartNode: ComponentNode | null;
 }> => {
@@ -26,13 +26,13 @@ const getAstroComponentFromLibrary = async (
   // let nearestAstroComponent;
   let nearestLocalParentAstroComponentLocal;
   let nearestLocalParentAstroComponentMeta;
-  let nearestSourceAstroComponent = null;
+  let nearestLibraryParentAstroComponent = null;
   let astroComponentFromLibrary = null;
   let sourceCounterpartNode = null;
 
   const returnObject = {
     astroComponentMeta,
-    nearestSourceAstroComponent,
+    nearestLibraryParentAstroComponent,
     astroComponentFromLibrary,
     sourceCounterpartNode,
   };
@@ -88,7 +88,7 @@ const getAstroComponentFromLibrary = async (
     try {
       if (nearestLocalParentAstroComponentMeta) {
         // Load the Astro component from Figma
-        nearestSourceAstroComponent = await componentLoaderFunction(
+        nearestLibraryParentAstroComponent = await componentLoaderFunction(
           nearestLocalParentAstroComponentMeta.type,
           nearestLocalParentAstroComponentMeta.key
         );
@@ -96,7 +96,7 @@ const getAstroComponentFromLibrary = async (
 
       return {
         ...returnObject,
-        nearestSourceAstroComponent
+        nearestLibraryParentAstroComponent
       };
     } catch (error) {
       console.error("Error getting main component:", error);

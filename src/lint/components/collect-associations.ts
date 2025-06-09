@@ -5,7 +5,7 @@ import { FillStyleNode } from "../../types/figma";
 import { tokens } from "../../tokens";
 import { addAssociation } from "../collect-data/associations";
 import { AssociationSet } from "../../types/associations";
-import { getNearestAstroComponent } from "./get-nearest-astro-component";
+import { getNearestLibraryParentAstroComponent } from "./get-nearest-library-parent-astro-component";
 
 const { astroComponents } = tokens();
 
@@ -14,7 +14,7 @@ const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
   let astroComponentMeta: AstroComponent | undefined = undefined;
   let sourceCounterpartNode: ComponentNode | null = null;
   let astroComponentFromLibrary: ComponentNode | ComponentSetNode | null = null;
-  let nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null = null;
+  let nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null = null;
   if (node.type === "INSTANCE") {
     sourceCounterpartNode = await (
       node as InstanceNode
@@ -42,13 +42,13 @@ const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
     }
   }
 
-  nearestSourceAstroComponent = await getNearestAstroComponent(node);
+  nearestLibraryParentAstroComponent = await getNearestLibraryParentAstroComponent(node);
 
   const associationSet: AssociationSet = {
     sourceCounterpartNode,
     astroComponentMeta,
     astroComponentFromLibrary,
-    nearestSourceAstroComponent,
+    nearestLibraryParentAstroComponent,
   };
 
   addAssociation(node.id, associationSet);

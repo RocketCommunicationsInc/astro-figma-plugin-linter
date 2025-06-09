@@ -24,7 +24,7 @@ const testPaintStyle = async (
   // Fail if node is not in an Astro component,
   // IS using a fill/stroke style,
   // AND not using an Astro paint style
-  // paintStylePromises.push(usingAstroFill(node, nearestSourceAstroComponent));
+  // paintStylePromises.push(usingAstroFill(node, nearestLibraryParentAstroComponent));
   // paintStylePromises.push(usingAstroStroke(node));
 
   // Fail if node is using an Astro paint style but not the correct one for this theme

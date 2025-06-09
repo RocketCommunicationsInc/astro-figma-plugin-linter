@@ -8,7 +8,7 @@ import {
 import { getAstroComponentFromLibrary } from "./components/get-astro-component-from-library";
 import { testPaintStyle } from "./colors/test-paint-style";
 import { collectOverrides } from "./components/collect-overrides";
-import { getNearestAstroComponent } from "./components/get-nearest-astro-component";
+import { getNearestLibraryParentAstroComponent } from "./components/get-nearest-library-parent-astro-component";
 import { clearInstanceOverrides } from "./collect-data/overrides";
 import { collectAssociations } from "./components/collect-associations";
 import { clearAssociations } from "./collect-data/associations";
@@ -62,13 +62,13 @@ const lintSelection = async (theme: AstroTheme) => {
     for (const selectionNode of fillStyleNodes) {
       associationsPromises.push(
         collectAssociations(selectionNode).catch((error) => {
-          console.error("Error in getNearestAstroComponent:", error);
+          console.error("Error in getNearestLibraryParentAstroComponent:", error);
         })
       );
       childrenToCheckForOverrides.map((node) => {
         associationsPromises.push(
           collectAssociations(node).catch((error) => {
-            console.error("Error in getNearestAstroComponent:", error);
+            console.error("Error in getNearestLibraryParentAstroComponent:", error);
           })
         );
       });

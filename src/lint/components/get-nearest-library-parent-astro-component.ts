@@ -10,47 +10,49 @@ import { tokens } from "../../tokens";
 
 const { astroComponents } = tokens();
 
-const getNearestAstroComponent = async (
+const getNearestLibraryParentAstroComponent = async (
   node: FillStyleNode
 ): Promise<ComponentNode | ComponentSetNode | null> => {
-  let nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null =
+  let nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null =
     null;
 
   if (node.type === "INSTANCE") {
     const nnn = node;
     const nn = node.name;
     const nt = node.type;
-    nearestSourceAstroComponent = await (
+    // todo: same as sourceCounterpartNode in collect-associations.ts??
+    nearestLibraryParentAstroComponent = await (
       node as InstanceNode
     ).getMainComponentAsync();
-    if (nearestSourceAstroComponent) {
-      return nearestSourceAstroComponent;
+    if (nearestLibraryParentAstroComponent) {
+      return nearestLibraryParentAstroComponent;
     }
     return null;
   }
 
 
-  const nearestAstroComponentResult = findNearestLocalParentAstroComponent(node);
+  //todo: need to use this to get the component from the library
+  const nearestLocalParentAstroComponentResult = findNearestLocalParentAstroComponent(node);
 
   if (
-    nearestAstroComponentResult &&
-    nearestAstroComponentResult.nearestLocalParentAstroComponentLocal
+    nearestLocalParentAstroComponentResult &&
+    nearestLocalParentAstroComponentResult.nearestLocalParentAstroComponentLocal
   ) {
     const { nearestLocalParentAstroComponentLocal, nearestLocalParentAstroComponentMeta } =
-      nearestAstroComponentResult;
+      nearestLocalParentAstroComponentResult;
     if (nearestLocalParentAstroComponentMeta) {
       // Load the Astro component from Figma
-      nearestSourceAstroComponent = await componentLoaderFunction(
+      nearestLibraryParentAstroComponent = await componentLoaderFunction(
         nearestLocalParentAstroComponentMeta.type,
         nearestLocalParentAstroComponentMeta.key
       );
     }
 
-    if (nearestSourceAstroComponent) {
-      return nearestSourceAstroComponent;
+    if (nearestLibraryParentAstroComponent) {
+      return nearestLibraryParentAstroComponent;
     }
   }
   return null;
 };
 
-export { getNearestAstroComponent };
+export { getNearestLibraryParentAstroComponent };

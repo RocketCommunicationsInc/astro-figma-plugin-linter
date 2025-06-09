@@ -1,6 +1,6 @@
 import { FillStyleNode } from "../../types/figma";
 import { getAssociation } from "../collect-data/associations";
-import { findNearestAstroComponent } from "./find-nearest-astro-component";
+import { findNearestLocalParentAstroComponent } from "./find-nearest-local-parent-astro-component";
 import { isFillStyleNode } from "./is-fill-style-node";
 
 type ComponentSourceNode = ComponentNode | ComponentSetNode | null;
@@ -13,11 +13,11 @@ type ComponentSourceNode = ComponentNode | ComponentSetNode | null;
 // We will use a regex to extract the last segment of the ID.
 const findCorrespondingNodeById = (
   startingNode: FillStyleNode,
-  nearestSourceAstroComponent: ComponentSourceNode
+  nearestLibraryParentAstroComponent: ComponentSourceNode
 ): FillStyleNode | null => {
   let correspondingNode: FillStyleNode | null = null;
   const regexMatchableIdSegments = /(\d+:\d+)(?!.*\d+:\d+)/;
-  if (nearestSourceAstroComponent && "findOne" in nearestSourceAstroComponent === false) {
+  if (nearestLibraryParentAstroComponent && "findOne" in nearestLibraryParentAstroComponent === false) {
     return null;
   }
 
@@ -25,7 +25,7 @@ const findCorrespondingNodeById = (
   const targetIdSegments = startingNode?.id.match(regexMatchableIdSegments);
   const lastSegment = targetIdSegments ? targetIdSegments[1] : undefined;
 
-  const foundNode = nearestSourceAstroComponent?.findOne((node) => {
+  const foundNode = nearestLibraryParentAstroComponent?.findOne((node) => {
     const searchIdSegments = node.id.match(regexMatchableIdSegments);
     const searchLastSegment = searchIdSegments
       ? searchIdSegments[1]
@@ -52,13 +52,17 @@ const findCorrespondingAstroNode = (
   let correspondingAstroNode: FillStyleNode | null = null;
 
   switch (true) {
-    // nearestSourceAstroComponent
-    case !!findCorrespondingNodeById(node, nearestSourceAstroComponent): {
-      correspondingAstroNode = findCorrespondingNodeById(node, nearestSourceAstroComponent);
+    // nearestLibraryParentAstroComponent
+    case !!findCorrespondingNodeById(node, nearestLibraryParentAstroComponent): {
+      correspondingAstroNode = findCorrespondingNodeById(node, nearestLibraryParentAstroComponent);
       break;
     }
 
     // sourceCounterpartNode
+    case !!sourceCounterpartNode && isFillStyleNode(sourceCounterpartNode): {
+      correspondingAstroNode = sourceCounterpartNode;
+      break;
+    }
 
     default: {
       try {
@@ -74,8 +78,8 @@ const findCorrespondingAstroNode = (
           node.name,
           "astroComponentFromLibrary:",
           astroComponentFromLibrary,
-          "nearestSourceAstroComponent:",
-          nearestSourceAstroComponent
+          "nearestLibraryParentAstroComponent:",
+          nearestLibraryParentAstroComponent
         );
       }
     }

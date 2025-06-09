@@ -12,24 +12,24 @@ const { astroComponents } = tokens();
 const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
   // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
-  let sourceCounterpartNode: ComponentNode | null = null;
+  let directLibraryCounterpartNode: ComponentNode | null = null;
   let astroComponentFromLibrary: ComponentNode | ComponentSetNode | null = null;
   let nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null = null;
   if (node.type === "INSTANCE") {
-    sourceCounterpartNode = await (
+    directLibraryCounterpartNode = await (
       node as InstanceNode
     ).getMainComponentAsync();
 
     const sourceCounterpartNodeKey: string | undefined =
-      sourceCounterpartNode?.key;
+      directLibraryCounterpartNode?.key;
     astroComponentMeta = astroComponents.get(sourceCounterpartNodeKey);
 
     if (
       !astroComponentMeta &&
-      sourceCounterpartNode?.parent?.type === "COMPONENT_SET"
+      directLibraryCounterpartNode?.parent?.type === "COMPONENT_SET"
     ) {
       const sourceCounterpartNodeParentKey: string | undefined =
-        sourceCounterpartNode?.parent?.key;
+        directLibraryCounterpartNode?.parent?.key;
       astroComponentMeta = astroComponents.get(sourceCounterpartNodeParentKey);
     }
 
@@ -45,7 +45,7 @@ const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
   nearestLibraryParentAstroComponent = await getNearestLibraryParentAstroComponent(node);
 
   const associationSet: AssociationSet = {
-    sourceCounterpartNode,
+    directLibraryCounterpartNode,
     astroComponentMeta,
     astroComponentFromLibrary,
     nearestLibraryParentAstroComponent,

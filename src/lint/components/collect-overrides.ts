@@ -16,21 +16,21 @@ const collectOverrides = async (node: FillStyleNode): Promise<boolean> => {
   let instanceOverrides = undefined;
   let astroComponentFromLibrary: ComponentNode | ComponentSetNode | null = null;
 
-  const sourceCounterpartNode: ComponentNode | null = await (
+  const directLibraryCounterpartNode: ComponentNode | null = await (
     node as InstanceNode
   ).getMainComponentAsync();
 
   const sourceCounterpartNodeKey: string | undefined =
-    sourceCounterpartNode?.key;
-  // Check if sourceCounterpartNode is one of the Astro components in components
+    directLibraryCounterpartNode?.key;
+  // Check if directLibraryCounterpartNode is one of the Astro components in components
   astroComponentMeta = astroComponents.get(sourceCounterpartNodeKey);
 
   if (
     !astroComponentMeta &&
-    sourceCounterpartNode?.parent?.type === "COMPONENT_SET"
+    directLibraryCounterpartNode?.parent?.type === "COMPONENT_SET"
   ) {
     const sourceCounterpartNodeParentKey: string | undefined =
-      sourceCounterpartNode?.parent?.key;
+      directLibraryCounterpartNode?.parent?.key;
     astroComponentMeta = astroComponents.get(sourceCounterpartNodeParentKey);
   }
 
@@ -46,7 +46,7 @@ const collectOverrides = async (node: FillStyleNode): Promise<boolean> => {
   instanceOverrides.map((instanceOverride) => {
     addInstanceOverride(
       instanceOverride,
-      sourceCounterpartNode,
+      directLibraryCounterpartNode,
       astroComponentMeta,
       astroComponentFromLibrary
     );

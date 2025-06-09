@@ -5,7 +5,7 @@ import { PaintColorToken } from "../../../../types/tokens";
 
 const usingStrokeFromComponent = (
   node: FillStyleNode,
-  sourceCounterpartNode: FillStyleNode | null
+  directLibraryCounterpartNode: FillStyleNode | null
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Stroke from a Component";
@@ -15,8 +15,8 @@ const usingStrokeFromComponent = (
 
     const strokeStyleId = "strokeStyleId" in node ? node.strokeStyleId : undefined;
     const sourceStrokeStyleId =
-      sourceCounterpartNode && "strokeStyleId" in sourceCounterpartNode
-        ? sourceCounterpartNode.strokeStyleId
+      directLibraryCounterpartNode && "strokeStyleId" in directLibraryCounterpartNode
+        ? directLibraryCounterpartNode.strokeStyleId
         : undefined;
     const { colorTokens } = tokens();
     let usedColor,
@@ -36,7 +36,7 @@ const usingStrokeFromComponent = (
       name,
       node,
       type: node.type,
-      sourceCounterpartNode,
+      directLibraryCounterpartNode,
       usedColor,
       sourceColor,
     };

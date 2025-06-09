@@ -10,7 +10,7 @@ interface LintingResult {
   name: string;
   node: FillStyleNode;
   type: string;
-  sourceCounterpartNode?: FillStyleNode | null;
+  directLibraryCounterpartNode?: FillStyleNode | null;
   usedColor?: PaintColorToken | Paint;
   sourceColor?: PaintColorToken;
   correspondingColor?: PaintColorToken;

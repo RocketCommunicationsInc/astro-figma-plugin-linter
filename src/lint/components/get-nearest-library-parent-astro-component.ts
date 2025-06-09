@@ -20,7 +20,7 @@ const getNearestLibraryParentAstroComponent = async (
     const nnn = node;
     const nn = node.name;
     const nt = node.type;
-    // todo: same as sourceCounterpartNode in collect-associations.ts??
+    // todo: same as directLibraryCounterpartNode in collect-associations.ts??
     nearestLibraryParentAstroComponent = await (
       node as InstanceNode
     ).getMainComponentAsync();

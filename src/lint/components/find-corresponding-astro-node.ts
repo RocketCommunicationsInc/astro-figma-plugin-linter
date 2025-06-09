@@ -41,10 +41,10 @@ const findCorrespondingAstroNode = (
 ): FillStyleNode | null => {
 
   const {
-      sourceCounterpartNode,
+      directLibraryCounterpartNode,
       astroComponentMeta,
       astroComponentFromLibrary,
-      nearestSourceAstroComponent,
+      nearestLibraryParentAstroComponent,
     } = getAssociation(node.id);
 
 
@@ -58,16 +58,22 @@ const findCorrespondingAstroNode = (
       break;
     }
 
-    // sourceCounterpartNode
-    case !!sourceCounterpartNode && isFillStyleNode(sourceCounterpartNode): {
-      correspondingAstroNode = sourceCounterpartNode;
+    // directLibraryCounterpartNode
+    case !!directLibraryCounterpartNode && isFillStyleNode(directLibraryCounterpartNode): {
+      correspondingAstroNode = directLibraryCounterpartNode;
       break;
     }
 
     default: {
       try {
-        correspondingAstroNode = sourceCounterpartNode;
-        // debugger;
+        const nsac = nearestLibraryParentAstroComponent
+        const {
+          nearestLocalParentAstroComponentLocal,
+          nearestLocalParentAstroComponentMeta,
+        } = findNearestLocalParentAstroComponent(node);
+        // correspondingAstroNode = findCorrespondingNodeById(node, nearestAstroComponentLocal);
+        // TODO: this is giving the wrong node. It's local and not the remote one.
+        debugger;
       } catch (error) {
         console.error(
           "Error in findCorrespondingAstroNode:",
@@ -85,9 +91,7 @@ const findCorrespondingAstroNode = (
     }
   }
 
-  return correspondingAstroNode && isFillStyleNode(correspondingAstroNode)
-    ? correspondingAstroNode
-    : null;
+  return correspondingAstroNode;
 };
 
 export { findCorrespondingAstroNode };

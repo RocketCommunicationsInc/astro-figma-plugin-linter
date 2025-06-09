@@ -47,15 +47,15 @@ const usingFillFromComponent: UsingFillFromComponent = (
     const overriddenFields = instanceOverrides || null;
 
     const {
-      sourceCounterpartNode,
+      directLibraryCounterpartNode,
       astroComponentMeta,
       astroComponentFromLibrary,
       nearestLibraryParentAstroComponent,
     } = getAssociation(node.id);
 
     const usedColor = getColorFill(node);
-    const sourceColor = sourceCounterpartNode
-      ? getColorFill(sourceCounterpartNode)
+    const sourceColor = directLibraryCounterpartNode
+      ? getColorFill(directLibraryCounterpartNode)
       : undefined;
 
     const correspondingAstroNode = findCorrespondingAstroNode(node);
@@ -71,7 +71,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       name,
       node,
       type: node.type,
-      sourceCounterpartNode,
+      directLibraryCounterpartNode,
       usedColor,
       correspondingColor,
     };

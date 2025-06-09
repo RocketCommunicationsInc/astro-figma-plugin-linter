@@ -18,7 +18,7 @@ const getAstroComponentFromLibrary = async (
   astroComponentMeta: AstroComponent | undefined;
   nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null;
   astroComponentFromLibrary: ComponentNode | ComponentSetNode | null;
-  sourceCounterpartNode: ComponentNode | null;
+  directLibraryCounterpartNode: ComponentNode | null;
 }> => {
   // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
@@ -28,13 +28,13 @@ const getAstroComponentFromLibrary = async (
   let nearestLocalParentAstroComponentMeta;
   let nearestLibraryParentAstroComponent = null;
   let astroComponentFromLibrary = null;
-  let sourceCounterpartNode = null;
+  let directLibraryCounterpartNode = null;
 
   const returnObject = {
     astroComponentMeta,
     nearestLibraryParentAstroComponent,
     astroComponentFromLibrary,
-    sourceCounterpartNode,
+    directLibraryCounterpartNode,
   };
 
   if (!(node.type === "INSTANCE")) {
@@ -45,28 +45,28 @@ const getAstroComponentFromLibrary = async (
     } = findNearestLocalParentAstroComponent(node));
   }
   if (node.type === "INSTANCE") {
-    sourceCounterpartNode = await (
+    directLibraryCounterpartNode = await (
       node as InstanceNode
     ).getMainComponentAsync();
 
     instanceOverrides = (node as InstanceNode).overrides;
     instanceOverrides.map((instanceOverride) => {
-      addInstanceOverride(instanceOverride, sourceCounterpartNode)
+      addInstanceOverride(instanceOverride, directLibraryCounterpartNode)
     });
 
     const sourceCounterpartNodeKey: string | undefined =
-      sourceCounterpartNode?.key;
-    // Check if sourceCounterpartNode is one of the Astro components in components
+      directLibraryCounterpartNode?.key;
+    // Check if directLibraryCounterpartNode is one of the Astro components in components
     astroComponentMeta = astroComponents.get(
       sourceCounterpartNodeKey
     );
 
     if (
       !astroComponentMeta &&
-      sourceCounterpartNode?.parent?.type === "COMPONENT_SET"
+      directLibraryCounterpartNode?.parent?.type === "COMPONENT_SET"
     ) {
       const sourceCounterpartNodeParentKey: string | undefined =
-        sourceCounterpartNode?.parent?.key;
+        directLibraryCounterpartNode?.parent?.key;
       astroComponentMeta = astroComponents.get(sourceCounterpartNodeParentKey);
     }
 
@@ -82,7 +82,7 @@ const getAstroComponentFromLibrary = async (
       ...returnObject,
       astroComponentMeta,
       astroComponentFromLibrary,
-      sourceCounterpartNode,
+      directLibraryCounterpartNode,
     };
   } else if (nearestLocalParentAstroComponentLocal) {
     try {

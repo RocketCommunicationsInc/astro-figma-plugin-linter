@@ -19,7 +19,7 @@ const testPaintStyle = async (
   // Fail if node is in a component and not using the correct paint style
   paintStylePromises.push(usingFillFromComponent(node));
   // paintStylePromises.push(
-  //   usingStrokeFromComponent(node, sourceCounterpartNode)
+  //   usingStrokeFromComponent(node, directLibraryCounterpartNode)
   // );
   // Fail if node is not in an Astro component,
   // IS using a fill/stroke style,

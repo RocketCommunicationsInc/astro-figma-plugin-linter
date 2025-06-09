@@ -14,7 +14,7 @@ const collectOverrides = async (node: FillStyleNode): Promise<boolean> => {
   // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
   let instanceOverrides = undefined;
-  let sourceAstroComponent: ComponentNode | ComponentSetNode | null = null;
+  let astroComponentFromLibrary: ComponentNode | ComponentSetNode | null = null;
 
   const sourceCounterpartNode: ComponentNode | null = await (
     node as InstanceNode
@@ -36,7 +36,7 @@ const collectOverrides = async (node: FillStyleNode): Promise<boolean> => {
 
   if (astroComponentMeta) {
     // Load the Astro component from Figma
-    sourceAstroComponent = await componentLoaderFunction(
+    astroComponentFromLibrary = await componentLoaderFunction(
       astroComponentMeta.type,
       astroComponentMeta.key
     );
@@ -48,7 +48,7 @@ const collectOverrides = async (node: FillStyleNode): Promise<boolean> => {
       instanceOverride,
       sourceCounterpartNode,
       astroComponentMeta,
-      sourceAstroComponent
+      astroComponentFromLibrary
     );
   });
 

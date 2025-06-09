@@ -1,5 +1,6 @@
 import { FillStyleNode } from "../../types/figma";
 import { getAssociation } from "../collect-data/associations";
+import { findNearestAstroComponent } from "./find-nearest-astro-component";
 import { isFillStyleNode } from "./is-fill-style-node";
 
 type ComponentSourceNode = ComponentNode | ComponentSetNode | null;
@@ -42,7 +43,7 @@ const findCorrespondingAstroNode = (
   const {
       sourceCounterpartNode,
       astroComponentMeta,
-      sourceAstroComponent,
+      astroComponentFromLibrary,
       nearestSourceAstroComponent,
     } = getAssociation(node.id);
 
@@ -71,8 +72,8 @@ const findCorrespondingAstroNode = (
           node.id,
           "node.name:",
           node.name,
-          "sourceAstroComponent:",
-          sourceAstroComponent,
+          "astroComponentFromLibrary:",
+          astroComponentFromLibrary,
           "nearestSourceAstroComponent:",
           nearestSourceAstroComponent
         );

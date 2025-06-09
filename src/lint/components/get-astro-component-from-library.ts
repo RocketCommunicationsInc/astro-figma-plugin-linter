@@ -12,12 +12,12 @@ const { astroComponents } = tokens();
  * @param node - The node to check.
  * @returns The source Astro component or null if not found.
  */
-const getSourceAstroComponent = async (
+const getAstroComponentFromLibrary = async (
   node: FillStyleNode
 ): Promise<{
   astroComponentMeta: AstroComponent | undefined;
   nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null;
-  sourceAstroComponent: ComponentNode | ComponentSetNode | null;
+  astroComponentFromLibrary: ComponentNode | ComponentSetNode | null;
   sourceCounterpartNode: ComponentNode | null;
 }> => {
   // Todo: break these into separate functions
@@ -27,13 +27,13 @@ const getSourceAstroComponent = async (
   let nearestAstroComponentLocal;
   let nearestAstroComponentMeta;
   let nearestSourceAstroComponent = null;
-  let sourceAstroComponent = null;
+  let astroComponentFromLibrary = null;
   let sourceCounterpartNode = null;
 
   const returnObject = {
     astroComponentMeta,
     nearestSourceAstroComponent,
-    sourceAstroComponent,
+    astroComponentFromLibrary,
     sourceCounterpartNode,
   };
 
@@ -72,7 +72,7 @@ const getSourceAstroComponent = async (
 
     if (astroComponentMeta) {
       // Load the Astro component from Figma
-      sourceAstroComponent = await componentLoaderFunction(
+      astroComponentFromLibrary = await componentLoaderFunction(
         astroComponentMeta.type,
         astroComponentMeta.key
       );
@@ -81,7 +81,7 @@ const getSourceAstroComponent = async (
     return {
       ...returnObject,
       astroComponentMeta,
-      sourceAstroComponent,
+      astroComponentFromLibrary,
       sourceCounterpartNode,
     };
   } else if (nearestAstroComponentLocal) {
@@ -113,4 +113,4 @@ const getSourceAstroComponent = async (
   }
 };
 
-export { getSourceAstroComponent };
+export { getAstroComponentFromLibrary };

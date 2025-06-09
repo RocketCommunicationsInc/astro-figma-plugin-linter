@@ -49,7 +49,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
     const {
       sourceCounterpartNode,
       astroComponentMeta,
-      sourceAstroComponent,
+      astroComponentFromLibrary,
       nearestSourceAstroComponent,
     } = getAssociation(node.id);
 

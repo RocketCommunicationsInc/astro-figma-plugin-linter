@@ -14,6 +14,7 @@ const findNearestAstroComponent = (node: FillStyleNode): FindNearestAstroCompone
     nearestAstroComponentLocal: null,
     nearestAstroComponentMeta: null,
   };
+
   if (node.type === "INSTANCE" && astroComponents.has(node.name)) {
     // If the node is an instance and has a corresponding Astro component, return it
     const nearestAstroComponentLocal = node as InstanceNode;
@@ -24,6 +25,7 @@ const findNearestAstroComponent = (node: FillStyleNode): FindNearestAstroCompone
       nearestAstroComponentMeta,
     };
   }
+
   if (node.parent) {
     // If the node has a parent, recursively search in the parent
     // Ensure node.parent is a FillStyleNode before recursion
@@ -33,6 +35,7 @@ const findNearestAstroComponent = (node: FillStyleNode): FindNearestAstroCompone
       return returnNull;
     }
   }
+
   return returnNull;
 };
 

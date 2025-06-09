@@ -13,7 +13,7 @@ const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
   // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
   let sourceCounterpartNode: ComponentNode | null = null;
-  let sourceAstroComponent: ComponentNode | ComponentSetNode | null = null;
+  let astroComponentFromLibrary: ComponentNode | ComponentSetNode | null = null;
   let nearestSourceAstroComponent: ComponentNode | ComponentSetNode | null = null;
   if (node.type === "INSTANCE") {
     sourceCounterpartNode = await (
@@ -35,7 +35,7 @@ const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
 
     if (astroComponentMeta) {
       // Load the Astro component from Figma
-      sourceAstroComponent = await componentLoaderFunction(
+      astroComponentFromLibrary = await componentLoaderFunction(
         astroComponentMeta.type,
         astroComponentMeta.key
       );
@@ -47,7 +47,7 @@ const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
   const associationSet: AssociationSet = {
     sourceCounterpartNode,
     astroComponentMeta,
-    sourceAstroComponent,
+    astroComponentFromLibrary,
     nearestSourceAstroComponent,
   };
 

@@ -3,7 +3,7 @@ import { AstroComponent } from "../../types/astro";
 import { astroFillIsUsingCorrectTheme } from "./tests/fills/astro-fill-is-using-correct-theme";
 import { astroStrokeIsUsingCorrectTheme } from "./tests/strokes/astro-stroke-is-using-correct-theme";
 import { AstroTheme } from "../../types/tokens";
-import { FillStyleNode } from "../../types/figma";
+import { TestableNode } from "../../types/figma";
 import { LintingResult } from "../../types/results";
 import { usingAstroFill } from "./tests/fills/using-astro-fill";
 import { usingAstroStroke } from "./tests/strokes/using-astro-stroke";
@@ -11,7 +11,7 @@ import { usingFillFromComponent } from "./tests/fills/using-fill-from-component"
 import { usingStrokeFromComponent } from "./tests/strokes/using-stroke-from-component";
 
 const testPaintStyle = async (
-  node: FillStyleNode,
+  node: TestableNode,
   theme: AstroTheme
 ): Promise<void> => {
   const paintStylePromises: Promise<LintingResult>[] = [];

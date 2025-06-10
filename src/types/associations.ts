@@ -1,12 +1,12 @@
 import { AstroComponent } from "./astro";
-import { FillStyleNode } from "./figma";
+import { TestableNode } from "./figma";
 
 type AssociationSet = {
   directLibraryCounterpartNode: ComponentNode | null;
   astroComponentMeta: AstroComponent | undefined;
   astroComponentFromLibrary: ComponentNode | ComponentSetNode | null;
   nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null;
-  correspondingAstroNodeFromLibrary: FillStyleNode | null;
+  correspondingAstroNodeFromLibrary: TestableNode | null;
 };
 
 export type { AssociationSet };

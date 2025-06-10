@@ -1,11 +1,11 @@
-import { FillStyleNode } from "../../../../types/figma";
+import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { tokens, stripToLoadableId } from "../../../../tokens";
 import { PaintColorToken } from "../../../../types/tokens";
 
 const usingStrokeFromComponent = (
-  node: FillStyleNode,
-  directLibraryCounterpartNode: FillStyleNode | null
+  node: TestableNode,
+  directLibraryCounterpartNode: TestableNode | null
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Stroke from a Component";

@@ -1,6 +1,6 @@
 import { AstroComponent } from "../../types/astro";
 import { componentLoaderFunction } from "./component-loader";
-import { FillStyleNode } from "../../types/figma";
+import { TestableNode } from "../../types/figma";
 import { tokens } from "../../tokens";
 import { addAssociation } from "../collect-data/associations";
 import { AssociationSet } from "../../types/associations";
@@ -9,13 +9,13 @@ import { findCorrespondingAstroNodeFromLibrary } from "./find-corresponding-astr
 
 const { astroComponents } = tokens();
 
-const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
+const collectAssociations = async (node: TestableNode): Promise<boolean> => {
   // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
   let directLibraryCounterpartNode: ComponentNode | null = null;
   let astroComponentFromLibrary: ComponentNode | ComponentSetNode | null = null;
   let nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null = null;
-  let correspondingAstroNodeFromLibrary: FillStyleNode | null = null;
+  let correspondingAstroNodeFromLibrary: TestableNode | null = null;
   if (node.type === "INSTANCE") {
     directLibraryCounterpartNode = await (
       node as InstanceNode

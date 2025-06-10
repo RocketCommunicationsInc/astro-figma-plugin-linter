@@ -1,4 +1,4 @@
-import type { FillStyleNode } from './figma';
+import type { TestableNode } from './figma';
 import { PaintColorToken } from './tokens';
 
 interface LintingResult {
@@ -8,9 +8,9 @@ interface LintingResult {
   pass: boolean;
   message: string;
   name: string;
-  node: FillStyleNode;
+  node: TestableNode;
   type: string;
-  directLibraryCounterpartNode?: FillStyleNode | null;
+  directLibraryCounterpartNode?: TestableNode | null;
   usedColor?: PaintColorToken | Paint;
   correspondingColor?: PaintColorToken;
   correspondingColorStatus?: string;

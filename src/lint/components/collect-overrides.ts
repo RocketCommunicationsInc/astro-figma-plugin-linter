@@ -1,7 +1,7 @@
 import { addInstanceOverride } from "../collect-data/overrides";
-import { FillStyleNode } from "../../types/figma";
+import { TestableNode } from "../../types/figma";
 
-const collectOverrides = async (node: FillStyleNode): Promise<boolean> => {
+const collectOverrides = async (node: TestableNode): Promise<boolean> => {
   if (node.type !== "INSTANCE") {
     return false;
   }

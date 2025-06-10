@@ -1,12 +1,12 @@
 import { AstroTheme } from "../../../../types/tokens";
-import { FillStyleNode } from "../../../../types/figma";
+import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { stripToLoadableId } from "../../../../tokens";
 import { tokens } from "../../../../tokens";
 const { colorTokens } = tokens();
 
 const astroStrokeIsUsingCorrectTheme = (
-  node: FillStyleNode,
+  node: TestableNode,
   theme: AstroTheme
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {

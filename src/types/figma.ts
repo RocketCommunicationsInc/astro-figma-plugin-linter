@@ -1,4 +1,4 @@
-type FillStyleNode =
+type TestableNode =
   | (RectangleNode & BaseNodeMixin)
   | (EllipseNode & BaseNodeMixin)
   | (PolygonNode & BaseNodeMixin)
@@ -18,6 +18,6 @@ interface InheritedStyleField {
 }
 
 export {
-  FillStyleNode,
+  TestableNode,
   InheritedStyleField,
 };

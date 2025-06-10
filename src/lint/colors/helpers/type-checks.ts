@@ -1,22 +1,22 @@
-import { FillStyleNode } from "../../../types/figma";
+import { TestableNode } from "../../../types/figma";
 
 // Return the node or null if it is a fillStyleNode
-const getFillStyleNode = (node: SceneNode): FillStyleNode | null => {
-  if (canNodeHaveFillStyle(node)) {
-    return node as FillStyleNode;
+const getTestableNode = (node: SceneNode): TestableNode | null => {
+  if (canNodeBeTested(node)) {
+    return node as TestableNode;
   }
   return null;
 }
 
-const findFillStyleNodes = (nodes: readonly SceneNode[]): FillStyleNode[] => {
-  return nodes.filter((node): node is FillStyleNode =>
-    canNodeHaveFillStyle(node)
+const findTestableNodes = (nodes: readonly SceneNode[]): TestableNode[] => {
+  return nodes.filter((node): node is TestableNode =>
+    canNodeBeTested(node)
   );
 };
 
-const canNodeHaveFillStyle = (node: SceneNode): boolean => {
+const canNodeBeTested = (node: SceneNode): boolean => {
   // List of node types that support fillStyleId
-  const fillStyleSupportedTypes: NodeType[] = [
+  const testableNodeTypes: NodeType[] = [
     "RECTANGLE",
     "ELLIPSE",
     "POLYGON",
@@ -30,7 +30,7 @@ const canNodeHaveFillStyle = (node: SceneNode): boolean => {
     "GROUP",
   ];
 
-  return fillStyleSupportedTypes.includes(node.type);
+  return testableNodeTypes.includes(node.type);
 };
 
-export { findFillStyleNodes, canNodeHaveFillStyle, getFillStyleNode };
+export { findTestableNodes, canNodeBeTested, getTestableNode };

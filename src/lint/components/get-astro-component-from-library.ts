@@ -1,6 +1,6 @@
 import { AstroComponent } from "../../types/astro";
 import { componentLoaderFunction } from "./component-loader";
-import { FillStyleNode } from "../../types/figma";
+import { TestableNode } from "../../types/figma";
 import { findNearestLocalParentAstroComponent } from "./find-nearest-local-parent-astro-component";
 import { tokens } from "../../tokens";
 
@@ -12,7 +12,7 @@ const { astroComponents } = tokens();
  * @returns The source Astro component or null if not found.
  */
 const getAstroComponentFromLibrary = async (
-  node: FillStyleNode
+  node: TestableNode
 ): Promise<{
   astroComponentMeta: AstroComponent | undefined;
   nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null;

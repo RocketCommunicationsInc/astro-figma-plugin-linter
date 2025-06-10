@@ -1,10 +1,10 @@
-import { FillStyleNode } from "../../../../types/figma";
+import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { stripToLoadableId } from "../../../../tokens";
 import { tokens } from "../../../../tokens";
 const { colorTokens } = tokens();
 
-const usingAstroStroke = (node: FillStyleNode): Promise<LintingResult> => {
+const usingAstroStroke = (node: TestableNode): Promise<LintingResult> => {
   const test = "Using an Astro Color Stroke";
   const name = node.name;
   const strokeStyleId = node.strokeStyleId;

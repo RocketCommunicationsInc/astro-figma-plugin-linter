@@ -1,10 +1,10 @@
-import { FillStyleNode } from "../../../../types/figma";
+import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { tokens, stripToLoadableId } from "../../../../tokens";
 import { getInstanceOverride } from "../../../collect-data/overrides";
 import { getAssociation } from "../../../collect-data/associations";
 
-const getColorFill = (node: FillStyleNode) => {
+const getColorFill = (node: TestableNode) => {
   let color = undefined;
   const { colorTokens } = tokens();
   const fillStyleId = "fillStyleId" in node ? node.fillStyleId : undefined;
@@ -29,7 +29,7 @@ const getColorFill = (node: FillStyleNode) => {
 };
 
 interface UsingFillFromComponent {
-  (node: FillStyleNode): Promise<LintingResult>;
+  (node: TestableNode): Promise<LintingResult>;
 }
 
 const usingFillFromComponent: UsingFillFromComponent = (

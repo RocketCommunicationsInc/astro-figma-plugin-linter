@@ -1,8 +1,8 @@
 import { findNearestLocalParentAstroComponent } from "./find-nearest-local-parent-astro-component";
-import { FillStyleNode } from "../../types/figma";
+import { TestableNode } from "../../types/figma";
 
 const getNearestLibraryParentAstroComponent = async (
-  node: FillStyleNode
+  node: TestableNode
 ): Promise<ComponentNode | ComponentSetNode | null> => {
   let nearestLibraryParentAstroComponent:
     | ComponentNode

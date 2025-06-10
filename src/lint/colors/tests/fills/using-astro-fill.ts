@@ -1,4 +1,4 @@
-import { FillStyleNode } from "../../../../types/figma";
+import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { stripToLoadableId } from "../../../../tokens";
 import { tokens } from "../../../../tokens";
@@ -10,7 +10,7 @@ type UsedColorResult = {
   usedColorType: "astroToken" | "paintStyle" | "paint" | undefined;
 };
 
-const getFirstColorFill = (node: FillStyleNode): UsedColorResult => {
+const getFirstColorFill = (node: TestableNode): UsedColorResult => {
   // 1. Using an Astro Color Fill Token
   // 2. Using a Figma Paint Style (not an Astro Token)
   // 3. Using a Figma Paint (not a style, just a paint object)
@@ -48,15 +48,12 @@ const getFirstColorFill = (node: FillStyleNode): UsedColorResult => {
 
 interface UsingAstroFill {
   (
-    node: FillStyleNode,
+    node: TestableNode,
     nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null
   ): Promise<LintingResult>;
 }
 
-const usingAstroFill: UsingAstroFill = (
-  node,
-  nearestLibraryParentAstroComponent
-): Promise<LintingResult> => {
+const usingAstroFill: UsingAstroFill = (node): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using an Astro Color Fill";
     const name = node.name;

@@ -1,9 +1,9 @@
 import { AstroTheme } from "../types/tokens";
 import { clearResults, getResults } from "./collect-data/results";
-import { FillStyleNode } from "../types/figma";
+import { TestableNode } from "../types/figma";
 import {
-  findFillStyleNodes,
-  getFillStyleNode,
+  findTestableNodes,
+  getTestableNode,
 } from "./colors/helpers/type-checks";
 import { testPaintStyle } from "./colors/test-paint-style";
 import { collectOverrides } from "./components/collect-overrides";
@@ -16,7 +16,7 @@ const lintSelection = async (theme: AstroTheme) => {
   clearInstanceOverrides();
   clearAssociations();
   const selection = figma.currentPage.selection;
-  const fillStyleNodes = findFillStyleNodes(selection);
+  const fillStyleNodes = findTestableNodes(selection);
 
   // Check if there are any selected nodes
   if (fillStyleNodes.length === 0) {
@@ -31,13 +31,13 @@ const lintSelection = async (theme: AstroTheme) => {
   const lintingPromises: Promise<void>[] = [];
 
   // collect all nodes to pre-screen
-  let childrenToCheckForOverrides: FillStyleNode[] = [];
+  let childrenToCheckForOverrides: TestableNode[] = [];
   for (const selectionNode of fillStyleNodes) {
     if ("findAll" in selectionNode) {
       childrenToCheckForOverrides = selectionNode
-        .findAll((node) => findFillStyleNodes([node]).length > 0)
-        .map((node) => getFillStyleNode(node))
-        .filter((node): node is FillStyleNode => !!node);
+        .findAll((node) => findTestableNodes([node]).length > 0)
+        .map((node) => getTestableNode(node))
+        .filter((node): node is TestableNode => !!node);
     }
   }
 
@@ -98,17 +98,17 @@ const lintSelection = async (theme: AstroTheme) => {
 };
 
 const lintChildren = async (
-  node: FillStyleNode,
+  node: TestableNode,
   theme: AstroTheme
 ): Promise<void> => {
   const lintChildrenPromises: Promise<void>[] = [];
   // Use a type guard to check if the node supports `findAll`
   if ("findAll" in node) {
     const childrenToLint = node.findAll((node) => {
-      return findFillStyleNodes([node]).length > 0;
+      return findTestableNodes([node]).length > 0;
     });
     childrenToLint.map((node) => {
-      const fillStyleNode = getFillStyleNode(node);
+      const fillStyleNode = getTestableNode(node);
       if (fillStyleNode) {
         lintChildrenPromises.push(lintSingleNode(fillStyleNode, theme));
       }
@@ -118,7 +118,7 @@ const lintChildren = async (
 };
 
 const lintSingleNode = async (
-  node: FillStyleNode,
+  node: TestableNode,
   theme: AstroTheme
 ): Promise<void> => {
   return new Promise((resolve) => {

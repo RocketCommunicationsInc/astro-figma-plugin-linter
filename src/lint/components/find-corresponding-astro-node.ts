@@ -1,4 +1,4 @@
-import { FillStyleNode } from "../../types/figma";
+import { TestableNode } from "../../types/figma";
 import { isFillStyleNode } from "./is-fill-style-node";
 
 type ComponentSourceNode = ComponentNode | ComponentSetNode | null;
@@ -13,10 +13,10 @@ type ComponentSourceNode = ComponentNode | ComponentSetNode | null;
 // There are exceptions but this is the most reliable way to
 // find the corresponding Astro component for a given nested Figma node.
 const findCorrespondingNodeById = (
-  startingNode: FillStyleNode,
+  startingNode: TestableNode,
   nearestLibraryParentAstroComponent: ComponentSourceNode
-): FillStyleNode | null => {
-  let correspondingNode: FillStyleNode | null = null;
+): TestableNode | null => {
+  let correspondingNode: TestableNode | null = null;
   const regexMatchableIdSegments = /(\d+:\d+)(?!.*\d+:\d+)/;
   if (
     nearestLibraryParentAstroComponent &&
@@ -42,12 +42,12 @@ const findCorrespondingNodeById = (
 };
 
 const findCorrespondingAstroNodeFromLibrary = (
-  node: FillStyleNode,
+  node: TestableNode,
   directLibraryCounterpartNode: ComponentNode | null = null,
   nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null = null
-): FillStyleNode | null => {
+): TestableNode | null => {
 
-  let correspondingAstroNode: FillStyleNode | null = null;
+  let correspondingAstroNode: TestableNode | null = null;
 
   switch (true) {
     // nearestLibraryParentAstroComponent

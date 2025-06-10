@@ -65,7 +65,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       : undefined;
 
     correspondingColorStatus = (correspondingAstroNodeFromLibrary) ?
-      "No fill style found in the library Astro component" :
+      "No fill or fill style found in the library Astro component" :
       "Could not determine the fill style from the library Astro component";
 
     const testResult: LintingResult = {
@@ -94,10 +94,21 @@ const usingFillFromComponent: UsingFillFromComponent = (
         break;
       }
 
-      case !overriddenFields: {
+      case !!overriddenFields && overriddenFields.includes("fills"): {
         resolve({
           ...testResult,
           id: `${test}-2`,
+          pass: false,
+          message:
+            "Node is not using the same fill as the source Astro component.",
+        });
+        break;
+      }
+
+      case !overriddenFields: {
+        resolve({
+          ...testResult,
+          id: `${test}-3`,
           pass: true,
           message:
             "Node is using the same fill style as the source Astro component.",
@@ -108,7 +119,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       default: {
         resolve({
           ...testResult,
-          id: `${test}-3`,
+          id: `${test}-4`,
           ignore: true,
           pass: true,
           message: "Something is overridden, but not fillStyleId.",
@@ -116,11 +127,6 @@ const usingFillFromComponent: UsingFillFromComponent = (
         break;
       }
     }
-
-    resolve({
-      ...testResult,
-      message: `An unexpected error occurred when linting fills`,
-    });
   });
 };
 

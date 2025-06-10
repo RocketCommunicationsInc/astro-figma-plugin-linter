@@ -1,6 +1,6 @@
 import { TestableNode } from "../../../types/figma";
 
-// Return the node or null if it is a fillStyleNode
+// Return the node or null if it is a TestableNode
 const getTestableNode = (node: SceneNode): TestableNode | null => {
   if (canNodeBeTested(node)) {
     return node as TestableNode;

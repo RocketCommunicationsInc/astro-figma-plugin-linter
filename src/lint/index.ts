@@ -16,10 +16,10 @@ const lintSelection = async (theme: AstroTheme) => {
   clearInstanceOverrides();
   clearAssociations();
   const selection = figma.currentPage.selection;
-  const fillStyleNodes = findTestableNodes(selection);
+  const testableNodes = findTestableNodes(selection);
 
   // Check if there are any selected nodes
-  if (fillStyleNodes.length === 0) {
+  if (testableNodes.length === 0) {
     figma.notify("No nodes selected");
     figma.ui.postMessage({ type: "lint-results", content: [] });
     return;
@@ -32,7 +32,7 @@ const lintSelection = async (theme: AstroTheme) => {
 
   // collect all nodes to pre-screen
   let childrenToCheckForOverrides: TestableNode[] = [];
-  for (const selectionNode of fillStyleNodes) {
+  for (const selectionNode of testableNodes) {
     if ("findAll" in selectionNode) {
       childrenToCheckForOverrides = selectionNode
         .findAll((node) => findTestableNodes([node]).length > 0)
@@ -41,7 +41,7 @@ const lintSelection = async (theme: AstroTheme) => {
     }
   }
 
-  for (const selectionNode of fillStyleNodes) {
+  for (const selectionNode of testableNodes) {
     overridesPromises.push(
       collectOverrides(selectionNode).catch((error) => {
         console.error("Error in collectOverrides:", error);
@@ -58,7 +58,7 @@ const lintSelection = async (theme: AstroTheme) => {
 
   await Promise.all(overridesPromises).then(() => {
     // collect all nearest Astro components
-    for (const selectionNode of fillStyleNodes) {
+    for (const selectionNode of testableNodes) {
       associationsPromises.push(
         collectAssociations(selectionNode).catch((error) => {
           console.error("Error in overridesPromises:", error);
@@ -75,7 +75,7 @@ const lintSelection = async (theme: AstroTheme) => {
   });
 
   await Promise.all(associationsPromises).then(() => {
-    for (const selectionNode of fillStyleNodes) {
+    for (const selectionNode of testableNodes) {
       lintingPromises.push(
         lintSingleNode(selectionNode, theme).catch((error) => {
           console.error("Error in lintSingleNode:", error);
@@ -108,9 +108,9 @@ const lintChildren = async (
       return findTestableNodes([node]).length > 0;
     });
     childrenToLint.map((node) => {
-      const fillStyleNode = getTestableNode(node);
-      if (fillStyleNode) {
-        lintChildrenPromises.push(lintSingleNode(fillStyleNode, theme));
+      const testableNode = getTestableNode(node);
+      if (testableNode) {
+        lintChildrenPromises.push(lintSingleNode(testableNode, theme));
       }
     });
   }

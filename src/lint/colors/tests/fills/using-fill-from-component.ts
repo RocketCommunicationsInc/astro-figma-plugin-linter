@@ -9,7 +9,7 @@ interface UsingFillFromComponent {
 }
 
 const usingFillFromComponent: UsingFillFromComponent = (
-  node
+  node: TestableNode
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Fill from a Component";

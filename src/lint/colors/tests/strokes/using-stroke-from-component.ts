@@ -1,32 +1,40 @@
 import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
-import { tokens, stripToLoadableId } from "../../../../tokens";
-import { PaintColorToken } from "../../../../types/tokens";
+import { getInstanceOverride } from "../../../collect-data/overrides";
+import { getAssociation } from "../../../collect-data/associations";
+import { getColorFill } from "../../helpers/get-color-fill";
 
-const usingStrokeFromComponent = (
-  node: TestableNode,
-  directLibraryCounterpartNode: TestableNode | null
+interface UsingStrokeFromComponent {
+  (node: TestableNode): Promise<LintingResult>;
+}
+
+const usingStrokeFromComponent: UsingStrokeFromComponent = (
+  node: TestableNode
 ): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using Color Stroke from a Component";
     const name = node.name;
     const pass = false;
     const message = "";
+    let correspondingColorStatus: string = "";
 
-    const strokeStyleId = "strokeStyleId" in node ? node.strokeStyleId : undefined;
-    const sourceStrokeStyleId =
-      directLibraryCounterpartNode && "strokeStyleId" in directLibraryCounterpartNode
-        ? directLibraryCounterpartNode.strokeStyleId
-        : undefined;
-    const { colorTokens } = tokens();
-    let usedColor,
-      sourceColor: PaintColorToken | undefined = undefined;
-    if (typeof strokeStyleId === "string") {
-      usedColor = colorTokens.get(stripToLoadableId(strokeStyleId));
-    }
-    if (typeof sourceStrokeStyleId === "string") {
-      sourceColor = colorTokens.get(stripToLoadableId(sourceStrokeStyleId));
-    }
+    const instanceOverrides = getInstanceOverride(node.id);
+    const overriddenFields = instanceOverrides || null;
+
+    const association = getAssociation(node.id);
+    const {
+      directLibraryCounterpartNode,
+      correspondingAstroNodeFromLibrary,
+    } = association || {};
+
+    const usedColor = getColorFill(node);
+    const correspondingColor = correspondingAstroNodeFromLibrary
+      ? getColorFill(correspondingAstroNodeFromLibrary)
+      : undefined;
+
+    correspondingColorStatus = (correspondingAstroNodeFromLibrary) ?
+      "No stroke or stroke style found in the library Astro component" :
+      "Could not determine the stroke style from the library Astro component";
 
     const testResult: LintingResult = {
       test,
@@ -38,26 +46,40 @@ const usingStrokeFromComponent = (
       type: node.type,
       directLibraryCounterpartNode,
       usedColor,
-      sourceColor,
+      correspondingColor,
+      correspondingColorStatus
     };
 
     switch (true) {
-      case !!usedColor && !!sourceColor: {
-        let pass = false
-        let message = "";
-        if (strokeStyleId === sourceStrokeStyleId) {
-          pass = true;
-          message =
-            "Node is using the same stroke style as the source Astro component.";
-        } else {
-          message =
-          "Node is not using the same stroke style as the source Astro component.";
-        }
+      case !!overriddenFields && overriddenFields.includes("strokeStyleId"): {
         resolve({
           ...testResult,
           id: `${test}-1`,
-          pass: pass,
-          message: message,
+          pass: false,
+          message:
+            "Node is not using the same stroke style as the source Astro component.",
+        });
+        break;
+      }
+
+      case !!overriddenFields && overriddenFields.includes("strokes"): {
+        resolve({
+          ...testResult,
+          id: `${test}-2`,
+          pass: false,
+          message:
+            "Node is not using the same stroke as the source Astro component.",
+        });
+        break;
+      }
+
+      case !overriddenFields: {
+        resolve({
+          ...testResult,
+          id: `${test}-3`,
+          pass: true,
+          message:
+            "Node is using the same stroke style as the source Astro component.",
         });
         break;
       }
@@ -65,18 +87,14 @@ const usingStrokeFromComponent = (
       default: {
         resolve({
           ...testResult,
-          id: `${test}-2`,
+          id: `${test}-4`,
           ignore: true,
-          message: "No source Astro component to compare stroke style.",
+          pass: true,
+          message: "Something is overridden, but not strokeStyleId.",
         });
         break;
       }
     }
-
-    resolve({
-      ...testResult,
-      message: `An unexpected error occurred when linting strokes`,
-    });
   });
 };
 

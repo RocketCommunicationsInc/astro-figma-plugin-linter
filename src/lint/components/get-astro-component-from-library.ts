@@ -1,4 +1,3 @@
-import { addInstanceOverride } from "../collect-data/overrides";
 import { AstroComponent } from "../../types/astro";
 import { componentLoaderFunction } from "./component-loader";
 import { FillStyleNode } from "../../types/figma";
@@ -22,8 +21,6 @@ const getAstroComponentFromLibrary = async (
 }> => {
   // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
-  let instanceOverrides = undefined;
-  // let nearestAstroComponent;
   let nearestLocalParentAstroComponentLocal;
   let nearestLocalParentAstroComponentMeta;
   let nearestLibraryParentAstroComponent = null;
@@ -39,20 +36,15 @@ const getAstroComponentFromLibrary = async (
 
   if (!(node.type === "INSTANCE")) {
     // Get the nearest ancestor that has a masterComponent
-    ({
-      nearestLocalParentAstroComponentLocal,
-      nearestLocalParentAstroComponentMeta
-    } = findNearestLocalParentAstroComponent(node));
+    const nearestLocalParentAstroComponentResult = findNearestLocalParentAstroComponent(node);
+    if (nearestLocalParentAstroComponentResult) {
+      ({nearestLocalParentAstroComponentLocal, nearestLocalParentAstroComponentMeta} = nearestLocalParentAstroComponentResult);
+    }
   }
   if (node.type === "INSTANCE") {
     directLibraryCounterpartNode = await (
       node as InstanceNode
     ).getMainComponentAsync();
-
-    instanceOverrides = (node as InstanceNode).overrides;
-    instanceOverrides.map((instanceOverride) => {
-      addInstanceOverride(instanceOverride, directLibraryCounterpartNode)
-    });
 
     const sourceCounterpartNodeKey: string | undefined =
       directLibraryCounterpartNode?.key;

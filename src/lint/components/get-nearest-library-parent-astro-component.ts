@@ -1,14 +1,5 @@
-import {
-  addInstanceOverride,
-  getInstanceOverride,
-} from "../collect-data/overrides";
-import { AstroComponent } from "../../types/astro";
-import { componentLoaderFunction } from "./component-loader";
 import { findNearestLocalParentAstroComponent } from "./find-nearest-local-parent-astro-component";
 import { FillStyleNode } from "../../types/figma";
-import { tokens } from "../../tokens";
-
-const { astroComponents } = tokens();
 
 const getNearestLibraryParentAstroComponent = async (
   node: FillStyleNode
@@ -35,10 +26,8 @@ const getNearestLibraryParentAstroComponent = async (
     nearestLocalParentAstroComponentResult &&
     nearestLocalParentAstroComponentResult.nearestLocalParentAstroComponentLocal
   ) {
-    const {
-      nearestLocalParentAstroComponentLocal,
-      nearestLocalParentAstroComponentMeta,
-    } = nearestLocalParentAstroComponentResult;
+    const { nearestLocalParentAstroComponentLocal } =
+      nearestLocalParentAstroComponentResult;
 
     if (nearestLocalParentAstroComponentLocal) {
       nearestLibraryParentAstroComponent =

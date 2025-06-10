@@ -2,8 +2,8 @@ import { FillStyleNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { tokens, stripToLoadableId } from "../../../../tokens";
 import { PaintColorToken } from "../../../../types/tokens";
-import { findCorrespondingAstroNode } from "../../../components/find-corresponding-astro-node";
-import { getInstanceOverride } from "../../../collect-data/overrides";
+import { findCorrespondingAstroNodeFromLibrary } from "../../../components/find-corresponding-astro-node";
+import { addInstanceOverride, getInstanceOverride } from "../../../collect-data/overrides";
 import { getAssociation } from "../../../collect-data/associations";
 
 const getColorFill = (node: FillStyleNode) => {
@@ -42,6 +42,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
     const name = node.name;
     const pass = false;
     const message = "";
+    let correspondingColorStatus: string = "";
 
     const instanceOverrides = getInstanceOverride(node.id);
     const overriddenFields = instanceOverrides || null;
@@ -51,6 +52,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       astroComponentMeta,
       astroComponentFromLibrary,
       nearestLibraryParentAstroComponent,
+      correspondingAstroNodeFromLibrary,
     } = getAssociation(node.id);
 
     const usedColor = getColorFill(node);
@@ -58,10 +60,13 @@ const usingFillFromComponent: UsingFillFromComponent = (
       ? getColorFill(directLibraryCounterpartNode)
       : undefined;
 
-    const correspondingAstroNode = findCorrespondingAstroNode(node);
-    const correspondingColor = correspondingAstroNode
-      ? getColorFill(correspondingAstroNode)
+    const correspondingColor = correspondingAstroNodeFromLibrary
+      ? getColorFill(correspondingAstroNodeFromLibrary)
       : undefined;
+
+    correspondingColorStatus = (correspondingAstroNodeFromLibrary) ?
+      "No fill style found in the library Astro component" :
+      "Could not determine the fill style from the library Astro component";
 
     const testResult: LintingResult = {
       test,
@@ -74,6 +79,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       directLibraryCounterpartNode,
       usedColor,
       correspondingColor,
+      correspondingColorStatus
     };
 
     switch (true) {

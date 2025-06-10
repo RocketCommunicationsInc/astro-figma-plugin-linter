@@ -6,6 +6,7 @@ import { tokens } from "../../tokens";
 import { addAssociation } from "../collect-data/associations";
 import { AssociationSet } from "../../types/associations";
 import { getNearestLibraryParentAstroComponent } from "./get-nearest-library-parent-astro-component";
+import { findCorrespondingAstroNodeFromLibrary } from "./find-corresponding-astro-node";
 
 const { astroComponents } = tokens();
 
@@ -15,6 +16,7 @@ const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
   let directLibraryCounterpartNode: ComponentNode | null = null;
   let astroComponentFromLibrary: ComponentNode | ComponentSetNode | null = null;
   let nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null = null;
+  let correspondingAstroNodeFromLibrary: FillStyleNode | null = null;
   if (node.type === "INSTANCE") {
     directLibraryCounterpartNode = await (
       node as InstanceNode
@@ -44,11 +46,19 @@ const collectAssociations = async (node: FillStyleNode): Promise<boolean> => {
 
   nearestLibraryParentAstroComponent = await getNearestLibraryParentAstroComponent(node);
 
+  // Collect this node's corresponding node from an Astro component from the library
+  correspondingAstroNodeFromLibrary = findCorrespondingAstroNodeFromLibrary(
+    node,
+    directLibraryCounterpartNode,
+    nearestLibraryParentAstroComponent
+  );
+
   const associationSet: AssociationSet = {
     directLibraryCounterpartNode,
     astroComponentMeta,
     astroComponentFromLibrary,
     nearestLibraryParentAstroComponent,
+    correspondingAstroNodeFromLibrary,
   };
 
   addAssociation(node.id, associationSet);

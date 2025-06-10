@@ -43,15 +43,11 @@ const findCorrespondingNodeById = (
   return correspondingNode;
 };
 
-const findCorrespondingAstroNode = (
-  node: FillStyleNode
+const findCorrespondingAstroNodeFromLibrary = (
+  node: FillStyleNode,
+  directLibraryCounterpartNode: ComponentNode | null = null,
+  nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null = null
 ): FillStyleNode | null => {
-  const {
-    directLibraryCounterpartNode,
-    astroComponentMeta,
-    astroComponentFromLibrary,
-    nearestLibraryParentAstroComponent,
-  } = getAssociation(node.id);
 
   let correspondingAstroNode: FillStyleNode | null = null;
 
@@ -70,7 +66,7 @@ const findCorrespondingAstroNode = (
 
     // directLibraryCounterpartNode
     case !!directLibraryCounterpartNode &&
-      isFillStyleNode(directLibraryCounterpartNode): {
+    isFillStyleNode(directLibraryCounterpartNode): {
       correspondingAstroNode = directLibraryCounterpartNode;
       return correspondingAstroNode;
     }
@@ -81,4 +77,4 @@ const findCorrespondingAstroNode = (
   }
 };
 
-export { findCorrespondingAstroNode };
+export { findCorrespondingAstroNodeFromLibrary };

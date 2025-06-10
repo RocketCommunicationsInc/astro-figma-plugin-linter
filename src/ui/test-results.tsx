@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React from "react";
 import { LintingResult } from "../types/results";
 import { PaintColorToken } from "../types/tokens";
 
@@ -29,7 +29,11 @@ function convertFigmaColorToCSS(color: FigmaRGB, opacity: number): string {
   return `rgba(${r},${g},${b},${opacity})`
 }
 
-const ColorReference: React.FC<{ colorReference: PaintColorToken | PaintStyle | Paint }> = ({ colorReference }) => {
+const ColorReference: React.FC<{
+  colorReference: PaintColorToken | PaintStyle | Paint ,
+  colorClassName?: string | null,
+  colorStatus?: string | null
+}> = ({ colorReference, colorClassName = "used", colorStatus = null }) => {
   try {
     let backgroundColor;
     if ('name' in colorReference) {
@@ -42,7 +46,7 @@ const ColorReference: React.FC<{ colorReference: PaintColorToken | PaintStyle | 
       throw new Error("Invalid color reference type");
     }
     return (
-      <div className="result-color-token used">
+      <div className={`result-color-token ${colorClassName}`}>
         <span
           className="color-swatch"
           style={{
@@ -57,6 +61,18 @@ const ColorReference: React.FC<{ colorReference: PaintColorToken | PaintStyle | 
             <span className="color-swatch-description">
               {colorReference.description}
             </span>
+          </>
+        )}
+        {!('name' in colorReference) && (
+          <>
+            <span className="color-swatch-name">
+              Tested: {backgroundColor}
+            </span>
+            {colorStatus && (
+              <span className="color-swatch-description">
+                {colorStatus}
+              </span>
+            )}
           </>
         )}
       </div>
@@ -92,42 +108,13 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
         {usedColor && (
           <ColorReference colorReference={usedColor} />
         )}
-        {sourceColor?.paints && (
-          <div className="result-color-token source">
-            <span
-              className="color-swatch"
-              style={{
-                backgroundColor: convertFigmaPaintToCSS(sourceColor.paints[0] as Paint),
-              }}
-            ></span>
-            <span className="color-swatch-name">
-              Astro: {sourceColor.name}
-            </span>
-            <span className="color-swatch-description">
-              {sourceColor.description}
-            </span>
-          </div>
-        )}
         {usedColor && !correspondingColor && (
           <div className="result-color-token source error">
-            <span className="color-swatch-name error">No corresponding Astro color found</span>
+            <span className="color-swatch-error">{result.correspondingColorStatus}</span>
           </div>
         )}
-        {correspondingColor?.paints && (
-          <div className="result-color-token source">
-            <span
-              className="color-swatch"
-              style={{
-                backgroundColor: convertFigmaPaintToCSS(correspondingColor.paints[0] as Paint),
-              }}
-            ></span>
-            <span className="color-swatch-name">
-              Astro: {correspondingColor.name}
-            </span>
-            <span className="color-swatch-description">
-              {correspondingColor.description}
-            </span>
-          </div>
+        {correspondingColor && (
+          <ColorReference colorReference={correspondingColor} colorClassName="source" colorStatus={result.correspondingColorStatus} />
         )}
       </div>
       {debug && (

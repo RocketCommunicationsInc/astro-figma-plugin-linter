@@ -14,6 +14,7 @@ interface LintingResult {
   usedColor?: PaintColorToken | Paint;
   sourceColor?: PaintColorToken;
   correspondingColor?: PaintColorToken;
+  correspondingColorStatus?: string;
 }
 
 export type { LintingResult };

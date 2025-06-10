@@ -5,10 +5,8 @@ import {
   findFillStyleNodes,
   getFillStyleNode,
 } from "./colors/helpers/type-checks";
-import { getAstroComponentFromLibrary } from "./components/get-astro-component-from-library";
 import { testPaintStyle } from "./colors/test-paint-style";
 import { collectOverrides } from "./components/collect-overrides";
-import { getNearestLibraryParentAstroComponent } from "./components/get-nearest-library-parent-astro-component";
 import { clearInstanceOverrides } from "./collect-data/overrides";
 import { collectAssociations } from "./components/collect-associations";
 import { clearAssociations } from "./collect-data/associations";

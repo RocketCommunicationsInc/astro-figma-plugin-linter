@@ -1,6 +1,4 @@
 import { FillStyleNode } from "../../types/figma";
-import { getAssociation } from "../collect-data/associations";
-import { findNearestLocalParentAstroComponent } from "./find-nearest-local-parent-astro-component";
 import { isFillStyleNode } from "./is-fill-style-node";
 
 type ComponentSourceNode = ComponentNode | ComponentSetNode | null;

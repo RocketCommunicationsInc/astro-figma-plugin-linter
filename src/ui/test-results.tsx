@@ -109,7 +109,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
   };
 
   const resultClass = result.pass ? "pass" : "fail";
-  const { usedColor, sourceColor, correspondingColor } = result;
+  const { usedColor, correspondingColor } = result;
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
       <div className={`result-test ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>

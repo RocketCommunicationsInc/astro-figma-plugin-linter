@@ -1,22 +1,18 @@
 import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
-import { getFirstColorFill } from "../../helpers/get-first-color-filll";
+import { getFirstColorFillAndType } from "../../helpers/get-first-color-filll-and-type";
 
 interface UsingAstroFill {
-  (
-    node: TestableNode,
-    nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null
-  ): Promise<LintingResult>;
+  (node: TestableNode): Promise<LintingResult>;
 }
 
 const usingAstroFill: UsingAstroFill = (node): Promise<LintingResult> => {
   return new Promise((resolve) => {
     const test = "Using an Astro Color Fill";
     const name = node.name;
-    // const fillStyleId = node.fillStyleId;
     const pass = false;
     const message = "";
-    const { usedColor, usedColorType } = getFirstColorFill(node);
+    const { usedColor, usedColorType } = getFirstColorFillAndType(node);
 
     const testResult: LintingResult = {
       test,

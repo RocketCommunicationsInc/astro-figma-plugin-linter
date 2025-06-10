@@ -8,7 +8,7 @@ type UsedColorResult = {
   usedColorType: "astroToken" | "paintStyle" | "paint" | undefined;
 };
 
-const getFirstColorFill = (node: TestableNode): UsedColorResult => {
+const getFirstColorFillAndType = (node: TestableNode): UsedColorResult => {
   // 1. Using an Astro Color Fill Token
   // 2. Using a Figma Paint Style (not an Astro Token)
   // 3. Using a Figma Paint (not a style, just a paint object)
@@ -44,4 +44,4 @@ const getFirstColorFill = (node: TestableNode): UsedColorResult => {
   }
 };
 
-export { getFirstColorFill, UsedColorResult };
+export { getFirstColorFillAndType, UsedColorResult };

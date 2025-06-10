@@ -62,13 +62,13 @@ const lintSelection = async (theme: AstroTheme) => {
     for (const selectionNode of fillStyleNodes) {
       associationsPromises.push(
         collectAssociations(selectionNode).catch((error) => {
-          console.error("Error in getNearestLibraryParentAstroComponent:", error);
+          console.error("Error in overridesPromises:", error);
         })
       );
       childrenToCheckForOverrides.map((node) => {
         associationsPromises.push(
           collectAssociations(node).catch((error) => {
-            console.error("Error in getNearestLibraryParentAstroComponent:", error);
+            console.error("Error in overridesPromises:", error);
           })
         );
       });

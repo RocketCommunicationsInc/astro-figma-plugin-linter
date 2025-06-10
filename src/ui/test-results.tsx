@@ -31,9 +31,21 @@ function convertFigmaColorToCSS(color: FigmaRGB, opacity: number): string {
 
 const ColorReference: React.FC<{
   colorReference: PaintColorToken | PaintStyle | Paint ,
-  colorClassName?: string | null,
+  testMode?: "used" | "source",
   colorStatus?: string | null
-}> = ({ colorReference, colorClassName = "used", colorStatus = null }) => {
+}> = ({ colorReference, testMode = "used", colorStatus = null }) => {
+  let colorLabel = "";
+  switch (testMode) {
+    case "used":
+      colorLabel = "Tested:";
+      break;
+    case "source":
+      colorLabel = "Source:";
+      break;
+    default:
+      colorLabel = "";
+  }
+
   try {
     let backgroundColor;
     if ('name' in colorReference) {
@@ -46,7 +58,7 @@ const ColorReference: React.FC<{
       throw new Error("Invalid color reference type");
     }
     return (
-      <div className={`result-color-token ${colorClassName}`}>
+      <div className={`result-color-token ${testMode}`}>
         <span
           className="color-swatch"
           style={{
@@ -56,7 +68,7 @@ const ColorReference: React.FC<{
         {'name' in colorReference && (
           <>
             <span className="color-swatch-name">
-              Tested: {colorReference.name}
+              {colorLabel}: {colorReference.name}
             </span>
             <span className="color-swatch-description">
               {colorReference.description}
@@ -66,7 +78,7 @@ const ColorReference: React.FC<{
         {!('name' in colorReference) && (
           <>
             <span className="color-swatch-name">
-              Tested: {backgroundColor}
+              {colorLabel}: {backgroundColor}
             </span>
             {colorStatus && (
               <span className="color-swatch-description">
@@ -108,13 +120,13 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
         {usedColor && (
           <ColorReference colorReference={usedColor} />
         )}
-        {usedColor && !correspondingColor && (
+        {correspondingColor && (
+          <ColorReference colorReference={correspondingColor} testMode="source" colorStatus={result.correspondingColorStatus} />
+        )}
+        {!correspondingColor && !correspondingColor && (
           <div className="result-color-token source error">
             <span className="color-swatch-error">{result.correspondingColorStatus}</span>
           </div>
-        )}
-        {correspondingColor && (
-          <ColorReference colorReference={correspondingColor} colorClassName="source" colorStatus={result.correspondingColorStatus} />
         )}
       </div>
       {debug && (

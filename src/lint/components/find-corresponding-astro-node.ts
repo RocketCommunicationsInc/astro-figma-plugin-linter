@@ -11,13 +11,19 @@ type ComponentSourceNode = ComponentNode | ComponentSetNode | null;
 // This means we can use the last segment of the ID
 // to find the corresponding Astro component.
 // We will use a regex to extract the last segment of the ID.
+//
+// There are exceptions but this is the most reliable way to
+// find the corresponding Astro component for a given nested Figma node.
 const findCorrespondingNodeById = (
   startingNode: FillStyleNode,
   nearestLibraryParentAstroComponent: ComponentSourceNode
 ): FillStyleNode | null => {
   let correspondingNode: FillStyleNode | null = null;
   const regexMatchableIdSegments = /(\d+:\d+)(?!.*\d+:\d+)/;
-  if (nearestLibraryParentAstroComponent && "findOne" in nearestLibraryParentAstroComponent === false) {
+  if (
+    nearestLibraryParentAstroComponent &&
+    "findOne" in nearestLibraryParentAstroComponent === false
+  ) {
     return null;
   }
 
@@ -32,66 +38,47 @@ const findCorrespondingNodeById = (
       : undefined;
     return searchLastSegment === lastSegment && node.name === targetNodeName;
   });
-  correspondingNode = (foundNode && isFillStyleNode(foundNode)) ? foundNode : null;
+  correspondingNode =
+    foundNode && isFillStyleNode(foundNode) ? foundNode : null;
   return correspondingNode;
 };
 
 const findCorrespondingAstroNode = (
   node: FillStyleNode
 ): FillStyleNode | null => {
-
   const {
-      directLibraryCounterpartNode,
-      astroComponentMeta,
-      astroComponentFromLibrary,
-      nearestLibraryParentAstroComponent,
-    } = getAssociation(node.id);
-
-
+    directLibraryCounterpartNode,
+    astroComponentMeta,
+    astroComponentFromLibrary,
+    nearestLibraryParentAstroComponent,
+  } = getAssociation(node.id);
 
   let correspondingAstroNode: FillStyleNode | null = null;
 
   switch (true) {
     // nearestLibraryParentAstroComponent
-    case !!findCorrespondingNodeById(node, nearestLibraryParentAstroComponent): {
-      correspondingAstroNode = findCorrespondingNodeById(node, nearestLibraryParentAstroComponent);
-      break;
+    case !!findCorrespondingNodeById(
+      node,
+      nearestLibraryParentAstroComponent
+    ): {
+      correspondingAstroNode = findCorrespondingNodeById(
+        node,
+        nearestLibraryParentAstroComponent
+      );
+      return correspondingAstroNode;
     }
 
     // directLibraryCounterpartNode
-    case !!directLibraryCounterpartNode && isFillStyleNode(directLibraryCounterpartNode): {
+    case !!directLibraryCounterpartNode &&
+      isFillStyleNode(directLibraryCounterpartNode): {
       correspondingAstroNode = directLibraryCounterpartNode;
-      break;
+      return correspondingAstroNode;
     }
 
     default: {
-      try {
-        const nsac = nearestLibraryParentAstroComponent
-        const {
-          nearestLocalParentAstroComponentLocal,
-          nearestLocalParentAstroComponentMeta,
-        } = findNearestLocalParentAstroComponent(node);
-        // correspondingAstroNode = findCorrespondingNodeById(node, nearestAstroComponentLocal);
-        // TODO: this is giving the wrong node. It's local and not the remote one.
-        debugger;
-      } catch (error) {
-        console.error(
-          "Error in findCorrespondingAstroNode:",
-          error,
-          "node.id:",
-          node.id,
-          "node.name:",
-          node.name,
-          "astroComponentFromLibrary:",
-          astroComponentFromLibrary,
-          "nearestLibraryParentAstroComponent:",
-          nearestLibraryParentAstroComponent
-        );
-      }
+      return null;
     }
   }
-
-  return correspondingAstroNode;
 };
 
 export { findCorrespondingAstroNode };

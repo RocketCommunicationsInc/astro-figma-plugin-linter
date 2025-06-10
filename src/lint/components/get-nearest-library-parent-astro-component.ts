@@ -13,14 +13,13 @@ const { astroComponents } = tokens();
 const getNearestLibraryParentAstroComponent = async (
   node: FillStyleNode
 ): Promise<ComponentNode | ComponentSetNode | null> => {
-  let nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null =
-    null;
+  let nearestLibraryParentAstroComponent:
+    | ComponentNode
+    | ComponentSetNode
+    | null = null;
 
   if (node.type === "INSTANCE") {
-    const nnn = node;
-    const nn = node.name;
-    const nt = node.type;
-    // todo: same as directLibraryCounterpartNode in collect-associations.ts??
+    // FIXME: same as directLibraryCounterpartNode in collect-associations.ts??
     nearestLibraryParentAstroComponent = await (
       node as InstanceNode
     ).getMainComponentAsync();
@@ -30,22 +29,20 @@ const getNearestLibraryParentAstroComponent = async (
     return null;
   }
 
-
-  //todo: need to use this to get the component from the library
-  const nearestLocalParentAstroComponentResult = findNearestLocalParentAstroComponent(node);
-
+  const nearestLocalParentAstroComponentResult =
+    findNearestLocalParentAstroComponent(node);
   if (
     nearestLocalParentAstroComponentResult &&
     nearestLocalParentAstroComponentResult.nearestLocalParentAstroComponentLocal
   ) {
-    const { nearestLocalParentAstroComponentLocal, nearestLocalParentAstroComponentMeta } =
-      nearestLocalParentAstroComponentResult;
-    if (nearestLocalParentAstroComponentMeta) {
-      // Load the Astro component from Figma
-      nearestLibraryParentAstroComponent = await componentLoaderFunction(
-        nearestLocalParentAstroComponentMeta.type,
-        nearestLocalParentAstroComponentMeta.key
-      );
+    const {
+      nearestLocalParentAstroComponentLocal,
+      nearestLocalParentAstroComponentMeta,
+    } = nearestLocalParentAstroComponentResult;
+
+    if (nearestLocalParentAstroComponentLocal) {
+      nearestLibraryParentAstroComponent =
+        await nearestLocalParentAstroComponentLocal.getMainComponentAsync();
     }
 
     if (nearestLibraryParentAstroComponent) {

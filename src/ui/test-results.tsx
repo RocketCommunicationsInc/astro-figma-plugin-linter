@@ -30,7 +30,7 @@ function convertFigmaColorToCSS(color: FigmaRGB, opacity: number): string {
 }
 
 const ColorReference: React.FC<{
-  colorReference: PaintColorToken | PaintStyle | Paint ,
+  colorReference: PaintColorToken | PaintStyle | Paint,
   testMode?: "used" | "source",
   colorStatus?: string | null
 }> = ({ colorReference, testMode = "used", colorStatus = null }) => {
@@ -147,6 +147,5 @@ const TestResults: React.FC<{ results: LintingResult[], debug: boolean }> = ({ r
 };
 
 export {
-  TestResult,
   TestResults
 }

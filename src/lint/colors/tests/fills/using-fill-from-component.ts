@@ -1,13 +1,11 @@
 import { FillStyleNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { tokens, stripToLoadableId } from "../../../../tokens";
-import { PaintColorToken } from "../../../../types/tokens";
-import { findCorrespondingAstroNodeFromLibrary } from "../../../components/find-corresponding-astro-node";
-import { addInstanceOverride, getInstanceOverride } from "../../../collect-data/overrides";
+import { getInstanceOverride } from "../../../collect-data/overrides";
 import { getAssociation } from "../../../collect-data/associations";
 
 const getColorFill = (node: FillStyleNode) => {
-  let color: PaintColorToken | undefined = undefined;
+  let color = undefined;
   const { colorTokens } = tokens();
   const fillStyleId = "fillStyleId" in node ? node.fillStyleId : undefined;
   if (typeof fillStyleId === "string") {
@@ -47,19 +45,13 @@ const usingFillFromComponent: UsingFillFromComponent = (
     const instanceOverrides = getInstanceOverride(node.id);
     const overriddenFields = instanceOverrides || null;
 
+    const association = getAssociation(node.id);
     const {
       directLibraryCounterpartNode,
-      astroComponentMeta,
-      astroComponentFromLibrary,
-      nearestLibraryParentAstroComponent,
       correspondingAstroNodeFromLibrary,
-    } = getAssociation(node.id);
+    } = association || {};
 
     const usedColor = getColorFill(node);
-    const sourceColor = directLibraryCounterpartNode
-      ? getColorFill(directLibraryCounterpartNode)
-      : undefined;
-
     const correspondingColor = correspondingAstroNodeFromLibrary
       ? getColorFill(correspondingAstroNodeFromLibrary)
       : undefined;

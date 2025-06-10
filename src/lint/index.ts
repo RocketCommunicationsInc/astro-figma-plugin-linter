@@ -34,9 +34,10 @@ const lintSelection = async (theme: AstroTheme) => {
   let childrenToCheckForOverrides: FillStyleNode[] = [];
   for (const selectionNode of fillStyleNodes) {
     if ("findAll" in selectionNode) {
-      childrenToCheckForOverrides = selectionNode.findAll((node) => {
-        return findFillStyleNodes([node]).length > 0;
-      });
+      childrenToCheckForOverrides = selectionNode
+        .findAll((node) => findFillStyleNodes([node]).length > 0)
+        .map((node) => getFillStyleNode(node))
+        .filter((node): node is FillStyleNode => !!node);
     }
   }
 

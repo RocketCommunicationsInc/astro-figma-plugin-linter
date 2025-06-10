@@ -10,7 +10,7 @@ import { usingAstroStroke } from "./tests/strokes/using-astro-stroke";
 import { usingFillFromComponent } from "./tests/fills/using-fill-from-component";
 import { usingStrokeFromComponent } from "./tests/strokes/using-stroke-from-component";
 
-const testPaintStyle = async (
+const testColors = async (
   node: TestableNode,
   theme: AstroTheme
 ): Promise<void> => {
@@ -41,8 +41,8 @@ const testPaintStyle = async (
       return Promise.resolve();
     })
     .catch((error) => {
-      console.error("Error in testPaintStyle:", error);
+      console.error("Error in testColors:", error);
     });
 };
 
-export { testPaintStyle };
+export { testColors };

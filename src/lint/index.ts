@@ -5,7 +5,7 @@ import {
   findTestableNodes,
   getTestableNode,
 } from "./colors/helpers/type-checks";
-import { testPaintStyle } from "./colors/test-paint-style";
+import { testColors } from "./colors/test-paint-style";
 import { collectOverrides } from "./components/collect-overrides";
 import { clearInstanceOverrides } from "./collect-data/overrides";
 import { collectAssociations } from "./components/collect-associations";
@@ -124,7 +124,7 @@ const lintSingleNode = async (
   return new Promise((resolve) => {
     (async () => {
       // Test paint style
-      await testPaintStyle(node, theme);
+      await testColors(node, theme);
       resolve();
     })();
   });

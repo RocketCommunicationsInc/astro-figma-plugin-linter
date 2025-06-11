@@ -8,18 +8,41 @@ type UsedColorResult = {
   usedColorType: "astroToken" | "paintStyle" | "paint" | undefined;
 };
 
-const getFirstColorFillAndType = (node: TestableNode): UsedColorResult => {
+interface GetFirstColorFillAndType {
+  (node: TestableNode, testMode?: "fill" | "stroke"): UsedColorResult;
+}
+
+const getFirstColorFillAndType: GetFirstColorFillAndType = (
+  node,
+  testMode = "fill"
+): UsedColorResult => {
   // 1. Using an Astro Color Fill Token
   // 2. Using a Figma Paint Style (not an Astro Token)
   // 3. Using a Figma Paint (not a style, just a paint object)
   // 4. Using no fill at all (no fills array or empty fills array)
-  const fillStyleId = "fillStyleId" in node ? node.fillStyleId : null;
+
+  let styleId;
+  let nodeColors;
+
+  switch (testMode) {
+    case "fill":
+      styleId = "fillStyleId" in node ? node.fillStyleId : null;
+      nodeColors = node.fills;
+      break;
+    case "stroke":
+      styleId = "strokeStyleId" in node ? node.strokeStyleId : null;
+      nodeColors = node.strokes;
+      break;
+    default:
+      throw new Error("Invalid test mode. Use 'fill' or 'stroke'.");
+  }
+
   const astroToken =
-    typeof fillStyleId === "string"
-      ? colorTokens.get(stripToLoadableId(fillStyleId))
+    typeof styleId === "string"
+      ? colorTokens.get(stripToLoadableId(styleId))
       : null;
-  const fills = node.fills;
-  const color = Array.isArray(fills) && fills.length > 0 ? fills[0] : null;
+  const color =
+    Array.isArray(nodeColors) && nodeColors.length > 0 ? nodeColors[0] : null;
 
   switch (true) {
     case !!astroToken: {
@@ -29,7 +52,7 @@ const getFirstColorFillAndType = (node: TestableNode): UsedColorResult => {
         usedColorType: "astroToken",
       };
     }
-    case !!fillStyleId && !astroToken: {
+    case !!styleId && !astroToken: {
       // If the color is a PaintColorToken
       return { usedColor: color as Paint, usedColorType: "paintStyle" };
     }
@@ -38,7 +61,7 @@ const getFirstColorFillAndType = (node: TestableNode): UsedColorResult => {
       return { usedColor: color, usedColorType: "paint" };
     }
     default: {
-      // If no fill style or fills are present, return null
+      // If no fill/stroke style or fills/strokes are present, return null
       return { usedColor: undefined, usedColorType: undefined };
     }
   }

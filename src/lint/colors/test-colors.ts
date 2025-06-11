@@ -14,24 +14,24 @@ const testColors = async (
   node: TestableNode,
   theme: AstroTheme
 ): Promise<void> => {
-  const paintStylePromises: Promise<LintingResult>[] = [];
+  const colorTestPromises: Promise<LintingResult>[] = [];
 
   // Fail if node is in a component and not using the correct paint style
-  paintStylePromises.push(usingFillFromComponent(node));
-  // paintStylePromises.push(
-  //   usingStrokeFromComponent(node, directLibraryCounterpartNode)
-  // );
+  colorTestPromises.push(usingFillFromComponent(node));
+  colorTestPromises.push(
+    usingStrokeFromComponent(node)
+  );
   // Fail if node is not in an Astro component,
   // IS using a fill/stroke style,
   // AND not using an Astro paint style
-  // paintStylePromises.push(usingAstroFill(node, nearestLibraryParentAstroComponent));
-  // paintStylePromises.push(usingAstroStroke(node));
+  colorTestPromises.push(usingAstroFill(node));
+  colorTestPromises.push(usingAstroStroke(node));
 
   // Fail if node is using an Astro paint style but not the correct one for this theme
   // paintStylePromises.push(astroFillIsUsingCorrectTheme(node, theme));
   // paintStylePromises.push(astroStrokeIsUsingCorrectTheme(node, theme));
 
-  await Promise.all(paintStylePromises)
+  await Promise.all(colorTestPromises)
     .then((results) => {
       results.forEach((result: LintingResult | undefined) => {
         if (result) {

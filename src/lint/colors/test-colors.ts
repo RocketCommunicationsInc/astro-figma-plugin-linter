@@ -1,5 +1,4 @@
 import { addResult } from "../collect-data/results";
-import { AstroComponent } from "../../types/astro";
 import { astroFillIsUsingCorrectTheme } from "./tests/fills/astro-fill-is-using-correct-theme";
 import { astroStrokeIsUsingCorrectTheme } from "./tests/strokes/astro-stroke-is-using-correct-theme";
 import { AstroTheme } from "../../types/tokens";
@@ -29,7 +28,7 @@ const testColors = async (
 
   // Fail if node is using an Astro paint style but not the correct one for this theme
   colorTestPromises.push(astroFillIsUsingCorrectTheme(node, theme));
-  // colorTestPromises.push(astroStrokeIsUsingCorrectTheme(node, theme));
+  colorTestPromises.push(astroStrokeIsUsingCorrectTheme(node, theme));
 
   await Promise.all(colorTestPromises)
     .then((results) => {

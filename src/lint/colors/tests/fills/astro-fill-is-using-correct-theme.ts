@@ -20,6 +20,17 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
       const pass = false;
       const message = "";
       const { usedColor, usedColorType } = await getFirstColorFillAndType(node);
+      const astroColorNameWithTheme =
+        usedColor && "name" in usedColor
+          ? `${theme}/${usedColor.name}`
+          : undefined;
+      const astroColorFromTheme = astroColorNameWithTheme
+        ? colorTokens.get(astroColorNameWithTheme)
+        : undefined;
+      const usedColorMatchesThemedColor =
+        usedColor && astroColorFromTheme && "id" in usedColor
+          ? usedColor.id === astroColorFromTheme.id
+          : false;
 
       const testResult: LintingResult = {
         test,
@@ -32,77 +43,66 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
         usedColor,
       };
 
-    const astroColorNameWithTheme =
-      usedColor && "name" in usedColor
-        ? `${theme}/${usedColor.name}`
-        : undefined;
-    const astroColorFromTheme = astroColorNameWithTheme
-      ? colorTokens.get(astroColorNameWithTheme)
-      : undefined;
-    const usedColorMatchesThemedColor =
-      usedColor && astroColorFromTheme && "id" in usedColor
-        ? usedColor.id === astroColorFromTheme.id
-        : false;
-    switch (true) {
-      case usedColorType === "astroToken" && usedColorMatchesThemedColor: {
-        resolve({
-          ...testResult,
-          id: `${test}-1`,
-          pass: true,
-          message: `Node is using a fill style from Astro in the correct theme (${theme})`,
-        });
-        break;
-      }
+      switch (true) {
+        case usedColorType === "astroToken" && usedColorMatchesThemedColor: {
+          resolve({
+            ...testResult,
+            id: `${test}-1`,
+            pass: true,
+            message: `Node is using a fill style from Astro in the correct theme (${theme})`,
+          });
+          break;
+        }
 
-      case usedColorType === "astroToken" && !usedColorMatchesThemedColor: {
-        resolve({
-          ...testResult,
-          id: `${test}-2`,
-          pass: false,
-          message: `Node is using a fill style from Astro but using the correct theme (${theme})`,
-        });
-        break;
-      }
+        case usedColorType === "astroToken" && !usedColorMatchesThemedColor: {
+          resolve({
+            ...testResult,
+            id: `${test}-2`,
+            pass: false,
+            message: `Node is using a fill style from Astro but using the correct theme (${theme})`,
+          });
+          break;
+        }
 
-      case usedColorType === "paintStyle": {
-        resolve({
-          ...testResult,
-          id: `${test}-3`,
-          pass: false,
-          message: `Node is filled with a fill style but not using a fill style from Astro`,
-        });
-        break;
-      }
+        case usedColorType === "paintStyle": {
+          resolve({
+            ...testResult,
+            id: `${test}-3`,
+            pass: false,
+            message: `Node is filled with a fill style but not using a fill style from Astro`,
+          });
+          break;
+        }
 
-      case usedColorType === "paint": {
-        resolve({
-          ...testResult,
-          id: `${test}-4`,
-          pass: false,
-          message: `Node is filled with a color but not using a fill style from Astro`,
-        });
-        break;
-      }
+        case usedColorType === "paint": {
+          resolve({
+            ...testResult,
+            id: `${test}-4`,
+            pass: false,
+            message: `Node is filled with a color but not using a fill style from Astro`,
+          });
+          break;
+        }
 
-      case !usedColor: {
-        resolve({
-          ...testResult,
-          id: `${test}-5`,
-          ignore: true,
-          pass: true,
-          message: `Node has no fills`,
-        });
-        break;
-      }
+        case !usedColor: {
+          resolve({
+            ...testResult,
+            id: `${test}-5`,
+            ignore: true,
+            pass: true,
+            message: `Node has no fills`,
+          });
+          break;
+        }
 
-      default: {
-        resolve({
-          ...testResult,
-          id: `${test}-6 `,
-          message: `An unexpected error occurred when linting fills`,
-        });
+        default: {
+          resolve({
+            ...testResult,
+            id: `${test}-6 `,
+            message: `An unexpected error occurred when linting fills`,
+          });
+        }
       }
-    }
     })();
   });
 };

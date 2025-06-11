@@ -1,101 +1,109 @@
 import { AstroTheme } from "../../../../types/tokens";
 import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
-import { stripToLoadableId } from "../../../../tokens";
 import { tokens } from "../../../../tokens";
+import { getFirstColorFillAndType } from "../../helpers/get-first-color-filll-and-type";
 const { colorTokens } = tokens();
 
-const astroStrokeIsUsingCorrectTheme = (
-  node: TestableNode,
-  theme: AstroTheme
-): Promise<LintingResult> => {
+interface AstroStrokeIsUsingCorrectTheme {
+  (node: TestableNode, theme: AstroTheme): Promise<LintingResult>;
+}
+
+const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
+  node,
+  theme
+) => {
   return new Promise((resolve) => {
-    const test = "Using Astro Color Stroke in Correct Theme";
-    const name = node.name;
-    const strokeStyleId = (node.strokeStyleId as string) || "";
-    const astroColor = colorTokens.get(stripToLoadableId(strokeStyleId));
-    const strokes = node.strokes;
-    const pass = false;
-    const message = "";
+    (async () => {
+      const test = "Using Astro Color Stroke in Correct Theme";
+      const name = node.name;
+      const pass = false;
+      const message = "";
+      const { usedColor, usedColorType } = await getFirstColorFillAndType(node, "stroke");
+      const astroColorNameWithTheme =
+        usedColor && "name" in usedColor
+          ? `${theme}/${usedColor.name}`
+          : undefined;
+      const astroColorFromTheme = astroColorNameWithTheme
+        ? colorTokens.get(astroColorNameWithTheme)
+        : undefined;
+      const usedColorMatchesThemedColor =
+        usedColor && astroColorFromTheme && "id" in usedColor
+          ? usedColor.id === astroColorFromTheme.id
+          : false;
 
-    const testResult: LintingResult = {
-      test,
-      id: `${test}-0`,
-      pass,
-      message,
-      name,
-      node,
-      type: node.type,
-    };
+      const testResult: LintingResult = {
+        test,
+        id: `${test}-0`,
+        pass,
+        message,
+        name,
+        node,
+        type: node.type,
+        usedColor,
+      };
 
-    // Switch logic based on node state
-    switch (true) {
-      case !!astroColor?.name: {
-        const astroColorNameWithTheme = `${theme}/${astroColor?.name}`;
-        const astroColorWithTheme = colorTokens.get(astroColorNameWithTheme);
-        const pass = astroColor?.id === astroColorWithTheme?.id;
-        resolve({
-          ...testResult,
-          id: `${test}-1`,
-          pass: pass,
-          message: pass
-            ? `Node is using a stroke style (${astroColor.name}) from Astro in the correct theme (${theme})`
-            : `Node is using a stroke style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`,
-        });
-        break;
-      }
+      switch (true) {
+        case usedColorType === "astroToken" && usedColorMatchesThemedColor: {
+          resolve({
+            ...testResult,
+            id: `${test}-1`,
+            pass: true,
+            message: `Node is using a stroke style from Astro in the correct theme (${theme})`,
+          });
+          break;
+        }
 
-      case Array.isArray(strokes) && strokes.length === 0: {
-        resolve({
-          ...testResult,
-          id: `${test}-2`,
-          pass: true,
-          message: `Node has no strokes`,
-        });
-        break;
-      }
+        case usedColorType === "astroToken" && !usedColorMatchesThemedColor: {
+          resolve({
+            ...testResult,
+            id: `${test}-2`,
+            pass: false,
+            message: `Node is using a stroke style from Astro but using the correct theme (${theme})`,
+          });
+          break;
+        }
 
-      case Array.isArray(strokes) && strokes.length > 0: {
-        const visibleStrokes = strokes.filter(
-          (stroke) => stroke.visible === true
-        );
-        if (visibleStrokes.length === 0) {
+        case usedColorType === "paintStyle": {
           resolve({
             ...testResult,
             id: `${test}-3`,
-            pass: true,
-            message: `Node has an invisible stroke`,
+            pass: false,
+            message: `Node is stroked with a stroke style but not using a stroke style from Astro`,
           });
-          return;
+          break;
         }
-        break;
-      }
 
-      case !strokeStyleId: {
-        resolve({
-          ...testResult,
-          id: `${test}-4`,
-          ignore: true,
-          pass: true,
-          message: `Node is not using a stroke style`,
-        });
-        return;
-      }
+        case usedColorType === "paint": {
+          resolve({
+            ...testResult,
+            id: `${test}-4`,
+            pass: false,
+            message: `Node is stroked with a color but not using a stroke style from Astro`,
+          });
+          break;
+        }
 
-      default: {
-        resolve({
-          ...testResult,
-          id: `${test}-5`,
-          message: `Node is not using a stroke style from Astro`,
-        });
-        return;
-      }
-    }
+        case !usedColor: {
+          resolve({
+            ...testResult,
+            id: `${test}-5`,
+            ignore: true,
+            pass: true,
+            message: `Node has no strokes`,
+          });
+          break;
+        }
 
-    resolve({
-      ...testResult,
-      message: `An unexpected error occurred when linting strokes`,
-    });
+        default: {
+          resolve({
+            ...testResult,
+            id: `${test}-6 `,
+            message: `An unexpected error occurred when linting strokes`,
+          });
+        }
+      }
+    })();
   });
 };
 

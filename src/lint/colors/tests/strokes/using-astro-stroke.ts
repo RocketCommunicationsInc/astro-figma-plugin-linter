@@ -1,92 +1,80 @@
 import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
-import { stripToLoadableId } from "../../../../tokens";
-import { tokens } from "../../../../tokens";
-const { colorTokens } = tokens();
+import { getFirstColorFillAndType } from "../../helpers/get-first-color-filll-and-type";
 
 const usingAstroStroke = (node: TestableNode): Promise<LintingResult> => {
-  const test = "Using an Astro Color Stroke";
-  const name = node.name;
-  const strokeStyleId = node.strokeStyleId;
-  let pass = false;
-  let message = "";
-
-  const testResult: LintingResult = {
-    test,
-    id: `${test}-0`,
-    pass,
-    message,
-    name,
-    node,
-    type: node.type,
-  };
-
   return new Promise((resolve) => {
-    const strokes = node.strokes;
+    const test = "Using an Astro Color Stroke";
+    const name = node.name;
+    const pass = false;
+    const message = "";
+    const { usedColor, usedColorType } = getFirstColorFillAndType(
+      node,
+      "stroke"
+    );
+
+    const testResult: LintingResult = {
+      test,
+      id: `${test}-0`,
+      pass,
+      message,
+      name,
+      node,
+      type: node.type,
+      usedColor,
+    };
 
     switch (true) {
-      case !strokeStyleId: {
+      case !!usedColor && usedColorType === "astroToken": {
+        // If the usedColor is a PaintColorToken
         resolve({
           ...testResult,
           id: `${test}-1`,
-          ignore: true,
           pass: true,
-          message: `Node is not using a stroke style`,
+          message: "Node is using a stroke style from Astro.",
         });
         break;
       }
 
-      case typeof strokeStyleId !== "string": {
+      case !!usedColor && usedColorType === "paintStyle": {
+        // If the usedColor is a PaintStyle but not an Astro PaintColorToken
+        // This means the node is using a stroke style but not from Astro
         resolve({
           ...testResult,
           id: `${test}-2`,
           pass: false,
-          message: `Node is not using a fill style from Astro`,
+          message: "Node is using a stroke style not from Astro.",
         });
         break;
       }
 
-      case !!strokeStyleId && typeof strokeStyleId === "string": {
-        const token = colorTokens.get(stripToLoadableId(strokeStyleId));
-        pass = !!token;
-        message = pass
-          ? `Node is using a stroke style from Astro (${token?.name})`
-          : `Node is using a stroke style but it's not from Astro`;
+      case !!usedColor && usedColorType === "paint": {
+        // If the usedColor is a Paint (Figma Paint) but not an Astro PaintColorToken
+        // This is not a style, just a paint object
         resolve({
           ...testResult,
           id: `${test}-3`,
-          pass,
-          message,
+          pass: false,
+          message: "Node is using a stroke color, not a style not from Astro.",
         });
         break;
       }
 
-      case Array.isArray(strokes) && strokes.length > 0: {
-        const visibleStrokes = strokes.filter((stroke) => stroke.visible === true);
-        if (visibleStrokes.length === 0) {
-          resolve({
-            ...testResult,
-            id: `${test}-4`,
-            pass: true,
-            message: `Node has an invisible stroke`,
-          });
-        } else {
-          resolve({
-            ...testResult,
-            id: `${test}-5`,
-            pass: false,
-            message: `Node has a stroke but not using a color style from Astro`,
-          });
-        }
+      case !usedColor: {
+        // If no fill style or fills are present, return null
+        resolve({
+          ...testResult,
+          id: `${test}-4`,
+          pass: true,
+          message: "Node has no stroke styles or fills.",
+        });
         break;
       }
 
       default: {
         resolve({
           ...testResult,
-          id: `${test}-6`,
-          pass: true,
-          message: `Node is not using a stroke style`,
+          message: `An unexpected error occurred when linting strokes`,
         });
       }
     }

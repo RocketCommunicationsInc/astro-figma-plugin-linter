@@ -8,9 +8,7 @@ interface UsingFillFromComponent {
   (node: TestableNode): Promise<LintingResult>;
 }
 
-const usingFillFromComponent: UsingFillFromComponent = (
-  node: TestableNode
-): Promise<LintingResult> => {
+const usingFillFromComponent: UsingFillFromComponent = (node) => {
   return new Promise((resolve) => {
     const test = "Using Color Fill from a Component";
     const name = node.name;
@@ -22,19 +20,17 @@ const usingFillFromComponent: UsingFillFromComponent = (
     const overriddenFields = instanceOverrides || null;
 
     const association = getAssociation(node.id);
-    const {
-      directLibraryCounterpartNode,
-      correspondingAstroNodeFromLibrary,
-    } = association || {};
+    const { directLibraryCounterpartNode, correspondingAstroNodeFromLibrary } =
+      association || {};
 
     const usedColor = getColorFill(node);
     const correspondingColor = correspondingAstroNodeFromLibrary
       ? getColorFill(correspondingAstroNodeFromLibrary)
       : undefined;
 
-    correspondingColorStatus = (correspondingAstroNodeFromLibrary) ?
-      "No fill or fill style found in the library Astro component" :
-      "Could not determine the fill style from the library Astro component";
+    correspondingColorStatus = correspondingAstroNodeFromLibrary
+      ? "No fill or fill style found in the library Astro component"
+      : "Could not determine the fill style from the library Astro component";
 
     const testResult: LintingResult = {
       test,
@@ -47,7 +43,7 @@ const usingFillFromComponent: UsingFillFromComponent = (
       directLibraryCounterpartNode,
       usedColor,
       correspondingColor,
-      correspondingColorStatus
+      correspondingColorStatus,
     };
 
     switch (true) {

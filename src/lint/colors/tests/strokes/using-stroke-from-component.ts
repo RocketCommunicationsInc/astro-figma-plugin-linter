@@ -8,9 +8,7 @@ interface UsingStrokeFromComponent {
   (node: TestableNode): Promise<LintingResult>;
 }
 
-const usingStrokeFromComponent: UsingStrokeFromComponent = (
-  node: TestableNode
-): Promise<LintingResult> => {
+const usingStrokeFromComponent: UsingStrokeFromComponent = (node) => {
   return new Promise((resolve) => {
     const test = "Using Color Stroke from a Component";
     const name = node.name;
@@ -22,19 +20,17 @@ const usingStrokeFromComponent: UsingStrokeFromComponent = (
     const overriddenFields = instanceOverrides || null;
 
     const association = getAssociation(node.id);
-    const {
-      directLibraryCounterpartNode,
-      correspondingAstroNodeFromLibrary,
-    } = association || {};
+    const { directLibraryCounterpartNode, correspondingAstroNodeFromLibrary } =
+      association || {};
 
     const usedColor = getColorFill(node);
     const correspondingColor = correspondingAstroNodeFromLibrary
       ? getColorFill(correspondingAstroNodeFromLibrary)
       : undefined;
 
-    correspondingColorStatus = (correspondingAstroNodeFromLibrary) ?
-      "No stroke or stroke style found in the library Astro component" :
-      "Could not determine the stroke style from the library Astro component";
+    correspondingColorStatus = correspondingAstroNodeFromLibrary
+      ? "No stroke or stroke style found in the library Astro component"
+      : "Could not determine the stroke style from the library Astro component";
 
     const testResult: LintingResult = {
       test,
@@ -47,7 +43,7 @@ const usingStrokeFromComponent: UsingStrokeFromComponent = (
       directLibraryCounterpartNode,
       usedColor,
       correspondingColor,
-      correspondingColorStatus
+      correspondingColorStatus,
     };
 
     switch (true) {

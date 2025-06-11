@@ -1,100 +1,109 @@
 import { AstroTheme } from "../../../../types/tokens";
 import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
-import { stripToLoadableId } from "../../../../tokens";
 import { tokens } from "../../../../tokens";
+import { getFirstColorFillAndType } from "../../helpers/get-first-color-filll-and-type";
 const { colorTokens } = tokens();
 
-const astroFillIsUsingCorrectTheme = (
-  node: TestableNode,
-  theme: AstroTheme
-): Promise<LintingResult> => {
+interface AstroFillIsUsingCorrectTheme {
+  (node: TestableNode, theme: AstroTheme): Promise<LintingResult>;
+}
+
+const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
+  node,
+  theme
+) => {
   return new Promise((resolve) => {
-    const test = "Using Astro Color Fill in Correct Theme";
-    const name = node.name;
-    const fillStyleId = (node.fillStyleId as string) || "";
-    const astroColor = colorTokens.get(stripToLoadableId(fillStyleId));
-    const fills = node.fills;
-    const pass = false;
-    const message = "";
+    (async () => {
+      const test = "Using Astro Color Fill in Correct Theme";
+      const name = node.name;
+      const pass = false;
+      const message = "";
+      const { usedColor, usedColorType } = await getFirstColorFillAndType(node);
 
-    const testResult: LintingResult = {
-      test,
-      id: `${test}-0`,
-      pass,
-      message,
-      name,
-      node,
-      type: node.type,
-    };
+      const testResult: LintingResult = {
+        test,
+        id: `${test}-0`,
+        pass,
+        message,
+        name,
+        node,
+        type: node.type,
+        usedColor,
+      };
 
-    // Switch logic based on node state
+    const astroColorNameWithTheme =
+      usedColor && "name" in usedColor
+        ? `${theme}/${usedColor.name}`
+        : undefined;
+    const astroColorFromTheme = astroColorNameWithTheme
+      ? colorTokens.get(astroColorNameWithTheme)
+      : undefined;
+    const usedColorMatchesThemedColor =
+      usedColor && astroColorFromTheme && "id" in usedColor
+        ? usedColor.id === astroColorFromTheme.id
+        : false;
     switch (true) {
-      case !!astroColor?.name: {
-        const astroColorNameWithTheme = `${theme}/${astroColor?.name}`;
-        const astroColorWithTheme = colorTokens.get(astroColorNameWithTheme);
-        const pass = astroColor?.id === astroColorWithTheme?.id;
-        const message = pass
-          ? `Node is using a fill style (${astroColor.name}) from Astro in the correct theme (${theme})`
-          : `Node is using a fill style (${astroColor.name}) from Astro but it's not the correct theme (${theme})`;
+      case usedColorType === "astroToken" && usedColorMatchesThemedColor: {
         resolve({
           ...testResult,
           id: `${test}-1`,
-          pass,
-          message,
+          pass: true,
+          message: `Node is using a fill style from Astro in the correct theme (${theme})`,
         });
         break;
       }
 
-      case Array.isArray(fills) && fills.length === 0: {
+      case usedColorType === "astroToken" && !usedColorMatchesThemedColor: {
         resolve({
           ...testResult,
           id: `${test}-2`,
+          pass: false,
+          message: `Node is using a fill style from Astro but using the correct theme (${theme})`,
+        });
+        break;
+      }
+
+      case usedColorType === "paintStyle": {
+        resolve({
+          ...testResult,
+          id: `${test}-3`,
+          pass: false,
+          message: `Node is filled with a fill style but not using a fill style from Astro`,
+        });
+        break;
+      }
+
+      case usedColorType === "paint": {
+        resolve({
+          ...testResult,
+          id: `${test}-4`,
+          pass: false,
+          message: `Node is filled with a color but not using a fill style from Astro`,
+        });
+        break;
+      }
+
+      case !usedColor: {
+        resolve({
+          ...testResult,
+          id: `${test}-5`,
+          ignore: true,
           pass: true,
           message: `Node has no fills`,
         });
         break;
       }
 
-      case Array.isArray(fills) && fills.length > 0: {
-        const visibleFills = fills.filter((fill) => fill.visible === true);
-        if (visibleFills.length === 0) {
-          resolve({
-            ...testResult,
-            id: `${test}-3`,
-            pass: true,
-            message: `Node is filled invisibly`,
-          });
-          return;
-        }
-        break;
-      }
-
-      case !fillStyleId: {
-        resolve({
-          ...testResult,
-          id: `${test}-4`,
-          ignore: true,
-          pass: true,
-          message: `Node cannot have a fill`,
-        });
-        return;
-      }
-
       default: {
         resolve({
           ...testResult,
-          id: `${test}-5`,
-          message: `Node is not using a stroke style from Astro`,
+          id: `${test}-6 `,
+          message: `An unexpected error occurred when linting fills`,
         });
-        return;
       }
     }
-
-    resolve({
-      ...testResult,
-      message: `An unexpected error occurred when linting fills`,
-    });
+    })();
   });
 };
 

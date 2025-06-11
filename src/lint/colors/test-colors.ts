@@ -28,8 +28,8 @@ const testColors = async (
   colorTestPromises.push(usingAstroStroke(node));
 
   // Fail if node is using an Astro paint style but not the correct one for this theme
-  // paintStylePromises.push(astroFillIsUsingCorrectTheme(node, theme));
-  // paintStylePromises.push(astroStrokeIsUsingCorrectTheme(node, theme));
+  colorTestPromises.push(astroFillIsUsingCorrectTheme(node, theme));
+  // colorTestPromises.push(astroStrokeIsUsingCorrectTheme(node, theme));
 
   await Promise.all(colorTestPromises)
     .then((results) => {

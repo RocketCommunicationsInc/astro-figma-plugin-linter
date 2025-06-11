@@ -57,6 +57,24 @@ const ColorReference: React.FC<{
     } else {
       throw new Error("Invalid color reference type");
     }
+
+    let colorSwatchName = "";
+    let colorSwatchDescription = colorStatus;
+    switch (true) {
+      case 'name' in colorReference:
+        colorSwatchName = colorReference.name;
+        colorSwatchDescription = colorReference.description || "";
+        break;
+      case 'colorName' in colorReference:
+        colorSwatchName = (colorReference as { colorName: string }).colorName;
+        break;
+      case 'color' in colorReference:
+        colorSwatchName = `rgb(${Math.round(255 * colorReference.color.r)}, ${Math.round(255 * colorReference.color.g)}, ${Math.round(255 * colorReference.color.b)})`;
+        break;
+      default:
+        colorSwatchName = "";
+    }
+
     return (
       <div className={`result-color-token ${testMode}`}>
         <span
@@ -65,28 +83,14 @@ const ColorReference: React.FC<{
             backgroundColor: backgroundColor,
           }}
         ></span>
-        {'name' in colorReference && (
-          <>
-            <span className="color-swatch-name">
-              {colorLabel}: {colorReference.name}
-            </span>
-            <span className="color-swatch-description">
-              {colorReference.description}
-            </span>
-          </>
-        )}
-        {!('name' in colorReference) && (
-          <>
-            <span className="color-swatch-name">
-              {colorLabel}: {backgroundColor}
-            </span>
-            {colorStatus && (
-              <span className="color-swatch-description">
-                {colorStatus}
-              </span>
-            )}
-          </>
-        )}
+
+        <span className="color-swatch-name">
+          {colorLabel}: {colorSwatchName}
+        </span>
+        <span className="color-swatch-description">
+          {colorSwatchDescription}
+        </span>
+
       </div>
     );
 

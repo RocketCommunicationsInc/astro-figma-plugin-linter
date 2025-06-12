@@ -9,11 +9,11 @@ type UsedColorResult = {
   usedColorType: "astroToken" | "paintStyle" | "paint" | undefined;
 };
 
-interface GetFirstColorFillAndType {
+interface GetColorAndColorType {
   (node: TestableNode, testMode?: "fill" | "stroke"): Promise<UsedColorResult>;
 }
 
-const getFirstColorFillAndType: GetFirstColorFillAndType = async (
+const getColorAndColorType: GetColorAndColorType = async (
   node,
   testMode = "fill"
 ) => {
@@ -94,4 +94,4 @@ const getFirstColorFillAndType: GetFirstColorFillAndType = async (
   });
 };
 
-export { getFirstColorFillAndType, UsedColorResult };
+export { getColorAndColorType, UsedColorResult };

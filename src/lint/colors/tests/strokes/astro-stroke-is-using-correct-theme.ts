@@ -2,8 +2,7 @@ import { AstroTheme } from "../../../../types/tokens";
 import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { tokens } from "../../../../tokens";
-import { getFirstColorFillAndType } from "../../helpers/get-first-color-filll-and-type";
-const { colorTokens } = tokens();
+import { getColorAndColorType } from "../../helpers/get-color-and-color-type";
 
 interface AstroStrokeIsUsingCorrectTheme {
   (node: TestableNode, theme: AstroTheme): Promise<LintingResult>;
@@ -15,11 +14,12 @@ const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
 ) => {
   return new Promise((resolve) => {
     (async () => {
+      const { colorTokens } = tokens();
       const test = "Using Astro Color Stroke in Correct Theme";
       const name = node.name;
       const pass = false;
       const message = "";
-      const { usedColor, usedColorType } = await getFirstColorFillAndType(node, "stroke");
+      const { usedColor, usedColorType } = await getColorAndColorType(node, "stroke");
       const astroColorNameWithTheme =
         usedColor && "name" in usedColor
           ? `${theme}/${usedColor.name}`

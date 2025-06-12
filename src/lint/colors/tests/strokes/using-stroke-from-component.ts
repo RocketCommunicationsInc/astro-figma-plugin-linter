@@ -2,7 +2,7 @@ import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { getInstanceOverride } from "../../../collect-data/overrides";
 import { getAssociation } from "../../../collect-data/associations";
-import { getFirstColorFillAndType } from "../../helpers/get-first-color-filll-and-type";
+import { getColorAndColorType } from "../../helpers/get-color-and-color-type";
 
 interface UsingStrokeFromComponent {
   (node: TestableNode): Promise<LintingResult>;
@@ -28,10 +28,10 @@ const usingStrokeFromComponent: UsingStrokeFromComponent = (node) => {
         correspondingAstroNodeFromLibrary,
       } = association || {};
 
-      const { usedColor } = await getFirstColorFillAndType(node, "stroke");
+      const { usedColor } = await getColorAndColorType(node, "stroke");
       let correspondingColor: typeof usedColor | undefined;
       if (correspondingAstroNodeFromLibrary) {
-        const result = await getFirstColorFillAndType(
+        const result = await getColorAndColorType(
           correspondingAstroNodeFromLibrary
         );
         correspondingColor = result.usedColor;

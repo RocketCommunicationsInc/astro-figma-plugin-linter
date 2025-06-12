@@ -1,6 +1,6 @@
 import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
-import { getFirstColorFillAndType } from "../../helpers/get-first-color-filll-and-type";
+import { getColorAndColorType } from "../../helpers/get-color-and-color-type";
 
 interface UsingAstroStroke {
   (node: TestableNode): Promise<LintingResult>;
@@ -13,7 +13,7 @@ const usingAstroStroke: UsingAstroStroke = (node) => {
       const name = node.name;
       const pass = false;
       const message = "";
-      const { usedColor, usedColorType } = await getFirstColorFillAndType(
+      const { usedColor, usedColorType } = await getColorAndColorType(
         node,
         "stroke"
       );

@@ -1,10 +1,9 @@
-import { LintingResult } from "../types/results";
+import { LintingResult } from "../../types/results";
 
 let results: LintingResult[] = [];
 
 const clearResults = () => {
   results = [];
-  figma.ui.postMessage({ type: "clear-results" });
 };
 
 const addResult = (result: LintingResult) => {

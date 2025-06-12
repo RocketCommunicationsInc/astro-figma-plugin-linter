@@ -28,7 +28,8 @@ const LinterUi = () => {
       const messageContent = event.data.pluginMessage.content;
       // Handle incoming message with exported JSON
       if (messageType === "lint-results") {
-        setResults(messageContent);
+        const sortedResults = (messageContent as LintingResult[]).sort((a: LintingResult, b: LintingResult) => a.id.localeCompare(b.id));
+        setResults(sortedResults);
         setFilteredResults(messageContent);
       }
     };

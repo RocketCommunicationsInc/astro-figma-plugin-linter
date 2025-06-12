@@ -17,9 +17,7 @@ const testColors = async (
 
   // Fail if node is in a component and not using the correct paint style
   colorTestPromises.push(usingFillFromComponent(node));
-  colorTestPromises.push(
-    usingStrokeFromComponent(node)
-  );
+  colorTestPromises.push(usingStrokeFromComponent(node));
   // Fail if node is not in an Astro component,
   // IS using a fill/stroke style,
   // AND not using an Astro paint style

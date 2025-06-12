@@ -7,19 +7,19 @@ const ColorReference: React.FC<{
   testMode?: "used" | "source",
   colorStatus?: string | null
 }> = ({ colorReference, testMode = "used", colorStatus = null }) => {
-  let colorLabel = "";
-  switch (testMode) {
-    case "used":
-      colorLabel = "Tested:";
-      break;
-    case "source":
-      colorLabel = "Source:";
-      break;
-    default:
-      colorLabel = "";
-  }
-
   try {
+    let colorLabel = "";
+    switch (testMode) {
+      case "used":
+        colorLabel = "Tested:";
+        break;
+      case "source":
+        colorLabel = "Source:";
+        break;
+      default:
+        colorLabel = "";
+    }
+
     let backgroundColor;
     if ('name' in colorReference) {
       // It's a PaintColorToken

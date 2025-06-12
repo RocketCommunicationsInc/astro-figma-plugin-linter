@@ -1,7 +1,6 @@
 import { TestableNode } from "../../../types/figma";
 import { PaintColorToken } from "../../../types/tokens";
 import { stripToLoadableId, tokens } from "../../../tokens";
-const { colorTokens } = tokens();
 
 type PaintWithColorName = Paint & { colorName?: string };
 
@@ -25,6 +24,7 @@ const getFirstColorFillAndType: GetFirstColorFillAndType = async (
     // 4. Using no fill at all (no fills array or empty fills array)
 
     (async () => {
+      const { colorTokens } = tokens();
       let styleId;
       let nodeColors;
 

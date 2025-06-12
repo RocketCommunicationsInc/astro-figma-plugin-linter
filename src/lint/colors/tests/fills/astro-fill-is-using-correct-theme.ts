@@ -59,7 +59,7 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-2`,
             pass: false,
-            message: `Node is using a fill style from Astro but using the correct theme (${theme})`,
+            message: `Node is using a fill style from Astro but not using the correct theme (${theme})`,
           });
           break;
         }

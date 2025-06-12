@@ -57,7 +57,7 @@ const usingAstroFill: UsingAstroFill = (node) => {
             ...testResult,
             id: `${test}-3`,
             pass: false,
-            message: "Node is using a fill color, not a style not from Astro.",
+            message: "Node is using a fill color, not a fill style from Astro.",
           });
           break;
         }

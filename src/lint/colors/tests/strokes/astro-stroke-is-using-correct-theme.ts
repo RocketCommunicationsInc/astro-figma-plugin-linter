@@ -59,7 +59,7 @@ const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-2`,
             pass: false,
-            message: `Node is using a stroke style from Astro but using the correct theme (${theme})`,
+            message: `Node is using a stroke style from Astro but not using the correct theme (${theme})`,
           });
           break;
         }

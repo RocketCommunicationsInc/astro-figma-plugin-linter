@@ -5,6 +5,7 @@ interface LintingResult {
   ignore?: boolean;
   test: string;
   id: string;
+  testType: 'color' | 'typography';
   pass: boolean;
   message: string;
   name: string;

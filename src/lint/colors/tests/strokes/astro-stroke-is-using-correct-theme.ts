@@ -35,6 +35,7 @@ const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
       const testResult: LintingResult = {
         test,
         id: `${test}-0`,
+        testType: "color",
         pass,
         message,
         name,

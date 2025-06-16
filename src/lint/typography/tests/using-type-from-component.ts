@@ -49,6 +49,7 @@ const usingTypeFromComponent: UsingTypeFromComponent = (node) => {
       const testResult: LintingResult = {
         test,
         id: `${test}-0`,
+        testType: "typography",
         pass,
         message,
         name,

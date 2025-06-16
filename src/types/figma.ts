@@ -1,4 +1,4 @@
-type FillStyleNode =
+type TestableNode =
   | (RectangleNode & BaseNodeMixin)
   | (EllipseNode & BaseNodeMixin)
   | (PolygonNode & BaseNodeMixin)
@@ -10,14 +10,4 @@ type FillStyleNode =
   | (InstanceNode & BaseNodeMixin)
   | (BooleanOperationNode & BaseNodeMixin);
 
-interface InheritedStyleField {
-  fillStyleId?: string;
-  type?: string;
-  name?: string;
-  // Add other inherited style fields here if needed
-}
-
-export {
-  FillStyleNode,
-  InheritedStyleField,
-};
+export { TestableNode };

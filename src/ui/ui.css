@@ -6,6 +6,7 @@
   --color-border: var(--figma-color-border);
   --color-border-focus: var(--figma-color-border-selected);
   --color-text: var(--figma-color-text);
+  --color-text-secondary: var(--figma-color-text-secondary);
   --color-bg-brand: var(--figma-color-bg-brand);
   --color-bg-brand-hover: var(--figma-color-bg-brand-hover);
   --color-bg-brand-active: var(--figma-color-bg-brand-pressed);
@@ -13,15 +14,21 @@
   --color-border-brand-focus: var(--figma-color-border-selected-strong);
   --color-text-brand: var(--figma-color-text-onbrand);
   --color-border-success: var(--figma-color-border-success);
+  --color-border-success-strong: var(--figma-color-border-success-strong);
   --color-border-danger: var(--figma-color-border-danger);
+  --color-border-danger-strong: var(--figma-color-border-danger-strong);
   --color-text-success: var(--figma-color-text-success);
+  --color-text-success-strong: var(--figma-color-text-success);
   --color-text-danger: var(--figma-color-text-danger);
+  --color-text-danger-strong: var(--figma-color-text-danger);
   --color-border-brand: var(--figma-color-border-brand);
   --color-bg-brand: var(--figma-color-bg-brand);
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;
   --spacing-3: 0.75rem;
   --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
 }
 
 /* Underlying defaults */
@@ -70,30 +77,30 @@ main {
 
 /* Buttons */
 .header {
-    display: grid;
-    gap: inherit;
-    grid-area: header;
-    justify-content: space-between;
-    grid-template-areas:
-        "logo buttons"
-        "logo theme";
-    justify-items: end;
-    align-items: center;
-}
-
-.logo {
-  width: 4rem;
-  grid-area: logo;
-}
-
-.buttons {
-  grid-area: buttons;
-  display: flex;
+  display: grid;
   gap: inherit;
-  justify-content: flex-end;
-  align-items: baseline;
-  flex-wrap: wrap;
-  flex-direction: row;
+  grid-area: header;
+  justify-content: space-between;
+  grid-template-areas:
+    "logo buttons"
+    "logo theme";
+  justify-items: end;
+  align-items: center;
+
+  .logo {
+    width: 4rem;
+    grid-area: logo;
+  }
+
+  .buttons {
+    grid-area: buttons;
+    display: flex;
+    gap: inherit;
+    justify-content: flex-end;
+    align-items: baseline;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
 }
 
 button {
@@ -103,28 +110,28 @@ button {
   cursor: pointer;
   border: 1px solid var(--color-border);
   padding: 0.5rem 1rem;
-}
 
-button:hover {
-  background-color: var(--color-bg-hover);
-}
+  &:hover {
+    background-color: var(--color-bg-hover);
+  }
 
-button:active {
-  background-color: var(--color-bg-active);
-}
+  &:active {
+    background-color: var(--color-bg-active);
+  }
 
-button:focus-visible {
-  border: none;
-  outline-color: var(--color-border-focus);
-}
+  &:focus-visible {
+    border: none;
+    outline-color: var(--color-border-focus);
+  }
 
-button.primary {
-  --color-bg: var(--color-bg-brand);
-  --color-text: var(--color-text-brand);
-  --color-bg-hover: var(--color-bg-brand-hover);
-  --color-bg-active: var(--color-bg-brand-active);
-  --color-border: transparent;
-  --color-border-focus: var(--color-border-brand-focus);
+  &.primary {
+    --color-bg: var(--color-bg-brand);
+    --color-text: var(--color-text-brand);
+    --color-bg-hover: var(--color-bg-brand-hover);
+    --color-bg-active: var(--color-bg-brand-active);
+    --color-border: transparent;
+    --color-border-focus: var(--color-border-brand-focus);
+  }
 }
 
 .theme-selection {
@@ -140,9 +147,14 @@ button.primary {
 
 .test-result {
   display: grid;
-  grid-template-areas: "test-result node""test-name test-name""message message";
+  grid-template-areas:
+    "test-result node"
+    "test-name test-name"
+    "message message"
+    "references references"
+    "id id";
   grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto auto;
   gap: var(--spacing-2);
   padding: var(--spacing-2);
   border-radius: 0.25rem;
@@ -150,28 +162,49 @@ button.primary {
   border-width: 1px 1px 1px 6px;
   border-style: solid;
   cursor: pointer;
-}
 
-.test-result.pass {
-  border-color: var(--color-border-success);
-}
+  &:hover {
+    background-color: var(--color-bg-hover);
+  }
 
-.test-result.fail {
-  border-color: var(--color-border-danger);
+  &.pass {
+    border-color: var(--color-border-success);
+
+    &:hover {
+      border-color: var(--color-border-success-strong);
+    }
+  }
+
+  &.fail {
+    border-color: var(--color-border-danger);
+
+    &:hover {
+      border-color: var(--color-border-danger-strong);
+    }
+  }
 }
 
 .result-test {
   grid-area: test-result;
+
+  .pass & {
+    color: var(--color-text-success);
+  }
+
+  .pass:hover & {
+    color: var(--color-text-success-strong);
+  }
+
+  .fail & {
+    color: var(--color-text-danger);
+  }
+
+  .fail:hover & {
+    color: var(--color-text-danger-strong);
+  }
 }
 
-.result-test.pass {
-  color: var(--color-text-success);
 
-}
-
-.result-test.fail {
-  color: var(--color-text-danger);
-}
 
 .result-node {
   grid-area: node;
@@ -186,6 +219,62 @@ button.primary {
 .result-message {
   grid-area: message;
   color: var(--color-text);
+}
+
+.result-references {
+  grid-area: references;
+  display: grid;
+  gap: var(--spacing-2);
+}
+
+.result-color-token {
+  display: grid;
+  gap: var(--spacing-1);
+  grid-template-areas:
+    "token-swatch token-name"
+    "token-swatch token-description";
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  justify-content: start;
+  justify-items: start;
+}
+
+.color-swatch {
+  grid-area: token-swatch;
+  width: 1.5rem;
+  height: 100%;
+  display: inline-block;
+  margin-right: 2px;
+  margin-left: -4px;
+  border-radius: var(--spacing-1);
+  min-height: var(--spacing-8);
+  border: 1px solid var(--color-border);
+}
+
+.color-swatch-name {
+  grid-area: token-name;
+  font-weight: bold;
+  font-size: small;
+  line-break: anywhere;
+}
+
+.color-swatch-description {
+  grid-area: token-description;
+  color: var(--color-text-secondary);
+  font-size: smaller;
+}
+
+.color-swatch-error {
+  grid-area: token-description;
+  color: var(--color-text-secondary);
+  font-size: smaller;
+}
+
+.result-id {
+  grid-area: id;
+  color: var(--color-text-secondary);
+  font-family: monospace;
+  font-size: small;
 }
 
 
@@ -204,12 +293,14 @@ button.primary {
   background-color: var(--color-bg-brand);
 }
 
-.filter-button.pass {
-  color: var(--color-text-success);
-  border-color: var(--color-border-success);
-}
+.filter-button {
+  &.pass {
+    color: var(--color-text-success);
+    border-color: var(--color-border-success);
+  }
 
-.filter-button.fail {
-  color: var(--color-text-danger);
-  border-color: var(--color-border-danger);
+  &.fail {
+    color: var(--color-text-danger);
+    border-color: var(--color-border-danger);
+  }
 }

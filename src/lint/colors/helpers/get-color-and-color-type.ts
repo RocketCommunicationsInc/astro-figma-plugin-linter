@@ -1,8 +1,6 @@
-import { TestableNode } from "../../../types/figma";
+import { PaintWithColorName, TestableNode } from "../../../types/figma";
 import { PaintColorToken } from "../../../types/tokens";
 import { stripToLoadableId, tokens } from "../../../tokens";
-
-type PaintWithColorName = Paint & { colorName?: string };
 
 type UsedColorResult = {
   usedColor: PaintColorToken | PaintWithColorName | undefined;

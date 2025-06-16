@@ -53,7 +53,7 @@ const usingTypeFromComponent: UsingTypeFromComponent = (node) => {
         message,
         name,
         node,
-        type: node.type,
+        nodeType: node.type,
         directLibraryCounterpartNode,
         usedTypography,
         correspondingTypography,

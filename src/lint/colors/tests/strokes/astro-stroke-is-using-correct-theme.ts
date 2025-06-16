@@ -39,7 +39,7 @@ const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
         message,
         name,
         node,
-        type: node.type,
+        nodeType: node.type,
         usedColor,
       };
 

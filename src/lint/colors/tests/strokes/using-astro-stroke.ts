@@ -25,7 +25,7 @@ const usingAstroStroke: UsingAstroStroke = (node) => {
         message,
         name,
         node,
-        type: node.type,
+        nodeType: node.type,
         usedColor,
       };
 

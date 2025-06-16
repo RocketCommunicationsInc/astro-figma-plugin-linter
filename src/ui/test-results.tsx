@@ -16,7 +16,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
       <div className={`result-test ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>
       <div className="result-test-name">{result.test}</div>
-      <div className="result-node">{result.name} <span className="result-node-type">{result.type}</span></div>
+      <div className="result-node">{result.name} <span className="result-node-type">{result.nodeType}</span></div>
       <div className="result-message">{result.message}</div>
       <div className="result-references">
         {usedColor && (

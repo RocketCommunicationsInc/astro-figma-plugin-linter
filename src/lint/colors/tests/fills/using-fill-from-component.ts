@@ -50,7 +50,7 @@ const usingFillFromComponent: UsingFillFromComponent = (node) => {
         message,
         name,
         node,
-        type: node.type,
+        nodeType: node.type,
         directLibraryCounterpartNode,
         usedColor,
         correspondingColor,

@@ -39,7 +39,7 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
         message,
         name,
         node,
-        type: node.type,
+        nodeType: node.type,
         usedColor,
       };
 

@@ -22,7 +22,7 @@ const usingAstroFill: UsingAstroFill = (node) => {
         message,
         name,
         node,
-        type: node.type,
+        nodeType: node.type,
         usedColor,
       };
 

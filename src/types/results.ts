@@ -9,7 +9,7 @@ interface LintingResult {
   message: string;
   name: string;
   node: TestableNode;
-  type: string;
+  nodeType: string;
   directLibraryCounterpartNode?: TestableNode | null;
   usedColor?: PaintColorToken | Paint;
   correspondingColor?: PaintColorToken | PaintWithColorName | undefined;

@@ -1,4 +1,4 @@
-import type { TestableNode } from './figma';
+import type { PaintWithColorName, TestableNode } from './figma';
 import { PaintColorToken } from './tokens';
 
 interface LintingResult {
@@ -12,8 +12,11 @@ interface LintingResult {
   type: string;
   directLibraryCounterpartNode?: TestableNode | null;
   usedColor?: PaintColorToken | Paint;
-  correspondingColor?: PaintColorToken;
+  correspondingColor?: PaintColorToken | PaintWithColorName | undefined;
   correspondingColorStatus?: string;
+  usedTypography?: TextStyle | StyledTextSegment;
+  correspondingTypography?: TextStyle | StyledTextSegment;
+  correspondingTypographyStatus?: string;
 }
 
 export type { LintingResult };

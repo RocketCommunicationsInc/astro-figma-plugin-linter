@@ -6,7 +6,7 @@ type AssociationSet = {
   astroComponentMeta: AstroComponent | undefined;
   astroComponentFromLibrary: ComponentNode | ComponentSetNode | null;
   nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null;
-  correspondingAstroNodeFromLibrary: TestableNode | null;
+  correspondingAstroNodeFromLibrary: TestableNode | TextNode | null;
 };
 
 export type { AssociationSet };

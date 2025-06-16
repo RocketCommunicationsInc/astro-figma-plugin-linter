@@ -5,7 +5,7 @@ import {
   findTestableNodes,
   getTestableNode,
 } from "./colors/helpers/type-checks";
-import { testColors } from "./colors/test-colors";
+import { testColors } from "./colors";
 import { collectOverrides } from "./components/collect-overrides";
 import { clearInstanceOverrides } from "./collect-data/overrides";
 import { collectAssociations } from "./components/collect-associations";

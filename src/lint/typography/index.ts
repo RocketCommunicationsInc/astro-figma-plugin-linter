@@ -1,11 +1,10 @@
 import { addResult } from "../collect-data/results";
 import { AstroTheme } from "../../types/tokens";
-import { TestableNode } from "../../types/figma";
 import { LintingResult } from "../../types/results";
 import { usingTypeFromComponent } from "./tests/using-type-from-component";
 
 const testTypography = async (
-  node: TestableNode,
+  node: TextNode,
   theme: AstroTheme
 ): Promise<void> => {
   const typographyTestPromises: Promise<LintingResult>[] = [];

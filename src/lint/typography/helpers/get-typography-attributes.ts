@@ -59,7 +59,7 @@ const getTypographyAttributes: GetTypographyAttributes = async (node) => {
           }
           const newTypography = {
             ...typography,
-            typographyStyleName: typographyStyleName?.name || undefined,
+            name: typographyStyleName?.name || undefined,
           };
           resolve({
             usedTypography: newTypography,

@@ -1,6 +1,7 @@
 import React from "react";
 import { LintingResult } from "../types/results";
 import { ColorReference } from "./color-reference";
+import { TypographyReference } from "./typography-reference";
 
 
 
@@ -11,7 +12,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
   };
 
   const resultClass = result.pass ? "pass" : "fail";
-  const { usedColor, correspondingColor } = result;
+  const { testType, usedColor, correspondingColor, usedTypography, correspondingTypography } = result;
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
       <div className={`result-test ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>
@@ -19,16 +20,24 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
       <div className="result-node">{result.name} <span className="result-node-type">{result.nodeType}</span></div>
       <div className="result-message">{result.message}</div>
       <div className="result-references">
-        {usedColor && (
+        {/* COLOR */}
+        {testType === "color" && usedColor && (
           <ColorReference colorReference={usedColor} />
         )}
-        {correspondingColor && (
+        {testType === "color" && correspondingColor && (
           <ColorReference colorReference={correspondingColor} testMode="source" colorStatus={result.correspondingColorStatus} />
         )}
-        {!correspondingColor && !correspondingColor && (
+        {testType === "color" && !correspondingColor && !correspondingColor && (
           <div className="result-color-token source error">
             <span className="color-swatch-error">{result.correspondingColorStatus}</span>
           </div>
+        )}
+        {/* TYPOGRAPHY */}
+        {testType === "typography" && usedTypography && (
+          <TypographyReference typographyReference={usedTypography} />
+        )}
+        {testType === "typography" && correspondingTypography && (
+          <TypographyReference typographyReference={correspondingTypography} />
         )}
       </div>
       {debug && (

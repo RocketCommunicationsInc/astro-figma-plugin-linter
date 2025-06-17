@@ -12,7 +12,7 @@ const usingTypeFromComponent: UsingTypeFromComponent = (node) => {
     (async () => {
       // This test checks if the node is using a fill style from the source Astro component.
       // It checks for overrides and compares the fill style with the source Astro component.
-      const test = "Using Color Typography from a Component";
+      const test = "Using Typography from a Component";
       const name = node.name;
       const pass = false;
       const message = "";
@@ -81,7 +81,7 @@ const usingTypeFromComponent: UsingTypeFromComponent = (node) => {
           overriddenFields.some((item) =>
             possibleOverriddenFields.includes(item)
           ): {
-          resolve({
+            resolve({
             ...testResult,
             id: `${test}-1`,
             pass: false,

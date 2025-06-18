@@ -29,4 +29,5 @@
   --spacing-4: 1rem;
   --spacing-6: 1.5rem;
   --spacing-8: 2rem;
+  --border-radius: var(--spacing-1);
 }

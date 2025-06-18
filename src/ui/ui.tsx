@@ -8,6 +8,7 @@ import "./css/base.css";
 import "./css/layout.css";
 import "./css/buttons.css";
 import "./css/test-results.css";
+import "./css/filters.css";
 
 const LinterUi = () => {
   // Set up the state for the output
@@ -74,35 +75,34 @@ const LinterUi = () => {
 
       <section className="feedback">
         {results.length === 0 && (
-          <div>Select objects to test</div>
+          <div className="emptyText">Select objects to test</div>
         )}
         <TestResults results={filteredResults} debug={debug} />
       </section>
 
       <footer className="meta-filters">
 
-        <button className="filter-button pass" onClick={() => setFilteredResults(results.filter(result => result.pass === true))}>
-          {results.filter(result => result.pass === true).length} pass
-        </button>
-        <button className="filter-button fail" onClick={() => setFilteredResults(results.filter(result => result.pass === false))}>
-          {results.filter(result => result.pass === false).length} fail
-        </button>
-        <button className="filter-button reset" onClick={() => setFilteredResults(results)}>
-          {results.length} total
-        </button>
-
-        {results.length > 0 && (
+        <div className="filter-buttons">
+          {results.length > 0 && (
+            <div className="debug-switch">
+              <label>
+                <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
+                More Filters
+              </label>
+            </div>
+          )}
+          <button className="filter-button pass" onClick={() => setFilteredResults(results.filter(result => result.pass === true))}>
+            {results.filter(result => result.pass === true).length} pass
+          </button>
+          <button className="filter-button fail" onClick={() => setFilteredResults(results.filter(result => result.pass === false))}>
+            {results.filter(result => result.pass === false).length} fail
+          </button>
+          <button className="filter-button reset" onClick={() => setFilteredResults(results)}>
+            {results.length} total
+          </button>
+        </div>
+        {debug && results.length > 0 && (
           <div className="advanced">
-            {/* Dropdown list to filter results based on result.testType */}
-            <SelectFilter
-              results={results}
-              setFilteredResults={setFilteredResults}
-              filteredField="testType"
-              resultFieldToFilter={selectedTestType}
-              setResultFieldToFilter={setSelectedTestType}
-              otherFilters={[setSelectedTest, setSelectedNodeType]}
-            />
-
             {/* Dropdown list to filter results based on result.id */}
             <SelectFilter
               results={results}
@@ -111,6 +111,16 @@ const LinterUi = () => {
               resultFieldToFilter={selectedTest}
               setResultFieldToFilter={setSelectedTest}
               otherFilters={[setSelectedNodeType, setSelectedTestType]}
+            />
+
+            {/* Dropdown list to filter results based on result.testType */}
+            <SelectFilter
+              results={results}
+              setFilteredResults={setFilteredResults}
+              filteredField="testType"
+              resultFieldToFilter={selectedTestType}
+              setResultFieldToFilter={setSelectedTestType}
+              otherFilters={[setSelectedTest, setSelectedNodeType]}
             />
 
             {/* Dropdown list to filter results based on result.type */}
@@ -123,12 +133,12 @@ const LinterUi = () => {
               otherFilters={[setSelectedTest, setSelectedTestType]}
             />
 
-            <div className="debug-switch">
+            {/* <div className="debug-switch">
               <label>
                 <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
                 Show Test Names in Results
               </label>
-            </div>
+            </div> */}
           </div>
         )}
 

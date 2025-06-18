@@ -48,6 +48,7 @@ const SelectFilter: React.FC<SelectFilterProps> = ({
 
   return (
     <select
+      className='select-filter'
       value={resultFieldToFilter}
       onChange={e => {
         const filteredFieldValue = e.target.value;

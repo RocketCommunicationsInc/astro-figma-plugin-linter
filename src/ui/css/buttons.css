@@ -3,12 +3,10 @@
   display: grid;
   gap: inherit;
   grid-area: header;
-  justify-content: space-between;
-  grid-template-areas:
-    "logo buttons"
-    "logo theme";
-  justify-items: end;
+  grid-template-areas: "logo theme buttons";
   align-items: center;
+  justify-content: end;
+  grid-template-columns: 1fr auto auto;
 
   .logo {
     width: 4rem;
@@ -27,7 +25,7 @@
 }
 
 button {
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   background: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;

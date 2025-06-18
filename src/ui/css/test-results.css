@@ -1,3 +1,19 @@
+/* Output */
+.feedback {
+  /* align-items: center; */
+  display: grid;
+  grid-area: output;
+  /* justify-content: center; */
+  max-width: calc(100vw - var(--spacing-4));
+  overflow-y: auto;
+}
+
+.emptyText {
+  font-style: italic;
+  align-self: center;
+  justify-self: center;
+}
+
 /* Test Results */
 .test-results {
   display: flex;
@@ -17,7 +33,7 @@
   grid-template-rows: auto auto auto auto;
   gap: var(--spacing-2);
   padding: var(--spacing-2);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   margin-bottom: var(--spacing-2);
   border-width: 1px 1px 1px 6px;
   border-style: solid;
@@ -116,7 +132,7 @@
   display: inline-block;
   margin-right: 2px;
   margin-left: -4px;
-  border-radius: var(--spacing-1);
+  border-radius: var(--border-radius);
   min-height: var(--spacing-8);
   border: 1px solid var(--color-border);
 }
@@ -147,32 +163,4 @@
   color: var(--color-text-secondary);
   font-family: monospace;
   font-size: small;
-}
-
-
-/* footer */
-.meta-filters {
-  display: flex;
-  gap: var(--spacing-2);
-  grid-area: footer;
-  justify-content: flex-end;
-  align-items: baseline;
-  flex-wrap: wrap;
-  flex-direction: row;
-  margin: 0 calc(var(--spacing-2)* -1) calc(var(--spacing-2)* -1);
-  padding: var(--spacing-2);
-  border-top: 1px solid var(--color-border-brand);
-  background-color: var(--color-bg-brand);
-}
-
-.filter-button {
-  &.pass {
-    color: var(--color-text-success);
-    border-color: var(--color-border-success);
-  }
-
-  &.fail {
-    color: var(--color-text-danger);
-    border-color: var(--color-border-danger);
-  }
 }

@@ -118,12 +118,12 @@ const LinterUi = () => {
               if (type === "") {
                 setFilteredResults(results);
               } else {
-                setFilteredResults(results.filter(result => result.type === type));
+                setFilteredResults(results.filter(result => result.nodeType === type));
               }
             }}
           >
             <option value="">All Types</option>
-            {[...new Set(results.map(result => result.type))].map(type => (
+            {[...new Set(results.map(result => result.nodeType))].map(type => (
               <option key={type} value={type}>
                 {type}
               </option>

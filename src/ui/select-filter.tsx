@@ -7,20 +7,20 @@ function getResultField(result: LintingResult, field: FilteredField) {
 
 interface SelectFilterProps {
   results: LintingResult[];
+  setFilteredResults: (results: LintingResult[]) => void;
+  filteredField: FilteredField;
   resultFieldToFilter: string;
   setResultFieldToFilter: (value: string) => void;
-  setFilteredResults: (results: LintingResult[]) => void;
   otherFilters: Array<(value: string) => void>;
-  filteredField: FilteredField;
 }
 
 const SelectFilter: React.FC<SelectFilterProps> = ({
   results,
+  setFilteredResults,
+  filteredField,
   resultFieldToFilter,
   setResultFieldToFilter,
-  setFilteredResults,
   otherFilters,
-  filteredField
 }) => {
 
   const setOtherFilters = (value: string) => {
@@ -31,12 +31,16 @@ const SelectFilter: React.FC<SelectFilterProps> = ({
   let sortedResultsForThisField;
   switch (filteredField) {
     case 'id':
-      zeroOptionText = 'All IDs';
+      zeroOptionText = 'All Tests';
       sortedResultsForThisField = (results).sort((a: LintingResult, b: LintingResult) => a.id.localeCompare(b.id));
       break;
-      case 'nodeType':
-        zeroOptionText = 'All Types';
-        sortedResultsForThisField = (results).sort((a: LintingResult, b: LintingResult) => a.nodeType.localeCompare(b.nodeType));
+    case 'nodeType':
+      zeroOptionText = 'All Types';
+      sortedResultsForThisField = (results).sort((a: LintingResult, b: LintingResult) => a.nodeType.localeCompare(b.nodeType));
+      break;
+    case 'testType':
+      zeroOptionText = 'Color and Typography';
+      sortedResultsForThisField = (results).sort((a: LintingResult, b: LintingResult) => a.nodeType.localeCompare(b.nodeType));
       break;
     default:
       throw new Error(`Unsupported filter type: ${filteredField}`);

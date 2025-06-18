@@ -1,11 +1,13 @@
 import type { PaintWithColorName, TestableNode } from './figma';
 import { PaintColorToken } from './tokens';
 
+type LintingResultTestType = 'color' | 'typography';
+
 interface LintingResult {
   ignore?: boolean;
   test: string;
   id: string;
-  testType: 'color' | 'typography';
+  testType: LintingResultTestType;
   pass: boolean;
   message: string;
   name: string;
@@ -20,6 +22,6 @@ interface LintingResult {
   correspondingTypographyStatus?: string;
 }
 
-type FilteredField = "id" | "nodeType";
+type FilteredField = "id" | "nodeType" | "testType";
 
-export type { LintingResult, FilteredField };
+export type { LintingResult, FilteredField, LintingResultTestType };

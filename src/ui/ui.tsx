@@ -11,12 +11,13 @@ import "./css/test-results.css";
 
 const LinterUi = () => {
   // Set up the state for the output
-  const [theme, setTheme] = useState<string>('dark');
-  const [results, setResults] = useState<LintingResult[]>([]);
+  const [debug, setDebug] = useState<boolean>(false);
   const [filteredResults, setFilteredResults] = useState<LintingResult[]>([]);
-  const [debug, setDebug] = useState<boolean>(true);
-  const [selectedTest, setSelectedTest] = useState<string>("");
+  const [results, setResults] = useState<LintingResult[]>([]);
   const [selectedNodeType, setSelectedNodeType] = useState<string>("");
+  const [selectedTest, setSelectedTest] = useState<string>("");
+  const [selectedTestType, setSelectedTestType] = useState<string>("");
+  const [theme, setTheme] = useState<string>('dark');
 
   // Tell the plugin code to lint the selection
   const onLintSelection = () => {
@@ -90,35 +91,46 @@ const LinterUi = () => {
           {results.length} total
         </button>
 
-        <div className="advanced">
-          <div className="debug-switch">
-            <label>
-              <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
-              Debug
-            </label>
+        {results.length > 0 && (
+          <div className="advanced">
+            {/* Dropdown list to filter results based on result.testType */}
+            <SelectFilter
+              results={results}
+              setFilteredResults={setFilteredResults}
+              filteredField="testType"
+              resultFieldToFilter={selectedTestType}
+              setResultFieldToFilter={setSelectedTestType}
+              otherFilters={[setSelectedTest, setSelectedNodeType]}
+            />
+
+            {/* Dropdown list to filter results based on result.id */}
+            <SelectFilter
+              results={results}
+              setFilteredResults={setFilteredResults}
+              filteredField="id"
+              resultFieldToFilter={selectedTest}
+              setResultFieldToFilter={setSelectedTest}
+              otherFilters={[setSelectedNodeType, setSelectedTestType]}
+            />
+
+            {/* Dropdown list to filter results based on result.type */}
+            <SelectFilter
+              results={results}
+              setFilteredResults={setFilteredResults}
+              filteredField="nodeType"
+              resultFieldToFilter={selectedNodeType}
+              setResultFieldToFilter={setSelectedNodeType}
+              otherFilters={[setSelectedTest, setSelectedTestType]}
+            />
+
+            <div className="debug-switch">
+              <label>
+                <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
+                Show Test Names in Results
+              </label>
+            </div>
           </div>
-
-          {/* Dropdown list to filter results based on result.id */}
-          <SelectFilter
-            results={results}
-            resultFieldToFilter={selectedTest}
-            setResultFieldToFilter={setSelectedTest}
-            setFilteredResults={setFilteredResults}
-            otherFilters={[setSelectedNodeType]}
-            filteredField="id"
-          />
-
-          {/* Dropdown list to filter results based on result.type */}
-          <SelectFilter
-            results={results}
-            resultFieldToFilter={selectedNodeType}
-            setResultFieldToFilter={setSelectedNodeType}
-            setFilteredResults={setFilteredResults}
-            otherFilters={[setSelectedTest]}
-            filteredField="nodeType"
-          />
-
-        </div>
+        )}
 
       </footer>
     </main>

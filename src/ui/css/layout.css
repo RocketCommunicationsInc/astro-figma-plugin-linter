@@ -1,0 +1,18 @@
+/* Layout */
+main {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header"
+    "output"
+    "footer";
+  gap: var(--spacing-2);
+  height: calc(100vh - var(--spacing-4))
+}
+
+/* Output */
+.feedback {
+  grid-area: output;
+  overflow-y: auto;
+  max-width: calc(100vw - var(--spacing-4));
+}

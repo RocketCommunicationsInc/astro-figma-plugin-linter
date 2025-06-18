@@ -1,7 +1,11 @@
 import { LintingResult } from "../types/results";
 import { TestResults } from "./test-results";
 import React, { useState, useEffect } from "react";
-import "./ui.css";
+import "./css/variables.css";
+import "./css/base.css";
+import "./css/layout.css";
+import "./css/buttons.css";
+import "./css/test-results.css";
 
 const LinterUi = () => {
   // Set up the state for the output

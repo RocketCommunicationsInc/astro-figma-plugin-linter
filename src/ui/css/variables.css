@@ -1,0 +1,32 @@
+/* set variables */
+:root {
+  --color-bg: var(--figma-color-bg);
+  --color-bg-hover: var(--figma-color-bg-hover);
+  --color-bg-active: var(--figma-color-bg-pressed);
+  --color-border: var(--figma-color-border);
+  --color-border-focus: var(--figma-color-border-selected);
+  --color-text: var(--figma-color-text);
+  --color-text-secondary: var(--figma-color-text-secondary);
+  --color-bg-brand: var(--figma-color-bg-brand);
+  --color-bg-brand-hover: var(--figma-color-bg-brand-hover);
+  --color-bg-brand-active: var(--figma-color-bg-brand-pressed);
+  --color-border-brand: var(--figma-color-border-brand);
+  --color-border-brand-focus: var(--figma-color-border-selected-strong);
+  --color-text-brand: var(--figma-color-text-onbrand);
+  --color-border-success: var(--figma-color-border-success);
+  --color-border-success-strong: var(--figma-color-border-success-strong);
+  --color-border-danger: var(--figma-color-border-danger);
+  --color-border-danger-strong: var(--figma-color-border-danger-strong);
+  --color-text-success: var(--figma-color-text-success);
+  --color-text-success-strong: var(--figma-color-text-success);
+  --color-text-danger: var(--figma-color-text-danger);
+  --color-text-danger-strong: var(--figma-color-text-danger);
+  --color-border-brand: var(--figma-color-border-brand);
+  --color-bg-brand: var(--figma-color-bg-brand);
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+}

@@ -1,6 +1,8 @@
+import React, { useState, useEffect } from "react";
 import { LintingResult } from "../types/results";
 import { TestResults } from "./test-results";
-import React, { useState, useEffect } from "react";
+import { SelectFilter } from "./select-filter";
+
 import "./css/variables.css";
 import "./css/base.css";
 import "./css/layout.css";
@@ -97,50 +99,25 @@ const LinterUi = () => {
           </div>
 
           {/* Dropdown list to filter results based on result.id */}
-          <select
-            value={selectedTest}
-            onChange={e => {
-              const id = e.target.value;
-              if (id === "") {
-                setFilteredResults(results);
-                setSelectedTest("");
-              } else {
-                setFilteredResults(results.filter(result => result.id === id));
-                setSelectedTest(id);
-                setSelectedNodeType("");
-              }
-            }}
-          >
-            <option value="">All IDs</option>
-            {[...new Set(results.map(result => result.id))].map(id => (
-              <option key={id} value={id}>
-                {id}
-              </option>
-            ))}
-          </select>
+          <SelectFilter
+            results={results}
+            resultFieldToFilter={selectedTest}
+            setResultFieldToFilter={setSelectedTest}
+            setFilteredResults={setFilteredResults}
+            otherFilters={[setSelectedNodeType]}
+            filteredField="id"
+          />
 
           {/* Dropdown list to filter results based on result.type */}
-          <select
-            value={selectedNodeType}
-            onChange={e => {
-              const type = e.target.value;
-              if (type === "") {
-                setFilteredResults(results);
-                setSelectedNodeType("");
-              } else {
-                setFilteredResults(results.filter(result => result.nodeType === type));
-                setSelectedNodeType(type);
-                setSelectedTest("");
-              }
-            }}
-          >
-            <option value="">All Types</option>
-            {[...new Set(results.map(result => result.nodeType))].map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+          <SelectFilter
+            results={results}
+            resultFieldToFilter={selectedNodeType}
+            setResultFieldToFilter={setSelectedNodeType}
+            setFilteredResults={setFilteredResults}
+            otherFilters={[setSelectedTest]}
+            filteredField="nodeType"
+          />
+
         </div>
 
       </footer>

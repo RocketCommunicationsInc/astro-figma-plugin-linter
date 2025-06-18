@@ -20,4 +20,6 @@ interface LintingResult {
   correspondingTypographyStatus?: string;
 }
 
-export type { LintingResult };
+type FilteredField = "id" | "nodeType";
+
+export type { LintingResult, FilteredField };

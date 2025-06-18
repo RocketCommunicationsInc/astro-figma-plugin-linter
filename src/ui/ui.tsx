@@ -9,6 +9,8 @@ const LinterUi = () => {
   const [results, setResults] = useState<LintingResult[]>([]);
   const [filteredResults, setFilteredResults] = useState<LintingResult[]>([]);
   const [debug, setDebug] = useState<boolean>(true);
+  const [selectedTest, setSelectedTest] = useState<string>("");
+  const [selectedNodeType, setSelectedNodeType] = useState<string>("");
 
   // Tell the plugin code to lint the selection
   const onLintSelection = () => {
@@ -92,13 +94,16 @@ const LinterUi = () => {
 
           {/* Dropdown list to filter results based on result.id */}
           <select
-            value=""
+            value={selectedTest}
             onChange={e => {
               const id = e.target.value;
               if (id === "") {
                 setFilteredResults(results);
+                setSelectedTest("");
               } else {
                 setFilteredResults(results.filter(result => result.id === id));
+                setSelectedTest(id);
+                setSelectedNodeType("");
               }
             }}
           >
@@ -112,13 +117,16 @@ const LinterUi = () => {
 
           {/* Dropdown list to filter results based on result.type */}
           <select
-            value=""
+            value={selectedNodeType}
             onChange={e => {
               const type = e.target.value;
               if (type === "") {
                 setFilteredResults(results);
+                setSelectedNodeType("");
               } else {
                 setFilteredResults(results.filter(result => result.nodeType === type));
+                setSelectedNodeType(type);
+                setSelectedTest("");
               }
             }}
           >

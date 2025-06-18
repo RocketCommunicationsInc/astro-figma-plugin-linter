@@ -125,10 +125,10 @@ const lintSingleNode = async (
   return new Promise((resolve) => {
     (async () => {
       // Test paint style
-      // await testColors(node, theme);
+      await testColors(node, theme);
       // Test typography
       if (node.type === "TEXT") {
-        await testTypography(node, theme);
+        await testTypography(node);
       }
       resolve();
     })();

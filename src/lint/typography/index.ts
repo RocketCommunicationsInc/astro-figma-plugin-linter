@@ -1,12 +1,10 @@
 import { addResult } from "../collect-data/results";
-import { AstroTheme } from "../../types/tokens";
 import { LintingResult } from "../../types/results";
 import { usingTypeFromComponent } from "./tests/using-type-from-component";
 import { usingAstroType } from "./tests/using-astro-type";
 
 const testTypography = async (
   node: TextNode,
-  theme: AstroTheme
 ): Promise<void> => {
   const typographyTestPromises: Promise<LintingResult>[] = [];
 
@@ -16,9 +14,6 @@ const testTypography = async (
   // IS using a type style,
   // AND not using an Astro type style
   typographyTestPromises.push(usingAstroType(node));
-
-  // Fail if node is using an Astro type style but not the correct one for this theme
-  // typographyTestPromises.push(astroTypeIsUsingCorrectTheme(node, theme));
 
   await Promise.all(typographyTestPromises)
     .then((results) => {

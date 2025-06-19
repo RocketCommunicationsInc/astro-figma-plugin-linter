@@ -41,7 +41,10 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
         )}
       </div>
       {debug && (
-        <div className="result-id">Test ID: {result.id}</div>
+        <div className="result-id">
+          <div>Test ID: {result.id}</div>
+          <div>Node ID: {result.node.id}</div>
+        </div>
       )}
     </div>
   );

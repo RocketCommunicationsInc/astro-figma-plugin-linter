@@ -23,6 +23,7 @@
   --color-text-danger-strong: var(--figma-color-text-danger);
   --color-border-brand: var(--figma-color-border-brand);
   --color-bg-brand: var(--figma-color-bg-brand);
+  --color-text-onbrand: var(--figma-color-text-onbrand);
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;
   --spacing-3: 0.75rem;

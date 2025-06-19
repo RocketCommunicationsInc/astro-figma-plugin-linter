@@ -1,6 +1,7 @@
 /* footer */
 .meta-filters {
   background-color: var(--color-bg-brand);
+  color: var(--color-text-onbrand);
   border-top: 1px solid var(--color-border-brand);
   display: flex;
   flex-direction: column;

@@ -26,11 +26,20 @@ const tokens = () => {
     colorTokens.set(nameWithTheme, value);
     colorTokens.set(styleKey, value);
   });
-  Object.entries(type).forEach(([key, value]) => {
+
+  Object.entries(type.dark).forEach(([key, value]) => {
+    const nameWithTheme = 'dark/' + key;
     const styleKey = (value as { key: string })['key'];
-    typeTokens.set(key, value);
+    typeTokens.set(nameWithTheme, value);
     typeTokens.set(styleKey, value);
   });
+  Object.entries(type.light).forEach(([key, value]) => {
+    const nameWithTheme = 'light/' + key;
+    const styleKey = (value as { key: string })['key'];
+    typeTokens.set(nameWithTheme, value);
+    typeTokens.set(styleKey, value);
+  });
+
   Object.entries(components).forEach(([key, value]) => {
     const componentKey = (value as { key: string })['key'];
     astroComponents.set(key, value);

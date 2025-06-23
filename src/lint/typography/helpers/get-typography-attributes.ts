@@ -4,7 +4,7 @@ type UsedTypographyResult = {
   usedTypography: TextStyle | StyledTextSegment;
   usedTypographyType: "astroToken" | "typeStyle" | "manual";
   usedTypographyAttributes: StyledTextSegment[];
-  };
+};
 
 interface GetTypographyAttributes {
   (node: TextNode): Promise<UsedTypographyResult>;
@@ -82,7 +82,4 @@ const getTypographyAttributes: GetTypographyAttributes = async (node) => {
   });
 };
 
-export {
-  getTypographyAttributes,
-  UsedTypographyResult
-};
+export { getTypographyAttributes, UsedTypographyResult };

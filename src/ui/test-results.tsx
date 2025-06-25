@@ -15,10 +15,30 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
   const { testType, usedColor, correspondingColor, usedTypography, correspondingTypography } = result;
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
-      <div className={`result-test ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>
-      <div className="result-test-name">{result.test}</div>
-      <div className="result-node">{result.name} <span className="result-node-type">{result.nodeType}</span></div>
-      <div className="result-message">{result.message}</div>
+      <div className="result-main">
+        <div className="result-primary">
+          <div className={`result-test-result ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>
+          <div className="result-test-name">{result.test}</div>
+          <div className="result-message">{result.message}</div>
+        </div>
+      </div>
+      <div className="result-meta">
+        <label className="result-node-name-label">Name</label>
+        <div className="result-node-name">{result.name}</div>
+
+        <label className="result-node-type-label">Type</label>
+        <div className="result-node-type">{result.nodeType}</div>
+
+        {debug && (
+          <>
+            <label className="result-id-label">Test ID</label>
+            <div className="result-id">{result.id}</div>
+
+            <label className="result-node-id-label">Node ID</label>
+            <div className="result-node-id">{result.node.id}</div>
+          </>
+        )}
+      </div>
       <div className="result-references">
         {/* COLOR */}
         {testType === "color" && usedColor && (
@@ -40,12 +60,6 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
           <TypographyReference typographyReference={correspondingTypography} />
         )}
       </div>
-      {debug && (
-        <div className="result-id">
-          <div>Test ID: {result.id}</div>
-          <div>Node ID: {result.node.id}</div>
-        </div>
-      )}
     </div>
   );
 }

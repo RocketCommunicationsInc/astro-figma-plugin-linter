@@ -3,24 +3,51 @@
   display: grid;
   gap: inherit;
   grid-area: header;
-  grid-template-areas: "logo theme buttons";
   align-items: center;
   justify-content: end;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
 
-  .logo {
-    width: 4rem;
-    grid-area: logo;
+.header-buttons {
+  display: flex;
+  gap: inherit;
+  justify-content: flex-end;
+  align-items: baseline;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.lint-button {
+  grid-row: 2;
+  grid-column: 1 / span 3;
+}
+
+.theme-selection {
+  grid-row: 1;
+  grid-column: 1 / span 8;
+  font-size: var(--font-size-xs);;
+}
+
+.filter-buttons {
+  grid-row: 2;
+  grid-column: 4 / span 5;
+  align-items: baseline;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: inherit;
+  justify-content: flex-end;
+}
+
+.filter-button {
+  &.pass {
+    color: var(--color-text-success);
+    border-color: var(--color-border-success);
   }
 
-  .buttons {
-    grid-area: buttons;
-    display: flex;
-    gap: inherit;
-    justify-content: flex-end;
-    align-items: baseline;
-    flex-wrap: wrap;
-    flex-direction: row;
+  &.fail {
+    color: var(--color-text-danger);
+    border-color: var(--color-border-danger);
   }
 }
 
@@ -45,7 +72,7 @@ button {
     outline-color: var(--color-border-focus);
   }
 
-  &.primary {
+  &.lint-button {
     --color-bg: var(--color-bg-brand);
     --color-text: var(--color-text-brand);
     --color-bg-hover: var(--color-bg-brand-hover);
@@ -55,6 +82,4 @@ button {
   }
 }
 
-.theme-selection {
-  grid-area: theme;
-}
+

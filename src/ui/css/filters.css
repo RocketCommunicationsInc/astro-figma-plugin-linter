@@ -12,27 +12,6 @@
   padding: var(--spacing-2);
 }
 
-.filter-buttons {
-  align-items: baseline;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: inherit;
-  justify-content: flex-end;
-}
-
-.filter-button {
-  &.pass {
-    color: var(--color-text-success);
-    border-color: var(--color-border-success);
-  }
-
-  &.fail {
-    color: var(--color-text-danger);
-    border-color: var(--color-border-danger);
-  }
-}
-
 .advanced {
   display: flex;
   flex-direction: row;

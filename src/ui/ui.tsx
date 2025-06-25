@@ -7,6 +7,7 @@ import "./css/variables.css";
 import "./css/base.css";
 import "./css/layout.css";
 import "./css/buttons.css";
+import "./css/test-results-layout.css";
 import "./css/test-results.css";
 import "./css/filters.css";
 
@@ -53,13 +54,10 @@ const LinterUi = () => {
   return (
     <main>
       <header className="header">
-        <img src={require("../logo-circle.svg")} alt="Logo" className="logo" />
+        <button className="lint-button" onClick={onLintSelection}>
+          Test Selection
+        </button>
 
-        <div className="buttons">
-          <button className="primary" onClick={onLintSelection}>
-            Test Selection
-          </button>
-        </div>
         <div className="theme-selection">
           Astro Theme:
           <label>
@@ -71,26 +69,8 @@ const LinterUi = () => {
             Light
           </label>
         </div>
-      </header>
-
-      <section className="feedback">
-        {results.length === 0 && (
-          <div className="emptyText">Select objects to test</div>
-        )}
-        <TestResults results={filteredResults} debug={debug} />
-      </section>
-
-      <footer className="meta-filters">
 
         <div className="filter-buttons">
-          {results.length > 0 && (
-            <div className="debug-switch">
-              <label>
-                <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
-                More Filters
-              </label>
-            </div>
-          )}
           <button className="filter-button pass" onClick={() => setFilteredResults(results.filter(result => result.pass === true))}>
             {results.filter(result => result.pass === true).length} pass
           </button>
@@ -101,6 +81,27 @@ const LinterUi = () => {
             {results.length} total
           </button>
         </div>
+      </header>
+
+      <section className="feedback">
+        {results.length === 0 && (
+          <div className="emptyText">Select objects to test</div>
+        )}
+        <TestResults results={filteredResults} debug={debug} />
+      </section>
+
+      <footer className="meta-filters">
+        {results.length > 0 && (
+          <>
+            <button className="export" onClick={onLintSelection}>Export Results</button>
+            <div className="debug-switch">
+              <label>
+                <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
+                More Filters
+              </label>
+            </div>
+          </>
+        )}
         {debug && results.length > 0 && (
           <div className="advanced">
             {/* Dropdown list to filter results based on result.id */}
@@ -132,13 +133,6 @@ const LinterUi = () => {
               setResultFieldToFilter={setSelectedNodeType}
               otherFilters={[setSelectedTest, setSelectedTestType]}
             />
-
-            {/* <div className="debug-switch">
-              <label>
-                <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
-                Show Test Names in Results
-              </label>
-            </div> */}
           </div>
         )}
 

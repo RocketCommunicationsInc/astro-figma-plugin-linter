@@ -6,7 +6,7 @@ const stripToLoadableId: (input: string) => string | undefined = (
 ) => input.match(/:(.*?),/)?.[1];
 
 const tokens = () => {
-  const tokens = tokensJson as TokensJSON;
+  const tokens = tokensJson as unknown as TokensJSON;
   const colors = tokens['color-tokens'];
   const type = tokens['type-tokens'];
   const components = tokens['components'];

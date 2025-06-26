@@ -1,5 +1,5 @@
 /* Output */
-.feedback {
+.user-display {
   display: grid;
   grid-area: output;
   max-width: calc(100vw - var(--spacing-4));

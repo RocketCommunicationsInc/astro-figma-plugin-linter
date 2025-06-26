@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { CopyToClipboardButton } from 'react-clipboard-button';
 import { LintingResult } from "../types/results";
 import { TestResults } from "./test-results";
 import { SelectFilter } from "./select-filter";
@@ -20,9 +21,13 @@ const LinterUi = () => {
   const [selectedTest, setSelectedTest] = useState<string>("");
   const [selectedTestType, setSelectedTestType] = useState<string>("");
   const [theme, setTheme] = useState<string>('dark');
+  const [readyToCopy, setReadyToCopy] = useState<boolean>(false);
+  const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
 
   // Tell the plugin code to lint the selection
   const onLintSelection = () => {
+    setReadyToCopy(false);
+    setCopiedToClipboard(false);
     parent.postMessage({ pluginMessage: { type: 'lint-selection', theme: theme } }, '*')
   };
 
@@ -42,6 +47,7 @@ const LinterUi = () => {
         const sortedResults = (messageContent as LintingResult[]).sort((a: LintingResult, b: LintingResult) => a.id.localeCompare(b.id));
         setResults(sortedResults);
         setFilteredResults(messageContent);
+        setReadyToCopy(true);
       }
     };
 
@@ -83,7 +89,7 @@ const LinterUi = () => {
         </div>
       </header>
 
-      <section className="feedback">
+      <section className="user-display">
         {results.length === 0 && (
           <div className="emptyText">Select objects to test</div>
         )}
@@ -93,7 +99,20 @@ const LinterUi = () => {
       <footer className="meta-filters">
         {results.length > 0 && (
           <>
-            <button className="export" onClick={onLintSelection}>Export Results</button>
+            {!readyToCopy ? (
+              <button className="primary" disabled>Export Results</button>
+            ) : (
+              <CopyToClipboardButton
+                text={JSON.stringify(results)}
+                onSuccess={() => setCopiedToClipboard(true)}
+                onError={() => setCopiedToClipboard(false)}
+              >
+                <button className="primary">
+                  {!copiedToClipboard ? "Export Results" : "Copied to Clipboard"}
+                </button>
+              </CopyToClipboardButton>
+            )}
+
             <div className="debug-switch">
               <label>
                 <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />

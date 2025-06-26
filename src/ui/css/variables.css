@@ -21,8 +21,6 @@
   --color-text-success-strong: var(--figma-color-text-success);
   --color-text-danger: var(--figma-color-text-danger);
   --color-text-danger-strong: var(--figma-color-text-danger);
-  --color-border-brand: var(--figma-color-border-brand);
-  --color-bg-brand: var(--figma-color-bg-brand);
   --color-text-onbrand: var(--figma-color-text-onbrand);
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;

@@ -18,7 +18,7 @@ const usingAstroType: UsingAstroType = (node) => {
       const testResult: LintingResult = {
         test,
         id: `${test}-0`,
-        testType: "color",
+        testType: "typography",
         pass,
         message,
         name,

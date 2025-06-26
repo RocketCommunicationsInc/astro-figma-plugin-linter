@@ -33,7 +33,7 @@ const TypographyReference: React.FC<{
     );
 
   } catch (error) {
-    console.error("Error in ColorReference:", error);
+    console.error("Error in TypographyReference:", error);
     return (
       <div className="result-token error">
         <span className="token-swatch error">

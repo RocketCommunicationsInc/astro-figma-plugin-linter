@@ -47,7 +47,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
         {testType === "color" && correspondingColor && (
           <ColorReference colorReference={correspondingColor} testMode="source" colorStatus={result.correspondingColorStatus} />
         )}
-        {testType === "color" && !correspondingColor && !correspondingColor && (
+        {testType === "color" && !correspondingColor && (
           <div className="result-color-token source error">
             <span className="color-swatch-error">{result.correspondingColorStatus}</span>
           </div>

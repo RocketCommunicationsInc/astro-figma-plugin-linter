@@ -40,7 +40,7 @@ const SelectFilter: React.FC<SelectFilterProps> = ({
       break;
     case 'testType':
       zeroOptionText = 'Color and Typography';
-      sortedResultsForThisField = (results).sort((a: LintingResult, b: LintingResult) => a.nodeType.localeCompare(b.nodeType));
+      sortedResultsForThisField = (results).sort((a: LintingResult, b: LintingResult) => a.testType.localeCompare(b.testType));
       break;
     default:
       throw new Error(`Unsupported filter type: ${filteredField}`);

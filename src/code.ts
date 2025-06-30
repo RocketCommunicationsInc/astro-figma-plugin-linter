@@ -1,7 +1,7 @@
 import { lintSelection } from "./lint";
 import { AstroTheme } from "./types/tokens";
 
-figma.showUI(__html__, { themeColors: true, width: 500, height: 700 });
+figma.showUI(__html__, { themeColors: true, width: 550, height: 700 });
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the

@@ -34,7 +34,7 @@ const usingAstroType: UsingAstroType = (node) => {
             ...testResult,
             id: `${test}-1`,
             pass: true,
-            message: "Node is using a typography token from Astro.",
+            message: "Layer is using a typography token from Astro.",
           });
           break;
         }
@@ -46,7 +46,7 @@ const usingAstroType: UsingAstroType = (node) => {
             ...testResult,
             id: `${test}-2`,
             pass: false,
-            message: "Node is using a typography style not from Astro.",
+            message: "Layer is using a typography style not from Astro.",
           });
           break;
         }
@@ -57,7 +57,7 @@ const usingAstroType: UsingAstroType = (node) => {
             ...testResult,
             id: `${test}-3`,
             pass: false,
-            message: "Node is using manually set typography.",
+            message: "Layer is using manually set typography.",
           });
           break;
         }

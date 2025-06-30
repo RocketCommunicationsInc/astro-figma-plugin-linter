@@ -86,7 +86,7 @@ const usingTypeFromComponent: UsingTypeFromComponent = (node) => {
             id: `${test}-1`,
             pass: false,
             message:
-              "Node is not using the same typography as the source Astro component.",
+              "Layer is not using the same typography as the source Astro component.",
           });
           break;
         }
@@ -97,7 +97,7 @@ const usingTypeFromComponent: UsingTypeFromComponent = (node) => {
             id: `${test}-2`,
             pass: true,
             message:
-              "Node is using the same text style as the source Astro component.",
+              "Layer is using the same text style as the source Astro component.",
           });
           break;
         }

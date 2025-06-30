@@ -23,7 +23,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
         </div>
       </div>
       <div className="result-meta">
-        <label className="result-node-name-label">Name</label>
+        <label className="result-node-name-label">Layer</label>
         <div className="result-node-name">{result.name}</div>
 
         <label className="result-node-type-label">Type</label>

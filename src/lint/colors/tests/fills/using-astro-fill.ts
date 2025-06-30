@@ -39,7 +39,7 @@ const usingAstroFill: UsingAstroFill = (node) => {
             ...testResult,
             id: `${test}-1`,
             pass: false,
-            message: "Node is overriding a fill style from Astro.",
+            message: "Layer is overriding a fill style from Astro.",
           });
           break;
         }
@@ -50,7 +50,7 @@ const usingAstroFill: UsingAstroFill = (node) => {
             ...testResult,
             id: `${test}-2`,
             pass: true,
-            message: "Node is using a fill style from Astro.",
+            message: "Layer is using a fill style from Astro.",
           });
           break;
         }
@@ -62,7 +62,7 @@ const usingAstroFill: UsingAstroFill = (node) => {
             ...testResult,
             id: `${test}-3`,
             pass: false,
-            message: "Node is using a fill style not from Astro.",
+            message: "Layer is using a fill style not from Astro.",
           });
           break;
         }
@@ -74,7 +74,7 @@ const usingAstroFill: UsingAstroFill = (node) => {
             ...testResult,
             id: `${test}-4`,
             pass: false,
-            message: "Node is using a fill color, not a fill style from Astro.",
+            message: "Layer is using a fill color, not a fill style from Astro.",
           });
           break;
         }
@@ -85,7 +85,7 @@ const usingAstroFill: UsingAstroFill = (node) => {
             ...testResult,
             id: `${test}-5`,
             pass: true,
-            message: "Node has no fill styles or fills.",
+            message: "Layer has no fill styles or fills.",
           });
           break;
         }

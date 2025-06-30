@@ -65,7 +65,7 @@ const usingStrokeFromComponent: UsingStrokeFromComponent = (node) => {
             id: `${test}-1`,
             pass: false,
             message:
-              "Node is not using the same stroke style as the source Astro component.",
+              "Layer is not using the same stroke style as the source Astro component.",
           });
           break;
         }
@@ -76,7 +76,7 @@ const usingStrokeFromComponent: UsingStrokeFromComponent = (node) => {
             id: `${test}-2`,
             pass: false,
             message:
-              "Node is not using the same stroke as the source Astro component.",
+              "Layer is not using the same stroke as the source Astro component.",
           });
           break;
         }
@@ -87,7 +87,7 @@ const usingStrokeFromComponent: UsingStrokeFromComponent = (node) => {
             id: `${test}-3`,
             pass: true,
             message:
-              "Node is using the same stroke style as the source Astro component.",
+              "Layer is using the same stroke style as the source Astro component.",
           });
           break;
         }

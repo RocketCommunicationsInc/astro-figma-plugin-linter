@@ -42,7 +42,7 @@ const usingAstroStroke: UsingAstroStroke = (node) => {
             ...testResult,
             id: `${test}-1`,
             pass: false,
-            message: "Node is overriding a stroke style from Astro.",
+            message: "Layer is overriding a stroke style from Astro.",
           });
           break;
         }
@@ -53,7 +53,7 @@ const usingAstroStroke: UsingAstroStroke = (node) => {
             ...testResult,
             id: `${test}-2`,
             pass: true,
-            message: "Node is using a stroke style from Astro.",
+            message: "Layer is using a stroke style from Astro.",
           });
           break;
         }
@@ -65,7 +65,7 @@ const usingAstroStroke: UsingAstroStroke = (node) => {
             ...testResult,
             id: `${test}-3`,
             pass: false,
-            message: "Node is using a stroke style not from Astro.",
+            message: "Layer is using a stroke style not from Astro.",
           });
           break;
         }
@@ -78,7 +78,7 @@ const usingAstroStroke: UsingAstroStroke = (node) => {
             id: `${test}-4`,
             pass: false,
             message:
-              "Node is using a stroke color, not a style not from Astro.",
+              "Layer is using a stroke color, not a style not from Astro.",
           });
           break;
         }
@@ -89,7 +89,7 @@ const usingAstroStroke: UsingAstroStroke = (node) => {
             ...testResult,
             id: `${test}-5`,
             pass: true,
-            message: "Node has no stroke styles or fills.",
+            message: "Layer has no stroke styles or fills.",
           });
           break;
         }

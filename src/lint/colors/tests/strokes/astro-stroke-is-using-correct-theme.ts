@@ -50,7 +50,7 @@ const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-1`,
             pass: true,
-            message: `Node is using a stroke style from Astro in the correct theme (${theme})`,
+            message: `Layer is using a stroke style from Astro in the correct theme (${theme})`,
           });
           break;
         }
@@ -60,7 +60,7 @@ const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-2`,
             pass: false,
-            message: `Node is using a stroke style from Astro but not using the correct theme (${theme})`,
+            message: `Layer is using a stroke style from Astro but not using the correct theme (${theme})`,
           });
           break;
         }
@@ -70,7 +70,7 @@ const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-3`,
             pass: false,
-            message: `Node is stroked with a stroke style but not using a stroke style from Astro`,
+            message: `Layer is stroked with a stroke style but not using a stroke style from Astro`,
           });
           break;
         }
@@ -80,7 +80,7 @@ const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-4`,
             pass: false,
-            message: `Node is stroked with a color but not using a stroke style from Astro`,
+            message: `Layer is stroked with a color but not using a stroke style from Astro`,
           });
           break;
         }
@@ -91,7 +91,7 @@ const astroStrokeIsUsingCorrectTheme: AstroStrokeIsUsingCorrectTheme = (
             id: `${test}-5`,
             ignore: true,
             pass: true,
-            message: `Node has no strokes`,
+            message: `Layer has no strokes`,
           });
           break;
         }

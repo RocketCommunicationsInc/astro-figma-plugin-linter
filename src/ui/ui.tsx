@@ -14,7 +14,8 @@ import "./css/filters.css";
 
 const LinterUi = () => {
   // Set up the state for the output
-  const [debug, setDebug] = useState<boolean>(false);
+  const [debug] = useState<boolean>(true);
+  const [advancedFilters, setAdvancedFilters] = useState<boolean>(false);
   const [filteredResults, setFilteredResults] = useState<LintingResult[]>([]);
   const [results, setResults] = useState<LintingResult[]>([]);
   const [selectedNodeType, setSelectedNodeType] = useState<string>("");
@@ -118,13 +119,13 @@ const LinterUi = () => {
 
             <div className="debug-switch">
               <label>
-                <input type="checkbox" checked={debug} onChange={() => setDebug(!debug)} />
+                <input type="checkbox" checked={advancedFilters} onChange={() => setAdvancedFilters(!advancedFilters)} />
                 More Filters
               </label>
             </div>
           </>
         )}
-        {debug && results.length > 0 && (
+        {advancedFilters && results.length > 0 && (
           <div className="advanced">
             {/* Dropdown list to filter results based on result.id */}
             <SelectFilter

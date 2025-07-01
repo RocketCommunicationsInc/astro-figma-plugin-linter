@@ -38,7 +38,10 @@ type TokensJSON = {
     dark: Record<string, PaintColorToken>;
     light: Record<string, PaintColorToken>;
   };
-  "type-tokens": Record<string, unknown>;
+  "type-tokens": {
+    dark: Record<string, PaintColorToken>;
+    light: Record<string, PaintColorToken>;
+  };
   "components": Record<string, unknown>;
 };
 

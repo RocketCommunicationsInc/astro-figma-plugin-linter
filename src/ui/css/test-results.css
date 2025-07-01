@@ -1,0 +1,111 @@
+/* Output */
+.user-display {
+  display: grid;
+  grid-area: output;
+  max-width: calc(100vw - var(--spacing-4));
+  overflow-y: auto;
+}
+
+.emptyText {
+  font-style: italic;
+  align-self: center;
+  justify-self: center;
+}
+
+/* Test Results */
+.test-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.test-result {
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-2);
+  border-width: 1px 1px 1px 6px;
+  border-style: solid;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-bg-hover);
+  }
+
+  &.pass {
+    border-color: var(--color-border-success);
+
+    &:hover {
+      border-color: var(--color-border-success-strong);
+    }
+  }
+
+  &.fail {
+    border-color: var(--color-border-danger);
+
+    &:hover {
+      border-color: var(--color-border-danger-strong);
+    }
+  }
+}
+
+/* RESULT MAIN */
+.result-test-result {
+  .pass & {
+    color: var(--color-text-success);
+  }
+
+  .pass:hover & {
+    color: var(--color-text-success-strong);
+  }
+
+  .fail & {
+    color: var(--color-text-danger);
+  }
+
+  .fail:hover & {
+    color: var(--color-text-danger-strong);
+  }
+}
+
+.result-test-name {
+  font-weight: bold;
+}
+
+.result-message {
+  color: var(--color-text);
+}
+
+/* RESULT META */
+.result-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-family: monospace;
+}
+
+/* RESULT REFERENCES */
+.color-swatch {
+  border-radius: var(--border-radius);
+  min-height: var(--spacing-8);
+  border: 1px solid var(--color-border);
+}
+
+.color-swatch-name,
+.typography-swatch-name {
+  font-weight: bold;
+  font-size: var(--font-size-sm);
+  line-break: anywhere;
+}
+
+.color-swatch-description,
+.typography-swatch-description {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.token-swatch-error {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+
+
+

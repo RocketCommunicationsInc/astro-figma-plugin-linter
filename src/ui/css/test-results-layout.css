@@ -1,0 +1,128 @@
+.test-result {
+  display: grid;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2);
+  position: relative;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.result-main {
+  grid-column: 1 / span 8;
+  display: grid;
+  gap: inherit;
+  grid-template-columns: subgrid;
+
+  .debug & {
+    grid-column: 1 / span 5;
+  }
+}
+
+.result-meta {
+  grid-column: 6 / span 3;
+  display: grid;
+  gap: inherit;
+  grid-template-columns: subgrid;
+  grid-auto-rows: max-content;
+}
+
+.result-primary {
+  display: grid;
+  gap: inherit;
+  grid-template-columns: subgrid;
+  grid-column: 1 / span 8;
+
+  .debug & {
+    grid-column: 1 / span 5;
+  }
+}
+
+.result-test-result {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.result-test-name {
+  grid-row: 1;
+  grid-column: 2 / span 7;
+
+  .debug & {
+    grid-column: 2 / span 4;
+  }
+}
+
+.result-message {
+  grid-row: 2;
+  grid-column: 1 / span 8;
+
+  .debug & {
+    grid-column: 1 / span 5;
+  }
+}
+
+.result-references {
+  display: grid;
+  gap: inherit;
+  grid-column: 1 / span 8;
+  grid-template-columns: subgrid;
+}
+
+.result-color-token,
+.result-typography-token {
+  display: grid;
+  gap: inherit;
+  grid-column: 1 / span 8;
+  grid-template-columns: subgrid;
+}
+
+.color-swatch {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.color-swatch-name,
+.typography-swatch-name {
+  grid-column: 2 / span 6;
+}
+
+.color-swatch-description,
+.typography-swatch-description {
+  grid-row: 2;
+  grid-column: 2 / span 6;
+}
+
+.token-swatch-error {
+  grid-column: 1 / span 8;
+}
+
+/* META FIELDS */
+.result-id-label {
+  grid-column: 1;
+}
+
+.result-id {
+  grid-column: 2 / span 2;
+}
+
+.result-node-id-label {
+  grid-column: 1;
+}
+
+.result-node-id {
+  grid-column: 2 / span 2;
+}
+
+.result-node-name-label {
+  grid-column: 1;
+}
+
+.result-node-name {
+  grid-column: 2 / span 2;
+}
+
+.result-node-type-label {
+  grid-column: 1;
+}
+
+.result-node-type {
+  grid-column: 2 / span 2;
+}

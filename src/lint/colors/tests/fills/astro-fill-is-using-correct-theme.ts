@@ -35,11 +35,12 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
       const testResult: LintingResult = {
         test,
         id: `${test}-0`,
+        testType: "color",
         pass,
         message,
         name,
         node,
-        type: node.type,
+        nodeType: node.type,
         usedColor,
       };
 
@@ -49,7 +50,7 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-1`,
             pass: true,
-            message: `Node is using a fill style from Astro in the correct theme (${theme})`,
+            message: `Layer is using a fill style from Astro in the correct theme (${theme})`,
           });
           break;
         }
@@ -59,7 +60,7 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-2`,
             pass: false,
-            message: `Node is using a fill style from Astro but not using the correct theme (${theme})`,
+            message: `Layer is using a fill style from Astro but not using the correct theme (${theme})`,
           });
           break;
         }
@@ -69,7 +70,7 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-3`,
             pass: false,
-            message: `Node is filled with a fill style but not using a fill style from Astro`,
+            message: `Layer is filled with a fill style but not using a fill style from Astro`,
           });
           break;
         }
@@ -79,7 +80,7 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
             ...testResult,
             id: `${test}-4`,
             pass: false,
-            message: `Node is filled with a color but not using a fill style from Astro`,
+            message: `Layer is filled with a color but not using a fill style from Astro`,
           });
           break;
         }
@@ -90,7 +91,7 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
             id: `${test}-5`,
             ignore: true,
             pass: true,
-            message: `Node has no fills`,
+            message: `Layer has no fills`,
           });
           break;
         }

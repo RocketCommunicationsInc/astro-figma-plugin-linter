@@ -1,0 +1,32 @@
+/* footer */
+.meta-filters {
+  align-items: baseline;
+  background-color: var(--color-bg-brand);
+  border-top: 1px solid var(--color-border-brand);
+  color: var(--color-text-onbrand);
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  grid-area: footer;
+  margin: 0 calc(var(--spacing-2)* -1) calc(var(--spacing-2)* -1);
+  padding: var(--spacing-2);
+}
+
+.debug-switch {
+  font-size: var(--font-size-sm);
+}
+
+.advanced {
+  display: flex;
+  flex-direction: row;
+  gap: inherit;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.select-filter {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 1rem;
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import { LintingResult } from "../types/results";
 import { ColorReference } from "./color-reference";
+import { TypographyReference } from "./typography-reference";
 
 
 
@@ -11,36 +12,58 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
   };
 
   const resultClass = result.pass ? "pass" : "fail";
-  const { usedColor, correspondingColor } = result;
+  const { testType, usedColor, correspondingColor, usedTypography, correspondingTypography } = result;
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
-      <div className={`result-test ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>
-      <div className="result-test-name">{result.test}</div>
-      <div className="result-node">{result.name} <span className="result-node-type">{result.type}</span></div>
-      <div className="result-message">{result.message}</div>
-      <div className="result-references">
-        {usedColor && (
-          <ColorReference colorReference={usedColor} />
-        )}
-        {correspondingColor && (
-          <ColorReference colorReference={correspondingColor} testMode="source" colorStatus={result.correspondingColorStatus} />
-        )}
-        {!correspondingColor && !correspondingColor && (
-          <div className="result-color-token source error">
-            <span className="color-swatch-error">{result.correspondingColorStatus}</span>
-          </div>
-        )}
+      <div className="result-main">
+        <div className="result-primary">
+          <div className={`result-test-result ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>
+          <div className="result-test-name">{result.name}: {result.test}</div>
+          <div className="result-message">{result.message}</div>
+        </div>
       </div>
       {debug && (
-        <div className="result-id">Test ID: {result.id}</div>
+        <div className="result-meta">
+          <label className="result-node-type-label">Type</label>
+          <div className="result-node-type">{result.nodeType}</div>
+
+          <label className="result-id-label">Test ID</label>
+          <div className="result-id">{result.id}</div>
+
+          <label className="result-node-id-label">Node ID</label>
+          <div className="result-node-id">{result.node.id}</div>
+        </div>
       )}
+      <div className="result-references">
+        {/* COLOR */}
+        {testType === "color" && usedColor && (
+          <ColorReference colorReference={usedColor} />
+        )}
+        {testType === "color" && correspondingColor && (
+          <ColorReference colorReference={correspondingColor} testMode="source" colorStatus={result.correspondingColorStatus} />
+        )}
+        {testType === "color" && !correspondingColor && (
+          <div className="result-color-token source error">
+            <span className="token-swatch-error">
+              {result.correspondingColorStatus}
+            </span>
+          </div>
+        )}
+        {/* TYPOGRAPHY */}
+        {testType === "typography" && usedTypography && (
+          <TypographyReference typographyReference={usedTypography} />
+        )}
+        {testType === "typography" && correspondingTypography && (
+          <TypographyReference typographyReference={correspondingTypography} />
+        )}
+      </div>
     </div>
   );
 }
 
 const TestResults: React.FC<{ results: LintingResult[], debug: boolean }> = ({ results, debug }) => {
   return (
-    <div className="test-results">
+    <div className={`test-results ${debug ? "debug" : ""}`}>
       {results.map((result, index) => (
         <TestResult key={index} result={result} debug={debug} />
       ))}

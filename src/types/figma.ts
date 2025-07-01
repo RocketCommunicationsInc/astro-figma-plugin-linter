@@ -10,4 +10,6 @@ type TestableNode =
   | (InstanceNode & BaseNodeMixin)
   | (BooleanOperationNode & BaseNodeMixin);
 
-export { TestableNode };
+type PaintWithColorName = Paint & { colorName?: string };
+
+export { TestableNode, PaintWithColorName };

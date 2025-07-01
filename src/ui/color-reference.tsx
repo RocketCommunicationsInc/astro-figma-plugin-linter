@@ -11,10 +11,10 @@ const ColorReference: React.FC<{
     let colorLabel = "";
     switch (testMode) {
       case "used":
-        colorLabel = "Tested:";
+        colorLabel = "Result";
         break;
       case "source":
-        colorLabel = "Source:";
+        colorLabel = "Expected";
         break;
       default:
         colorLabel = "";

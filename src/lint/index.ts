@@ -5,11 +5,12 @@ import {
   findTestableNodes,
   getTestableNode,
 } from "./colors/helpers/type-checks";
-import { testColors } from "./colors/test-colors";
+import { testColors } from "./colors";
 import { collectOverrides } from "./components/collect-overrides";
 import { clearInstanceOverrides } from "./collect-data/overrides";
 import { collectAssociations } from "./components/collect-associations";
 import { clearAssociations } from "./collect-data/associations";
+import { testTypography } from "./typography";
 
 const lintSelection = async (theme: AstroTheme) => {
   clearResults();
@@ -125,6 +126,10 @@ const lintSingleNode = async (
     (async () => {
       // Test paint style
       await testColors(node, theme);
+      // Test typography
+      if (node.type === "TEXT") {
+        await testTypography(node);
+      }
       resolve();
     })();
   });

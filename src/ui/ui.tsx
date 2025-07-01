@@ -77,15 +77,18 @@ const LinterUi = () => {
         </div>
 
         <div className="filter-buttons">
-          <button className="filter-button pass" onClick={() => setFilteredResults(results.filter(result => result.pass === true))}>
-            {results.filter(result => result.pass === true).length} pass
-          </button>
-          <button className="filter-button fail" onClick={() => setFilteredResults(results.filter(result => result.pass === false))}>
-            {results.filter(result => result.pass === false).length} fail
-          </button>
-          <button className="filter-button reset" onClick={() => setFilteredResults(results)}>
-            {results.length} total
-          </button>
+          <label className="filter-label">Filters</label>
+          <div className="filter-button-group">
+            <button className="filter-button pass" onClick={() => setFilteredResults(results.filter(result => result.pass === true))}>
+              {results.filter(result => result.pass === true).length} pass
+            </button>
+            <button className="filter-button fail" onClick={() => setFilteredResults(results.filter(result => result.pass === false))}>
+              {results.filter(result => result.pass === false).length} fail
+            </button>
+            <button className="filter-button reset" onClick={() => setFilteredResults(results)}>
+              {results.length} total
+            </button>
+          </div>
         </div>
       </header>
 

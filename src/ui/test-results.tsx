@@ -44,7 +44,9 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
         )}
         {testType === "color" && !correspondingColor && (
           <div className="result-color-token source error">
-            <span className="color-swatch-error">{result.correspondingColorStatus}</span>
+            <span className="token-swatch-error">
+              {result.correspondingColorStatus}
+            </span>
           </div>
         )}
         {/* TYPOGRAPHY */}

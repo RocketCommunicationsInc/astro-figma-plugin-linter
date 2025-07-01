@@ -90,6 +90,10 @@
   grid-column: 2 / span 6;
 }
 
+.token-swatch-error {
+  grid-column: 1 / span 8;
+}
+
 /* META FIELDS */
 .result-id-label {
   grid-column: 1;

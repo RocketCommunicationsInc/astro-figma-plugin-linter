@@ -7,10 +7,14 @@
 }
 
 .result-main {
-  grid-column: 1 / span 5;
+  grid-column: 1 / span 8;
   display: grid;
   gap: inherit;
   grid-template-columns: subgrid;
+
+  .debug & {
+    grid-column: 1 / span 5;
+  }
 }
 
 .result-meta {
@@ -25,7 +29,11 @@
   display: grid;
   gap: inherit;
   grid-template-columns: subgrid;
-  grid-column: 1 / span 5;
+  grid-column: 1 / span 8;
+
+  .debug & {
+    grid-column: 1 / span 5;
+  }
 }
 
 .result-test-result {
@@ -35,12 +43,20 @@
 
 .result-test-name {
   grid-row: 1;
-  grid-column: 2 / span 4;
+  grid-column: 2 / span 7;
+
+  .debug & {
+    grid-column: 2 / span 4;
+  }
 }
 
 .result-message {
   grid-row: 2;
-  grid-column: 1 / span 5;
+  grid-column: 1 / span 8;
+
+  .debug & {
+    grid-column: 1 / span 5;
+  }
 }
 
 .result-references {

@@ -18,27 +18,22 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
       <div className="result-main">
         <div className="result-primary">
           <div className={`result-test-result ${resultClass}`}>{(result.pass) ? "PASS" : "FAIL"}</div>
-          <div className="result-test-name">{result.test}</div>
+          <div className="result-test-name">{result.name}: {result.test}</div>
           <div className="result-message">{result.message}</div>
         </div>
       </div>
-      <div className="result-meta">
-        <label className="result-node-name-label">Layer</label>
-        <div className="result-node-name">{result.name}</div>
+      {debug && (
+        <div className="result-meta">
+          <label className="result-node-type-label">Type</label>
+          <div className="result-node-type">{result.nodeType}</div>
 
-        <label className="result-node-type-label">Type</label>
-        <div className="result-node-type">{result.nodeType}</div>
+          <label className="result-id-label">Test ID</label>
+          <div className="result-id">{result.id}</div>
 
-        {debug && (
-          <>
-            <label className="result-id-label">Test ID</label>
-            <div className="result-id">{result.id}</div>
-
-            <label className="result-node-id-label">Node ID</label>
-            <div className="result-node-id">{result.node.id}</div>
-          </>
-        )}
-      </div>
+          <label className="result-node-id-label">Node ID</label>
+          <div className="result-node-id">{result.node.id}</div>
+        </div>
+      )}
       <div className="result-references">
         {/* COLOR */}
         {testType === "color" && usedColor && (
@@ -66,7 +61,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
 
 const TestResults: React.FC<{ results: LintingResult[], debug: boolean }> = ({ results, debug }) => {
   return (
-    <div className="test-results">
+    <div className={`test-results ${debug ? "debug" : ""}`}>
       {results.map((result, index) => (
         <TestResult key={index} result={result} debug={debug} />
       ))}

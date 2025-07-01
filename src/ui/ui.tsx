@@ -14,7 +14,7 @@ import "./css/filters.css";
 
 const LinterUi = () => {
   // Set up the state for the output
-  const [debug] = useState<boolean>(true);
+  const [debug] = useState<boolean>(false); // Set to true to show debug information
   const [advancedFilters, setAdvancedFilters] = useState<boolean>(false);
   const [filteredResults, setFilteredResults] = useState<LintingResult[]>([]);
   const [results, setResults] = useState<LintingResult[]>([]);

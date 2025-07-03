@@ -1,5 +1,6 @@
 import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
+import { getAssociation } from "../../../collect-data/associations";
 import { getInstanceOverride } from "../../../collect-data/overrides";
 import { getColorAndColorType } from "../../helpers/get-color-and-color-type";
 
@@ -19,6 +20,9 @@ const usingAstroFill: UsingAstroFill = (node) => {
       const instanceOverrides = getInstanceOverride(node.id);
       const overriddenFields = instanceOverrides || null;
       const overriddenFillStyleId = (overriddenFields && overriddenFields.includes("fillStyleId")) ? true : false;
+
+      const association = getAssociation(node.id);
+      const astroIconFromLibrary = association?.astroIconFromLibrary;
 
       const testResult: LintingResult = {
         test,
@@ -67,12 +71,24 @@ const usingAstroFill: UsingAstroFill = (node) => {
           break;
         }
 
-        case !!usedColor && usedColorType === "paint": {
+        case !!usedColor && usedColorType === "paint" && !!astroIconFromLibrary: {
           // If the usedColor is a Paint (Figma Paint) but not an Astro PaintColorToken
           // This is not a style, just a paint object
           resolve({
             ...testResult,
             id: `${test}-4`,
+            pass: true,
+            message: "Layer is using a fill color as used in Astro.",
+          });
+          break;
+        }
+
+        case !!usedColor && usedColorType === "paint" && !astroIconFromLibrary: {
+          // If the usedColor is a Paint (Figma Paint) but not an Astro PaintColorToken
+          // This is not a style, just a paint object
+          resolve({
+            ...testResult,
+            id: `${test}-5`,
             pass: false,
             message: "Layer is using a fill color, not a fill style from Astro.",
           });
@@ -83,7 +99,7 @@ const usingAstroFill: UsingAstroFill = (node) => {
           // If no fill style or fills are present, return null
           resolve({
             ...testResult,
-            id: `${test}-5`,
+            id: `${test}-6`,
             pass: true,
             message: "Layer has no fill styles or fills.",
           });

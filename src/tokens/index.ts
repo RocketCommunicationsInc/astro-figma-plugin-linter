@@ -16,7 +16,7 @@ const tokens = () => {
   const typeTokens = new Map();
   const astroComponents = new Map();
   const astroIcons = new Map();
-  
+
   Object.entries(colors.dark).forEach(([key, value]) => {
     const nameWithTheme = 'dark/' + key;
     const styleKey = (value as { key: string })['key'];

@@ -30,8 +30,8 @@ const getNearestLibraryParentAstroComponent = async (
       nearestLocalParentAstroComponentResult;
 
     if (nearestLocalParentAstroComponentLocal) {
-      // nearestLibraryParentAstroComponent =
-      //   await nearestLocalParentAstroComponentLocal.getMainComponentAsync();
+      nearestLibraryParentAstroComponent =
+        await nearestLocalParentAstroComponentLocal.getMainComponentAsync();
     }
 
     if (nearestLibraryParentAstroComponent) {

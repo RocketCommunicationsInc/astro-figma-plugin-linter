@@ -10,10 +10,13 @@ const tokens = () => {
   const colors = tokens['color-tokens'];
   const type = tokens['type-tokens'];
   const components = tokens['components'];
+  const icons = tokens['icons'];
 
   const colorTokens = new Map();
   const typeTokens = new Map();
   const astroComponents = new Map();
+  const astroIcons = new Map();
+  
   Object.entries(colors.dark).forEach(([key, value]) => {
     const nameWithTheme = 'dark/' + key;
     const styleKey = (value as { key: string })['key'];
@@ -46,10 +49,17 @@ const tokens = () => {
     astroComponents.set(componentKey, value);
   });
 
+  Object.entries(icons).forEach(([key, value]) => {
+    const iconKey = (value as { key: string })['key'];
+    astroIcons.set(key, value);
+    astroIcons.set(iconKey, value);
+  });
+
   return {
     colorTokens,
     typeTokens,
-    astroComponents
+    astroComponents,
+    astroIcons,
   };
 }
 

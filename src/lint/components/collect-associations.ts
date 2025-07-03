@@ -6,16 +6,22 @@ import { addAssociation } from "../collect-data/associations";
 import { AssociationSet } from "../../types/associations";
 import { getNearestLibraryParentAstroComponent } from "./get-nearest-library-parent-astro-component";
 import { findCorrespondingAstroNodeFromLibrary } from "./find-corresponding-astro-node";
-
-const { astroComponents } = tokens();
+import { findLibraryParentIcon } from "./find-library-parent-icon";
 
 const collectAssociations = async (node: TestableNode): Promise<boolean> => {
+  const { astroComponents } = tokens();
   // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
   let directLibraryCounterpartNode: ComponentNode | null = null;
   let astroComponentFromLibrary: ComponentNode | ComponentSetNode | null = null;
-  let nearestLibraryParentAstroComponent: ComponentNode | ComponentSetNode | null = null;
+  let nearestLibraryParentAstroComponent:
+    | ComponentNode
+    | ComponentSetNode
+    | null = null;
   let correspondingAstroNodeFromLibrary: TestableNode | null = null;
+  let localAstroIconMeta: AstroComponent | null = null;
+  let astroIconFromLibrary: ComponentNode | ComponentSetNode | null = null;
+
   if (node.type === "INSTANCE") {
     directLibraryCounterpartNode = await (
       node as InstanceNode
@@ -43,7 +49,8 @@ const collectAssociations = async (node: TestableNode): Promise<boolean> => {
     }
   }
 
-  nearestLibraryParentAstroComponent = await getNearestLibraryParentAstroComponent(node);
+  nearestLibraryParentAstroComponent =
+    await getNearestLibraryParentAstroComponent(node);
 
   // Collect this node's corresponding node from an Astro component from the library
   correspondingAstroNodeFromLibrary = findCorrespondingAstroNodeFromLibrary(
@@ -52,12 +59,24 @@ const collectAssociations = async (node: TestableNode): Promise<boolean> => {
     nearestLibraryParentAstroComponent
   );
 
+  // If the node is in an Icon component, we find that component
+  localAstroIconMeta = findLibraryParentIcon(node);
+  if (localAstroIconMeta) {
+    // Load the Astro component from Figma
+    astroIconFromLibrary = await componentLoaderFunction(
+      localAstroIconMeta.type,
+      localAstroIconMeta.key
+    );
+  }
+
   const associationSet: AssociationSet = {
     directLibraryCounterpartNode,
     astroComponentMeta,
     astroComponentFromLibrary,
     nearestLibraryParentAstroComponent,
     correspondingAstroNodeFromLibrary,
+    localAstroIconMeta,
+    astroIconFromLibrary,
   };
 
   addAssociation(node.id, associationSet);

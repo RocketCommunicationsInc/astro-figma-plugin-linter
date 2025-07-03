@@ -1,5 +1,5 @@
-import { findNearestLocalParentAstroComponent } from "./find-nearest-local-parent-astro-component";
-import { TestableNode } from "../../types/figma";
+import { findNearestLocalParentAstroComponent } from "../find-nearest-local-parent-astro-component";
+import { TestableNode } from "../../../types/figma";
 
 const getNearestLibraryParentAstroComponent = async (
   node: TestableNode
@@ -30,8 +30,8 @@ const getNearestLibraryParentAstroComponent = async (
       nearestLocalParentAstroComponentResult;
 
     if (nearestLocalParentAstroComponentLocal) {
-      nearestLibraryParentAstroComponent =
-        await nearestLocalParentAstroComponentLocal.getMainComponentAsync();
+      // nearestLibraryParentAstroComponent =
+      //   await nearestLocalParentAstroComponentLocal.getMainComponentAsync();
     }
 
     if (nearestLibraryParentAstroComponent) {

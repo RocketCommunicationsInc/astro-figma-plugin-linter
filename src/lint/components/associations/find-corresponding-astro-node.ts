@@ -1,5 +1,5 @@
-import { TestableNode } from "../../types/figma";
-import { isFillStyleNode } from "./is-fill-style-node";
+import { TestableNode } from "../../../types/figma";
+import { isFillStyleNode } from "../is-fill-style-node";
 
 type ComponentSourceNode = ComponentNode | ComponentSetNode | null;
 

@@ -1,73 +1,31 @@
 import { AstroComponent } from "../../types/astro";
-import { componentLoaderFunction } from "./component-loader";
 import { TestableNode } from "../../types/figma";
-import { tokens } from "../../tokens";
 import { addAssociation } from "../collect-data/associations";
 import { AssociationSet } from "../../types/associations";
-import { getNearestLibraryParentAstroComponent } from "./get-nearest-library-parent-astro-component";
-import { findCorrespondingAstroNodeFromLibrary } from "./find-corresponding-astro-node";
-import { findLibraryParentIcon } from "./find-library-parent-icon";
+import { getNearestLibraryParentAstroComponent } from "./associations/get-nearest-library-parent-astro-component";
+import { findCorrespondingAstroNodeFromLibrary } from "./associations/find-corresponding-astro-node";
+import { findLibraryParentIcon } from "./associations/find-library-parent-icon";
+import { getDirectLibraryCounterpartNode } from "./associations/get-direct-library-counterpart-node";
+import { getAstroComponentMeta } from "./associations/get-astro-component-meta";
+import { getAstroComponentFromLibrary } from "./associations/get-astro-component-from-library";
+import { getAstroIconFromLibrary } from "./associations/get-astro-icon-from-library";
 
 const collectAssociations = async (node: TestableNode): Promise<boolean> => {
-  const { astroComponents } = tokens();
-  // Todo: break these into separate functions
   let astroComponentMeta: AstroComponent | undefined = undefined;
   let directLibraryCounterpartNode: ComponentNode | null = null;
   let astroComponentFromLibrary: ComponentNode | ComponentSetNode | null = null;
-  let nearestLibraryParentAstroComponent:
-    | ComponentNode
-    | ComponentSetNode
-    | null = null;
+  let nearestLibraryParentAstroComponent: | ComponentNode | ComponentSetNode | null = null;
   let correspondingAstroNodeFromLibrary: TestableNode | null = null;
   let localAstroIconMeta: AstroComponent | null = null;
   let astroIconFromLibrary: ComponentNode | ComponentSetNode | null = null;
 
-  if (node.type === "INSTANCE") {
-    directLibraryCounterpartNode = await (
-      node as InstanceNode
-    ).getMainComponentAsync();
-
-    const sourceCounterpartNodeKey: string | undefined =
-      directLibraryCounterpartNode?.key;
-    astroComponentMeta = astroComponents.get(sourceCounterpartNodeKey);
-
-    if (
-      !astroComponentMeta &&
-      directLibraryCounterpartNode?.parent?.type === "COMPONENT_SET"
-    ) {
-      const sourceCounterpartNodeParentKey: string | undefined =
-        directLibraryCounterpartNode?.parent?.key;
-      astroComponentMeta = astroComponents.get(sourceCounterpartNodeParentKey);
-    }
-
-    if (astroComponentMeta) {
-      // Load the Astro component from Figma
-      astroComponentFromLibrary = await componentLoaderFunction(
-        astroComponentMeta.type,
-        astroComponentMeta.key
-      );
-    }
-  }
-
-  nearestLibraryParentAstroComponent =
-    await getNearestLibraryParentAstroComponent(node);
-
-  // Collect this node's corresponding node from an Astro component from the library
-  correspondingAstroNodeFromLibrary = findCorrespondingAstroNodeFromLibrary(
-    node,
-    directLibraryCounterpartNode,
-    nearestLibraryParentAstroComponent
-  );
-
-  // If the node is in an Icon component, we find that component
+  directLibraryCounterpartNode = await getDirectLibraryCounterpartNode(node);
+  astroComponentMeta = await getAstroComponentMeta(node, directLibraryCounterpartNode);
+  astroComponentFromLibrary = await getAstroComponentFromLibrary(node, astroComponentMeta);
+  nearestLibraryParentAstroComponent = await getNearestLibraryParentAstroComponent(node);
+  correspondingAstroNodeFromLibrary = findCorrespondingAstroNodeFromLibrary(node, directLibraryCounterpartNode, nearestLibraryParentAstroComponent);
   localAstroIconMeta = findLibraryParentIcon(node);
-  if (localAstroIconMeta) {
-    // Load the Astro component from Figma
-    astroIconFromLibrary = await componentLoaderFunction(
-      localAstroIconMeta.type,
-      localAstroIconMeta.key
-    );
-  }
+  astroIconFromLibrary = await getAstroIconFromLibrary(localAstroIconMeta);
 
   const associationSet: AssociationSet = {
     directLibraryCounterpartNode,

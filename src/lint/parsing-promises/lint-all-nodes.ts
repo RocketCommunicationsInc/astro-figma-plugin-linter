@@ -1,4 +1,5 @@
 import { TestableNode } from "../../types/figma";
+import { AstroTheme } from "../../types/tokens";
 import { lintChildren } from "./lint-children";
 import { lintSingleNode } from "./lint-single.node";
 

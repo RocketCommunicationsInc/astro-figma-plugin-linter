@@ -1,17 +1,20 @@
 import { TestableNode } from "../../types/figma";
-import { findTestableNodes, getTestableNode } from "../colors/helpers/type-checks";
+import { canNodeBeTested } from "../colors/helpers/type-checks";
 
-function getChildrenToCheckForOverrides(testableNodes: TestableNode[]): TestableNode[] {
-  let children: TestableNode[] = [];
-  for (const selectionNode of testableNodes) {
-    if ("findAll" in selectionNode) {
-      children = selectionNode
-        .findAll((node) => findTestableNodes([node]).length > 0)
-        .map((node) => getTestableNode(node))
-        .filter((node): node is TestableNode => !!node);
-    }
-  }
-  return children;
+interface GetChildrenToCheckForOverrides {
+  (testableNodes: TestableNode[]): TestableNode[];
 }
+
+const getChildrenToCheckForOverrides: GetChildrenToCheckForOverrides = (
+  testableNodes
+) => {
+  return testableNodes.flatMap((selectionNode) => {
+    if ("findAll" in selectionNode) {
+      // Use canNodeBeTested directly for efficiency and correct type casting.
+      return selectionNode.findAll(canNodeBeTested) as TestableNode[];
+    }
+    return [];
+  });
+};
 
 export { getChildrenToCheckForOverrides };

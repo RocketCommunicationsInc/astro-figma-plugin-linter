@@ -1,15 +1,17 @@
 import { TestableNode } from "../../types/figma";
 import { collectAssociations } from "../components/collect-associations";
 
-async function collectAllAssociations(testableNodes: TestableNode[], children: TestableNode[]) {
+interface CollectAllAssociations {
+  (allNodesToLint: TestableNode[]): Promise<void>;
+}
+
+const collectAllAssociations: CollectAllAssociations = async (
+  allNodesToLint
+) => {
   const promises: Promise<boolean | void>[] = [];
-  for (const node of testableNodes) {
-    // debugger;
-    promises.push(collectAssociations(node).catch(console.error));
-    children.forEach(child =>
-      promises.push(collectAssociations(child).catch(console.error))
-    );
-  }
+  allNodesToLint.forEach((child) =>
+    promises.push(collectAssociations(child).catch(console.error))
+  );
   await Promise.all(promises);
 }
 

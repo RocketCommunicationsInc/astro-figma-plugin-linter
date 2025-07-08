@@ -14,19 +14,22 @@ const lintSelection = async (theme: AstroTheme) => {
   clearAssociations();
 
   const selection = figma.currentPage.selection;
-  const testableNodes = findTestableNodes(selection);
+  const testableNodesInSelection = findTestableNodes(selection);
 
-  if (testableNodes.length === 0) {
+  if (testableNodesInSelection.length === 0) {
     figma.notify("No nodes selected");
     figma.ui.postMessage({ type: "lint-results", content: [] });
     return;
   }
 
-  const childrenToCheckForOverrides = getChildrenToCheckForOverrides(testableNodes);
+  const allNodesToLint = getChildrenToCheckForOverrides(
+    testableNodesInSelection
+  );
+  testableNodesInSelection.forEach((node) => allNodesToLint.push(node));
 
-  await collectAllOverrides(testableNodes, childrenToCheckForOverrides);
-  await collectAllAssociations(testableNodes, childrenToCheckForOverrides);
-  await lintAllNodes(testableNodes, theme);
+  await collectAllOverrides(allNodesToLint);
+  await collectAllAssociations(allNodesToLint);
+  await lintAllNodes(allNodesToLint, theme);
 
   const results = getResults();
   figma.ui.postMessage({ type: "lint-results", content: results });

@@ -10,7 +10,6 @@ const getNearestLibraryParentAstroComponent = async (
     | null = null;
 
   if (node.type === "INSTANCE") {
-    // FIXME: same as directLibraryCounterpartNode in collect-associations.ts??
     nearestLibraryParentAstroComponent = await (
       node as InstanceNode
     ).getMainComponentAsync();

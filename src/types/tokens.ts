@@ -43,6 +43,7 @@ type TokensJSON = {
     light: Record<string, PaintColorToken>;
   };
   "components": Record<string, unknown>;
+  "icons": Record<string, unknown>;
 };
 
 export {

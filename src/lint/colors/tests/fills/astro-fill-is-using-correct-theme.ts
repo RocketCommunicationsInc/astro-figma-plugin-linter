@@ -3,6 +3,7 @@ import { TestableNode } from "../../../../types/figma";
 import { LintingResult } from "../../../../types/results";
 import { tokens } from "../../../../tokens";
 import { getColorAndColorType } from "../../helpers/get-color-and-color-type";
+import { getAssociation } from "../../../collect-data/associations";
 
 interface AstroFillIsUsingCorrectTheme {
   (node: TestableNode, theme: AstroTheme): Promise<LintingResult>;
@@ -31,6 +32,9 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
         usedColor && astroColorFromTheme && "id" in usedColor
           ? usedColor.id === astroColorFromTheme.id
           : false;
+
+      const association = getAssociation(node.id);
+      const astroIconFromLibrary = association?.astroIconFromLibrary;
 
       const testResult: LintingResult = {
         test,
@@ -75,10 +79,20 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
           break;
         }
 
-        case usedColorType === "paint": {
+        case usedColorType === "paint" && !!astroIconFromLibrary: {
           resolve({
             ...testResult,
             id: `${test}-4`,
+            pass: true,
+            message: `Layer is filled with a color as used in Astro`,
+          });
+          break;
+        }
+
+        case usedColorType === "paint" && !astroIconFromLibrary: {
+          resolve({
+            ...testResult,
+            id: `${test}-5`,
             pass: false,
             message: `Layer is filled with a color but not using a fill style from Astro`,
           });
@@ -88,7 +102,7 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
         case !usedColor: {
           resolve({
             ...testResult,
-            id: `${test}-5`,
+            id: `${test}-6`,
             ignore: true,
             pass: true,
             message: `Layer has no fills`,
@@ -99,7 +113,6 @@ const astroFillIsUsingCorrectTheme: AstroFillIsUsingCorrectTheme = (
         default: {
           resolve({
             ...testResult,
-            id: `${test}-6 `,
             message: `An unexpected error occurred when linting fills`,
           });
         }

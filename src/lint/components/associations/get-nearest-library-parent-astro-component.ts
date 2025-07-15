@@ -1,5 +1,5 @@
-import { findNearestLocalParentAstroComponent } from "./find-nearest-local-parent-astro-component";
-import { TestableNode } from "../../types/figma";
+import { findNearestLocalParentAstroComponent } from "../find-nearest-local-parent-astro-component";
+import { TestableNode } from "../../../types/figma";
 
 const getNearestLibraryParentAstroComponent = async (
   node: TestableNode
@@ -10,7 +10,6 @@ const getNearestLibraryParentAstroComponent = async (
     | null = null;
 
   if (node.type === "INSTANCE") {
-    // FIXME: same as directLibraryCounterpartNode in collect-associations.ts??
     nearestLibraryParentAstroComponent = await (
       node as InstanceNode
     ).getMainComponentAsync();

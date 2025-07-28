@@ -37,10 +37,12 @@ type TokensJSON = {
   "color-tokens": {
     dark: Record<string, PaintColorToken>;
     light: Record<string, PaintColorToken>;
+    wireframe: Record<string, PaintColorToken>;
   };
   "type-tokens": {
     dark: Record<string, PaintColorToken>;
     light: Record<string, PaintColorToken>;
+    wireframe: Record<string, PaintColorToken>;
   };
   "components": Record<string, unknown>;
   "icons": Record<string, unknown>;

@@ -29,6 +29,12 @@ const tokens = () => {
     colorTokens.set(nameWithTheme, value);
     colorTokens.set(styleKey, value);
   });
+  Object.entries(colors.wireframe).forEach(([key, value]) => {
+    const nameWithTheme = 'wireframe/' + key;
+    const styleKey = (value as { key: string })['key'];
+    colorTokens.set(nameWithTheme, value);
+    colorTokens.set(styleKey, value);
+  });
 
   Object.entries(type.dark).forEach(([key, value]) => {
     const nameWithTheme = 'dark/' + key;
@@ -38,6 +44,12 @@ const tokens = () => {
   });
   Object.entries(type.light).forEach(([key, value]) => {
     const nameWithTheme = 'light/' + key;
+    const styleKey = (value as { key: string })['key'];
+    typeTokens.set(nameWithTheme, value);
+    typeTokens.set(styleKey, value);
+  });
+  Object.entries(type.wireframe).forEach(([key, value]) => {
+    const nameWithTheme = 'wireframe/' + key;
     const styleKey = (value as { key: string })['key'];
     typeTokens.set(nameWithTheme, value);
     typeTokens.set(styleKey, value);

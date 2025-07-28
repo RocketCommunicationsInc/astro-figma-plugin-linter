@@ -66,7 +66,7 @@ const LinterUi = () => {
         </button>
 
         <div className="theme-selection">
-          Astro Theme:
+          <div>Astro Theme:</div>
           <label>
             <input type="radio" name="theme" value="dark" checked={theme === "dark"} onChange={handleThemeChange} />
             Dark
@@ -74,6 +74,10 @@ const LinterUi = () => {
           <label>
             <input type="radio" name="theme" value="light" checked={theme === "light"} onChange={handleThemeChange} />
             Light
+          </label>
+          <label>
+            <input type="radio" name="theme" value="wireframe" checked={theme === "wireframe"} onChange={handleThemeChange} />
+            Wireframe
           </label>
         </div>
 

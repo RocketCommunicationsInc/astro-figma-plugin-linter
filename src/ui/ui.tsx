@@ -61,6 +61,7 @@ const LinterUi = () => {
     const handleMessage = async (event: MessageEvent) => {
       const messageType = event.data.pluginMessage.type;
       const messageContent = event.data.pluginMessage.content;
+      const nodeId = event.data.pluginMessage.nodeId;
       // Handle incoming message with exported JSON
       if (messageType === "lint-results") {
         const sortedResults = (messageContent as LintingResult[]).sort((a: LintingResult, b: LintingResult) => a.id.localeCompare(b.id));
@@ -74,6 +75,7 @@ const LinterUi = () => {
         const bytes = messageContent;
         // Do something with the image data
         console.log('bytes', bytes);
+        console.log('nodeId', nodeId)
         // get the color of the top left pixel
         // const topLeftPixel = imageData.slice(0, 4);
         // console.log('topLeftPixel', topLeftPixel);
@@ -89,6 +91,7 @@ const LinterUi = () => {
         // console.log('colors', colors);
         //   .catch(console.error)
         console.log('colors', colors)
+        parent.postMessage({ pluginMessage: { type: 'color-contrast-data', colorData: colors, nodeId } }, '*')
       }
     };
 

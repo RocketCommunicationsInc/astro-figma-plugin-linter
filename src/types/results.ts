@@ -1,7 +1,7 @@
 import type { PaintWithColorName, TestableNode } from './figma';
 import { PaintColorToken } from './tokens';
 
-type LintingResultTestType = 'color' | 'typography';
+type LintingResultTestType = 'color' | 'typography' | 'contrast';
 
 interface LintingResult {
   ignore?: boolean;

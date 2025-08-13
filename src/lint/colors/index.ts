@@ -8,12 +8,15 @@ import { usingAstroFill } from "./tests/fills/using-astro-fill";
 import { usingAstroStroke } from "./tests/strokes/using-astro-stroke";
 import { usingFillFromComponent } from "./tests/fills/using-fill-from-component";
 import { usingStrokeFromComponent } from "./tests/strokes/using-stroke-from-component";
+import { hasSufficientContrast } from "./tests/fills/has-sufficient-contrast";
 
 const testColors = async (
   node: TestableNode,
   theme: AstroTheme
 ): Promise<void> => {
   const colorTestPromises: Promise<LintingResult>[] = [];
+
+  colorTestPromises.push(hasSufficientContrast(node));
 
   // Fail if node is in a component and not using the correct paint style
   colorTestPromises.push(usingFillFromComponent(node));

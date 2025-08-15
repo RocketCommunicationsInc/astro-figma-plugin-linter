@@ -1,6 +1,7 @@
 import { TestableNode } from "../../types/figma";
 import { AstroTheme } from "../../types/tokens";
 import { testColors } from "../colors";
+import { testContrast } from "../contrast";
 import { testTypography } from "../typography";
 
 const lintSingleNode = async (
@@ -12,6 +13,7 @@ const lintSingleNode = async (
   // Test typography
   if (node.type === "TEXT") {
     await testTypography(node);
+    await testContrast(node);
   }
 };
 

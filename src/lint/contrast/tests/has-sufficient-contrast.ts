@@ -1,147 +1,111 @@
-// import Colorizr from 'Colorizr';
-import { TestableNode } from "../../../types/figma";
-import { LintingResult } from "../../../types/results";
-import { getAssociation } from "../../collect-data/associations";
-import { getInstanceOverride } from "../../collect-data/overrides";
+import { ContrastResults, LintingResult } from "../../../types/results";
 import { getColorAndColorType } from "../../colors/helpers/get-color-and-color-type";
-import { createRequest } from "../../parsing-promises/contrast-request-manager";
-import { UsedColorResult } from "../../colors/helpers/get-color-and-color-type";
+import { createContrastRequest } from "../../parsing-promises/contrast-request-manager";
 import { getTypographyAttributes } from "../../typography/helpers/get-typography-attributes";
 import { getRgbaFromUsedColor } from "../helpers/get-rgba-from-color";
+import { getContrastScreenshot } from "../../collect-data/contrast-screenshots";
 
 interface HasSufficientContrast {
-  (node: TextNode): Promise<LintingResult>;
+  (
+    node: TextNode,
+    formula: "WCAG" | "APCA"
+  ): Promise<LintingResult>;
 }
 
-const hasSufficientContrast: HasSufficientContrast = (node) => {
+const hasSufficientContrast: HasSufficientContrast = (node, formula = "WCAG") => {
   return new Promise((resolve) => {
     (async () => {
-      const test = "Has Sufficient Contrast";
+      const test = `Has Sufficient Contrast - ${formula}`;
+      const contrastTestId = `${node.id}-${formula}`;
       const name = node.name;
       const pass = false;
       const message = "";
       const usedColorResult = await getColorAndColorType(node);
-      const { usedColor, usedColorType } = usedColorResult;
-      const { usedTypography, usedTypographyType } =
-      await getTypographyAttributes(node);
+      const { usedTypography } = await getTypographyAttributes(node);
 
       const fontSize = usedTypography?.fontSize || 16;
 
       // Create a request for the color contrast data
       // This will allow us to wait for the UI thread to send back the data
-      // make the text fully transparent to only get the background
-      const origOpacity = node.opacity;
-      node.opacity = 0.001;
-      const bytes = await node.exportAsync({
-        format: "PNG",
-        constraint: { type: "SCALE", value: 4 },
-        contentsOnly: false,
-      });
-      // restore opacity
-      node.opacity = origOpacity;
+      // get a saved screenshot
+      const contrastScreenshot = getContrastScreenshot(node.id);
+
       const foreRgba = getRgbaFromUsedColor(usedColorResult);
       
       // send the image data to the UI
-      figma.ui.postMessage({ type: "image", content: bytes, foreRgba, fontSize, nodeId: node.id });
+      figma.ui.postMessage({ type: "image", content: contrastScreenshot, foreRgba, fontSize, testId: contrastTestId });
 
       // createRequest returns a promise that will be resolved when the UI thread
-      // sends back a message with the same nodeId.
-      const contrastResults = await createRequest<LintingResult>(node.id);
-      console.log('contrastResults', contrastResults)
-      const { 
-        foregroundColor, 
-        backgroundColor 
-      } = contrastResults;
 
+      // sends back a message with the same contrastTestId.
+      const contrastResults: ContrastResults = await createContrastRequest<ContrastResults>(contrastTestId);
+      const { 
+        textColor, 
+        backgroundColor,
+        contrastApca,
+        contrastWcag,
+        apcaInterpolatedFont,
+        apcaValidatedFont,
+        wcagPass,
+        apcaPass
+      } = contrastResults;
    
 
       const testResult: LintingResult = {
         test,
-        id: `${test}-0`,
+        id: `${test}-${formula}-0`,
         testType: "contrast",
         pass,
         message,
         name,
         node,
         nodeType: node.type,
-        usedColor,
+        usedColor: textColor,
+        backgroundColor
       };
-
-      
-
-
 
       // debugger;
 
       switch (true) {
-        // case !!overriddenFillStyleId: {
-        //   // If the usedColor overriding a component default
-        //   resolve({
-        //     ...testResult,
-        //     id: `${test}-1`,
-        //     pass: false,
-        //     message: "Layer is overriding a fill style from Astro.",
-        //   });
-        //   break;
-        // }
+        case formula === "WCAG" && !!wcagPass: {
+          resolve({
+            ...testResult,
+            id: `${test}-${formula}-1`,
+            pass: true,
+            message: `Text is passing WCAG color contrast with a ratio of ${contrastWcag}.`,
+          });
+          break;
+        }
 
-        // case !!usedColor && usedColorType === "astroToken": {
-        //   // If the usedColor is a PaintColorToken
-        //   resolve({
-        //     ...testResult,
-        //     id: `${test}-2`,
-        //     pass: true,
-        //     message: "Layer is using a fill style from Astro.",
-        //   });
-        //   break;
-        // }
+        case formula === "WCAG" && !wcagPass: {
+          resolve({
+            ...testResult,
+            id: `${test}-${formula}-2`,
+            pass: false,
+            message: `Text is failing WCAG color contrast with a ratio of ${contrastWcag}.`,
+          });
+          break;
+        }
 
-        // case !!usedColor && usedColorType === "paintStyle": {
-        //   // If the usedColor is a PaintStyle but not an Astro PaintColorToken
-        //   // This means the node is using a fill style but not from Astro
-        //   resolve({
-        //     ...testResult,
-        //     id: `${test}-3`,
-        //     pass: false,
-        //     message: "Layer is using a fill style not from Astro.",
-        //   });
-        //   break;
-        // }
+        case formula === "APCA" && !!apcaPass: {
+          resolve({
+            ...testResult,
+            id: `${test}-${formula}-3`,
+            pass: true,
+            message: `Text is passing APCA color contrast with a ratio of ${contrastApca}.`,
+          });
+          break;
+        }
 
-        // case !!usedColor && usedColorType === "paint" && !!astroIconFromLibrary: {
-        //   // If the usedColor is a Paint (Figma Paint) but not an Astro PaintColorToken
-        //   // This is not a style, just a paint object
-        //   resolve({
-        //     ...testResult,
-        //     id: `${test}-4`,
-        //     pass: true,
-        //     message: "Layer is using a fill color as used in Astro.",
-        //   });
-        //   break;
-        // }
-
-        // case !!usedColor && usedColorType === "paint" && !astroIconFromLibrary: {
-        //   // If the usedColor is a Paint (Figma Paint) but not an Astro PaintColorToken
-        //   // This is not a style, just a paint object
-        //   resolve({
-        //     ...testResult,
-        //     id: `${test}-5`,
-        //     pass: false,
-        //     message: "Layer is using a fill color, not a fill style from Astro.",
-        //   });
-        //   break;
-        // }
-
-        // case !usedColor: {
-        //   // If no fill style or fills are present, return null
-        //   resolve({
-        //     ...testResult,
-        //     id: `${test}-6`,
-        //     pass: true,
-        //     message: "Layer has no fill styles or fills.",
-        //   });
-        //   break;
-        // }
+        case formula === "APCA" && !apcaPass: {
+          resolve({
+            ...testResult,
+            id: `${test}-${formula}-4`,
+            pass: false,
+            message: `Text is failing APCA color contrast with a ratio of ${contrastApca}.`,
+          });
+          break;
+        }
 
         default: {
           resolve({

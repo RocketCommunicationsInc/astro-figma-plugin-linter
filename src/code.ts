@@ -9,7 +9,7 @@ interface PluginMessage {
   type: string;
   theme?: AstroTheme;
   nodeId?: string;
-  colorData?: LintingResult;
+  contrastResults?: object;
 }
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
@@ -38,8 +38,8 @@ figma.ui.onmessage = (msg: PluginMessage) => {
 
   if (msg.type === "color-contrast-data") {
     console.log('msg', msg)
-    if (msg.nodeId && msg.colorData) {
-      resolveRequest(msg.nodeId, msg.colorData);
+    if (msg.nodeId && msg.contrastResults) {
+      resolveRequest(msg.nodeId, msg.contrastResults);
     }
   }
 };

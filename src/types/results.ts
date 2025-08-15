@@ -24,4 +24,22 @@ interface LintingResult {
 
 type FilteredField = "id" | "nodeType" | "testType";
 
-export type { LintingResult, FilteredField, LintingResultTestType };
+interface ContrastResults {
+  textColor: string;
+  backgroundColor: string;
+  contrastApca: number;
+  contrastWcag: number;
+  apcaInterpolatedFont: any;
+  apcaValidatedFont: Record<number, Record<number, boolean>>;
+  wcagPass: boolean;
+  apcaPass: boolean;
+}
+
+interface Rgba {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
+export type { LintingResult, FilteredField, LintingResultTestType, ContrastResults, Rgba };

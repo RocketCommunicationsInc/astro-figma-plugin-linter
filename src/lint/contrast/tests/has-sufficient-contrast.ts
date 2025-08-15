@@ -7,42 +7,7 @@ import { getColorAndColorType } from "../../colors/helpers/get-color-and-color-t
 import { createRequest } from "../../parsing-promises/contrast-request-manager";
 import { UsedColorResult } from "../../colors/helpers/get-color-and-color-type";
 import { getTypographyAttributes } from "../../typography/helpers/get-typography-attributes";
-
-const getRgbaFromUsedColor = (usedColorResult: UsedColorResult) => {
-  const { usedColor, usedColorType } = usedColorResult;
-  if (!usedColor) return null;
-
-  let rgba: { r: number; g: number; b: number; a: number } | null = null;
-
-  switch (usedColorType) {
-    case "astroToken":
-    case "paintStyle":
-      // Handle Paint Style case
-      console.log('asdf astroToken: usedColor', usedColor)
-      rgba = {
-        r: usedColor.paints[0].color.r, 
-        g: usedColor.paints[0].color.g, 
-        b: usedColor.paints[0].color.b, 
-        a: usedColor.paints[0].opacity
-      };
-      break;
-    case "paint":
-      // Handle Paint case
-      console.log('asdf paint: usedColor', usedColor)
-      rgba = {
-        r: usedColor.color.r, 
-        g: usedColor.color.g, 
-        b: usedColor.color.b, 
-        a: usedColor.opacity
-      };
-      break;
-    default:
-      return null;
-  }
-
-  console.log('asdf rgba', rgba)
-  return rgba;
-};
+import { getRgbaFromUsedColor } from "../helpers/get-rgba-from-color";
 
 interface HasSufficientContrast {
   (node: TextNode): Promise<LintingResult>;
@@ -74,44 +39,21 @@ const hasSufficientContrast: HasSufficientContrast = (node) => {
       });
       // restore opacity
       node.opacity = origOpacity;
-
       const foreRgba = getRgbaFromUsedColor(usedColorResult);
       
       // send the image data to the UI
-      // console.group('hasSufficientContrast - COLLECT 1');
-        console.log('hasSufficientContrast', node)
-        console.log('usedColor, usedColorType', usedColor, usedColorType)
-        console.log('usedTypography, usedTypographyType', usedTypography, usedTypographyType)
-        console.log('foreRgba', foreRgba)
-      // console.groupEnd();
       figma.ui.postMessage({ type: "image", content: bytes, foreRgba, fontSize, nodeId: node.id });
 
       // createRequest returns a promise that will be resolved when the UI thread
       // sends back a message with the same nodeId.
       const contrastResults = await createRequest<LintingResult>(node.id);
-      // console.group('hasSufficientContrast - RETURN');
-        console.log('contrastResults', contrastResults)
-      // console.groupEnd();
+      console.log('contrastResults', contrastResults)
+      const { 
+        foregroundColor, 
+        backgroundColor 
+      } = contrastResults;
 
-      // const asdf = Colorizr;
-      // const colorInstance = new Colorizr('#ff0044');
-      // const colorInstance = new Colorizr('#ffffff');
-      // const foregroundColor = new Color("slategray")
-      // const backgroundColor = result[0]?.hex;
-      // console.log('usedColor', usedColor)
-      // console.log('colorInstance', colorInstance)
-      // console.log('foregroundColor', foregroundColor)
-      // console.log('backgroundColor', backgroundColor)
-
-      // const instanceOverrides = getInstanceOverride(node.id);
-      // const overriddenFields = instanceOverrides || null;
-      // const overriddenFillStyleId =
-      //   overriddenFields && overriddenFields.includes("fillStyleId")
-      //     ? true
-      //     : false;
-
-      // const association = getAssociation(node.id);
-      // const astroIconFromLibrary = association?.astroIconFromLibrary;
+   
 
       const testResult: LintingResult = {
         test,

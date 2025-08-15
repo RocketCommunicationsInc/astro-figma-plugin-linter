@@ -1,17 +1,14 @@
 import { addResult } from "../collect-data/results";
-import { AstroTheme } from "../../types/tokens";
-import { TestableNode } from "../../types/figma";
 import { LintingResult } from "../../types/results";
 import { hasSufficientContrast } from "./tests/has-sufficient-contrast";
 
-const testContast = async (
-  node: TestableNode,
-  theme: AstroTheme
+const testContrast = async (
+  node: TextNode
 ): Promise<void> => {
   const contrastTestPromises: Promise<LintingResult>[] = [];
 
-  contrastTestPromises.push(hasSufficientContrast(node));
-
+  contrastTestPromises.push(hasSufficientContrast(node, 'WCAG'));
+  contrastTestPromises.push(hasSufficientContrast(node, 'APCA'));
 
   await Promise.all(contrastTestPromises)
     .then((results) => {
@@ -27,4 +24,4 @@ const testContast = async (
     });
 };
 
-export { testContast };
+export { testContrast };

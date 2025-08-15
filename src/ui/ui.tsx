@@ -3,7 +3,7 @@ import { CopyToClipboardButton } from 'react-clipboard-button';
 import { LintingResult } from "../types/results";
 import { TestResults } from "./test-results";
 import { SelectFilter } from "./select-filter";
-import { extractColors } from "extract-colors"
+import { evaluateContrast } from "./evaluate-contrast";
 
 import "./css/variables.css";
 import "./css/base.css";
@@ -12,23 +12,6 @@ import "./css/buttons.css";
 import "./css/test-results-layout.css";
 import "./css/test-results.css";
 import "./css/filters.css";
-
-// Decoding an image can be done by sticking it in an HTML
-// canvas, as we can read individual pixels off the canvas.
-async function decode(canvas, ctx, bytes) {
-  const url = URL.createObjectURL(new Blob([bytes]))
-  const image = await new Promise((resolve, reject) => {
-    const img = new Image()
-    img.onload = () => resolve(img)
-    img.onerror = () => reject()
-    img.src = url
-  })
-  canvas.width = image.width
-  canvas.height = image.height
-  ctx.drawImage(image, 0, 0)
-  const imageData = ctx.getImageData(0, 0, image.width, image.height)
-  return imageData
-}
 
 const LinterUi = () => {
   // Set up the state for the output
@@ -61,7 +44,10 @@ const LinterUi = () => {
     const handleMessage = async (event: MessageEvent) => {
       const messageType = event.data.pluginMessage.type;
       const messageContent = event.data.pluginMessage.content;
+      const foreRgba = event.data.pluginMessage.foreRgba;
+      const fontSize = event.data.pluginMessage.fontSize;
       const nodeId = event.data.pluginMessage.nodeId;
+
       // Handle incoming message with exported JSON
       if (messageType === "lint-results") {
         const sortedResults = (messageContent as LintingResult[]).sort((a: LintingResult, b: LintingResult) => a.id.localeCompare(b.id));
@@ -70,28 +56,12 @@ const LinterUi = () => {
         setReadyToCopy(true);
       }
 
+      // evaluate text contrast using APCA and WCAG
+      // note: color libraries rely on browser APIs 
+      // so they need to be run in the plugin UI
       if (messageType === "image") {
-        console.log('event.data.pluginMessage', event.data.pluginMessage)
-        const bytes = messageContent;
-        // Do something with the image data
-        console.log('bytes', bytes);
-        console.log('nodeId', nodeId)
-        // get the color of the top left pixel
-        // const topLeftPixel = imageData.slice(0, 4);
-        // console.log('topLeftPixel', topLeftPixel);
-        
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const imageData = await decode(canvas, ctx, bytes);
-        const pixels = imageData.data;
-        console.log('imageData', imageData)
-        console.log('pixels', pixels)
-
-        const colors = await extractColors(imageData);
-        // console.log('colors', colors);
-        //   .catch(console.error)
-        console.log('colors', colors)
-        parent.postMessage({ pluginMessage: { type: 'color-contrast-data', colorData: colors, nodeId } }, '*')
+        const contrastResults = await evaluateContrast(messageContent, foreRgba, fontSize, nodeId);
+        parent.postMessage({ pluginMessage: { type: 'color-contrast-data', contrastResults, nodeId } }, '*');
       }
     };
 

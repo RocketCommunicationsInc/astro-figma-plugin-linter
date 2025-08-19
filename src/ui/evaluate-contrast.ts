@@ -2,7 +2,7 @@ import Color from "colorjs.io";
 import { apcaToInterpolatedFont, apcaValidateFont } from "a11y-color-contrast";
 import { extractColors } from "extract-colors";
 import { decode } from "./decode-image";
-import { ContrastResults, Rgba } from "../types/results";
+import { AnalyzedColor, ContrastResults, Rgba } from "../types/results";
 
 const evaluateContrast = async (
   messageContent: Uint8Array,
@@ -20,14 +20,14 @@ const evaluateContrast = async (
     [foreRgba.r, foreRgba.g, foreRgba.b],
     foreRgba.a
   );
-  const backgroundColorOKHL = backgroundColor.to("OKLCH");
-  const foregroundColorOKHL = foregroundColor.to("OKLCH");
-  const contrastApca = backgroundColorOKHL.contrast(
-    foregroundColorOKHL,
+  const backgroundColorOklch = backgroundColor.to("OKLCH");
+  const foregroundColorOklch = foregroundColor.to("OKLCH");
+  const contrastApca = backgroundColorOklch.contrast(
+    foregroundColorOklch,
     "APCA"
   );
-  const contrastWcag = backgroundColorOKHL.contrast(
-    foregroundColorOKHL,
+  const contrastWcag = backgroundColorOklch.contrast(
+    foregroundColorOklch,
     "WCAG21"
   );
   const apcaInterpolatedFont = apcaToInterpolatedFont(contrastApca);
@@ -51,9 +51,29 @@ const evaluateContrast = async (
   // Does this pass APCA?
   const apcaPass = apcaValidatedFont[fontSize]?.[400] === true;
 
+  const usedColor: AnalyzedColor = {
+    r: foregroundColor.r,
+    g: foregroundColor.g,
+    b: foregroundColor.b,
+    a: foregroundColor.alpha,
+    hex: foregroundColor.toString({ format: "hex" }),
+    rgba: foregroundColor.toString({ format: "rgba" }),
+    oklch: foregroundColorOklch.toString({ format: "oklch" }),
+  };
+  
+  const correspondingColor: AnalyzedColor = {
+    r: backgroundColor.r,
+    g: backgroundColor.g,
+    b: backgroundColor.b,
+    a: backgroundColor.alpha,
+    hex: backgroundColor.toString({ format: "hex" }),
+    rgba: backgroundColor.toString({ format: "rgba" }),
+    oklch: backgroundColorOklch.toString({ format: "oklch" }),
+  };
+
   const contrastResults: ContrastResults = {
-    textColor: foregroundColor.toString({ format: "hex" }),
-    backgroundColor: backgroundColor.toString({ format: "hex" }),
+    usedColor,
+    correspondingColor,
     contrastApca: Math.round(contrastApca * 1000) / 1000,
     contrastWcag: Math.round(contrastWcag * 1000) / 1000,
     apcaInterpolatedFont,

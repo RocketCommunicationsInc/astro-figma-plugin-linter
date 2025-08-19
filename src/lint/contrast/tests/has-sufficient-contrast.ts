@@ -40,8 +40,8 @@ const hasSufficientContrast: HasSufficientContrast = (node, formula = "WCAG") =>
       // sends back a message with the same contrastTestId.
       const contrastResults: ContrastResults = await createContrastRequest<ContrastResults>(contrastTestId);
       const { 
-        textColor, 
-        backgroundColor,
+        usedColor, 
+        correspondingColor,
         contrastApca,
         contrastWcag,
         apcaInterpolatedFont,
@@ -60,11 +60,10 @@ const hasSufficientContrast: HasSufficientContrast = (node, formula = "WCAG") =>
         name,
         node,
         nodeType: node.type,
-        usedColor: textColor,
-        backgroundColor
+        usedColor,
+        correspondingColor,
+        correspondingColorStatus: "TODO: provide contrast information"
       };
-
-      // debugger;
 
       switch (true) {
         case formula === "WCAG" && !!wcagPass: {

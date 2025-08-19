@@ -14,8 +14,8 @@ interface LintingResult {
   node: TestableNode;
   nodeType: string;
   directLibraryCounterpartNode?: TestableNode | null;
-  usedColor?: PaintColorToken | Paint;
-  correspondingColor?: PaintColorToken | PaintWithColorName | undefined;
+  usedColor?: PaintColorToken | Paint | AnalyzedColor;
+  correspondingColor?: PaintColorToken | PaintWithColorName | AnalyzedColor | undefined;
   correspondingColorStatus?: string;
   usedTypography?: TextStyle | StyledTextSegment;
   correspondingTypography?: TextStyle | StyledTextSegment;
@@ -24,9 +24,19 @@ interface LintingResult {
 
 type FilteredField = "id" | "nodeType" | "testType";
 
+type AnalyzedColor = {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+  rgba: string;
+  oklch: string;
+  hex: string;
+};
+
 interface ContrastResults {
-  textColor: string;
-  backgroundColor: string;
+  usedColor: AnalyzedColor;
+  correspondingColor: AnalyzedColor;
   contrastApca: number;
   contrastWcag: number;
   apcaInterpolatedFont: any;
@@ -42,4 +52,4 @@ interface Rgba {
   a: number;
 }
 
-export type { LintingResult, FilteredField, LintingResultTestType, ContrastResults, Rgba };
+export type { LintingResult, FilteredField, LintingResultTestType, ContrastResults, Rgba, AnalyzedColor };

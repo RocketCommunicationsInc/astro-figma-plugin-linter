@@ -1,25 +1,29 @@
-type ResolveFn<T> = (value: T | PromiseLike<T>) => void;
-type RejectFn = (reason?: any) => void;
+import { ContrastResults } from "../../types/results";
 
-interface PendingContrastRequest<T> {
-  resolve: ResolveFn<T>;
+type ResolveFn<T> = (value: T | PromiseLike<T>) => void;
+type RejectFn = (reason?: unknown) => void;
+
+interface PendingContrastRequest {
+  resolve: ResolveFn<ContrastResults>;
   reject: RejectFn;
   timer: number;
 }
 
-const pendingContrastRequests = new Map<string, PendingContrastRequest<any>>();
+const pendingContrastRequests = new Map<string, PendingContrastRequest>();
 
-export function createContrastRequest<T>(requestId: string): Promise<T> {
-  return new Promise<T>((resolve, reject) => {
+const createContrastRequest = (requestId: string): Promise<ContrastResults> => {
+  return new Promise<ContrastResults>((resolve, reject) => {
     pendingContrastRequests.set(requestId, { resolve, reject, timer: 0 });
   });
-}
+};
 
-export function resolveContrastRequest<T>(requestId: string, data: T) {
+const resolveContrastRequest = (requestId: string, data: ContrastResults): void => {
   const request = pendingContrastRequests.get(requestId);
   if (request) {
     clearTimeout(request.timer);
     request.resolve(data);
     pendingContrastRequests.delete(requestId);
   }
-}
+};
+
+export { createContrastRequest, resolveContrastRequest };

@@ -2,11 +2,13 @@ import React from "react";
 import { PaintColorToken } from "../types/tokens";
 import { convertFigmaColorToCSS, convertFigmaPaintToCSS } from "./convert-figma-colors-to-css";
 
-const ColorReference: React.FC<{
-  colorReference: PaintColorToken | PaintStyle | Paint,
-  testMode?: "used" | "source",
-  colorStatus?: string | null
-}> = ({ colorReference, testMode = "used", colorStatus = null }) => {
+interface ColorReferenceProps {
+  colorReference: PaintColorToken | PaintStyle | SolidPaint;
+  testMode?: "used" | "source";
+  colorStatus?: string | null;
+}
+
+const ColorReference: React.FC<ColorReferenceProps> = ({ colorReference, testMode = "used", colorStatus = null }) => {
   try {
     let colorLabel = "";
     switch (testMode) {
@@ -20,32 +22,32 @@ const ColorReference: React.FC<{
         colorLabel = "";
     }
 
-    let backgroundColor;
+    let colorReferenceType, backgroundColor;
+    let colorSwatchName = "";
+    let colorSwatchDescription = colorStatus;
     if ('name' in colorReference) {
-      // It's a PaintColorToken
-      backgroundColor = convertFigmaPaintToCSS(colorReference.paints[0] as Paint);
+      colorReferenceType = "PaintColorToken";
     } else if ('color' in colorReference) {
-      // It's a Figma Paint
-      backgroundColor = convertFigmaColorToCSS(colorReference.color, colorReference.opacity ?? 1);
+      colorReferenceType = "FigmaPaint";
     } else {
       throw new Error("Invalid color reference type");
     }
 
-    let colorSwatchName = "";
-    let colorSwatchDescription = colorStatus;
-    switch (true) {
-      case 'name' in colorReference:
-        colorSwatchName = colorReference.name;
-        colorSwatchDescription = colorReference.description || "";
+    switch (colorReferenceType) {
+      case "PaintColorToken": {
+        const cr = colorReference as PaintColorToken;
+        backgroundColor = convertFigmaPaintToCSS(cr.paints[0] as Paint);
+        colorSwatchName = cr.name;
+        colorSwatchDescription = cr.description || "";
         break;
-      case 'colorName' in colorReference:
-        colorSwatchName = (colorReference as { colorName: string }).colorName;
+      }
+      case "FigmaPaint":
+      default: {
+        const cr = colorReference as SolidPaint;
+        backgroundColor = convertFigmaColorToCSS(cr.color, cr.opacity ?? 1);
+        colorSwatchName = (colorReference as unknown as { colorName: string }).colorName;
         break;
-      case 'color' in colorReference:
-        colorSwatchName = `rgb(${Math.round(255 * colorReference.color.r)}, ${Math.round(255 * colorReference.color.g)}, ${Math.round(255 * colorReference.color.b)})`;
-        break;
-      default:
-        colorSwatchName = "";
+      }
     }
 
     return (

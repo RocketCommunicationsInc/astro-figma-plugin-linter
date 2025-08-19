@@ -67,16 +67,26 @@
 }
 
 .result-color-token,
-.result-typography-token {
+.result-typography-token,
+.result-contrast-token {
   display: grid;
   gap: inherit;
   grid-column: 1 / span 8;
   grid-template-columns: subgrid;
 }
 
-.color-swatch {
+.result-contrast-token {
+  grid-template-rows: repeat(3, auto);
+}
+
+.color-swatch,
+.contrast-swatch {
   grid-column: 1;
   grid-row: 1 / span 2;
+}
+
+.contrast-color-meta {
+    grid-column: 2 / span 7;
 }
 
 .color-swatch-name,
@@ -88,6 +98,11 @@
 .typography-swatch-description {
   grid-row: 2;
   grid-column: 2 / span 6;
+}
+
+.contrast-swatch-description {
+  grid-column: 2 / span 6;
+  /* grid-row: 3; */
 }
 
 .token-swatch-error {

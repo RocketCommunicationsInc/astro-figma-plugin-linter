@@ -82,10 +82,23 @@
 }
 
 /* RESULT REFERENCES */
-.color-swatch {
+.color-swatch,
+.contrast-swatch {
   border-radius: var(--border-radius);
   min-height: var(--spacing-8);
   border: 1px solid var(--color-border);
+}
+
+.contrast-swatch {
+    align-content: center;
+    text-align: center;
+    grid-row-end: -1;
+}
+
+.contrast-swatch-foreground {
+  /* font-style: italic; */
+  /* font-family: fantasy; */
+  font-family: cursive;
 }
 
 .color-swatch-name,
@@ -96,7 +109,8 @@
 }
 
 .color-swatch-description,
-.typography-swatch-description {
+.typography-swatch-description,
+.contrast-swatch-description {
   color: var(--color-text-secondary);
   font-size: var(--font-size-xs);
 }
@@ -106,6 +120,11 @@
   font-size: var(--font-size-xs);
 }
 
+.contrast-color-meta {
+  font-size: var(--font-size-sm);
+}
 
-
-
+.contrast-swatch-label,
+.contrast-label {
+  font-weight: bold;
+}

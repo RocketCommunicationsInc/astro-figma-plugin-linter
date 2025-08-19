@@ -2,8 +2,7 @@ import React from "react";
 import { LintingResult } from "../types/results";
 import { ColorReference } from "./color-reference";
 import { TypographyReference } from "./typography-reference";
-
-
+import { ColorContrastReference } from "./color-contrast-reference";
 
 const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ result, debug }) => {
   // Click on result name to select the node in Figma
@@ -13,6 +12,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
 
   const resultClass = result.pass ? "pass" : "fail";
   const { testType, usedColor, correspondingColor, usedTypography, correspondingTypography } = result;
+  
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
       <div className="result-main">
@@ -49,12 +49,22 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
             </span>
           </div>
         )}
+
         {/* TYPOGRAPHY */}
         {testType === "typography" && usedTypography && (
           <TypographyReference typographyReference={usedTypography} />
         )}
         {testType === "typography" && correspondingTypography && (
           <TypographyReference typographyReference={correspondingTypography} />
+        )}
+
+        {/* CONTRAST */}
+        {testType === "contrast" && usedColor && correspondingColor && (
+          <ColorContrastReference 
+            colorReferenceForeground={usedColor} 
+            colorReferenceBackground={correspondingColor} 
+            colorStatus={result.correspondingColorStatus} 
+          />
         )}
       </div>
     </div>

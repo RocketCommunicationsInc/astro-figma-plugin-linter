@@ -1,6 +1,6 @@
 interface ContrastScreenshot {
   id: string;
-  bytes: any;
+  bytes: Uint8Array;
 }
 
 export type { ContrastScreenshot };

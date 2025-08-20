@@ -1,6 +1,4 @@
 import React from "react";
-import { PaintColorToken } from "../types/tokens";
-import { convertFigmaColorToCSS, convertFigmaPaintToCSS } from "./convert-figma-colors-to-css";
 import { AnalyzedColor, ContrastTypography } from "../types/results";
 
 const ColorContrastReference: React.FC<{
@@ -16,7 +14,7 @@ const ColorContrastReference: React.FC<{
     const backgroundColor = colorReferenceBackground.rgba;
     const backgroundColorHex = colorReferenceBackground.hex;
     const backgroundColorOkLCH = colorReferenceBackground.oklch;
-    const { fontSize, fontWeight, fontFamily, fontItalic, apcaInterpolatedFont, apcaValidatedFont } = contrastTypography || {};
+    const { fontSize, fontWeight, fontFamily, fontItalic, apcaInterpolatedFont } = contrastTypography || {};
 
     let fontStack: string;
     switch (fontFamily) {

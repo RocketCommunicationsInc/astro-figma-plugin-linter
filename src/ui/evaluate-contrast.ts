@@ -13,6 +13,9 @@ const evaluateContrast = async (
   const bytes = messageContent;
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Canvas context is null");
+  }
   const imageData = await decode(canvas, ctx, bytes);
   const extractedColors = await extractColors(imageData);
   const backgroundColor = new Color(extractedColors[0].hex);

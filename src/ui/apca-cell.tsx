@@ -40,6 +40,7 @@ const ApcaCell = ({
       </div>
     );
   }
+  return null;
 };
 
 export { ApcaCell };

@@ -20,7 +20,7 @@ const testContrast = async (
       return Promise.resolve();
     })
     .catch((error) => {
-      console.error("Error in testContast:", error);
+      console.error("Error in testContrast:", error);
     });
 };
 

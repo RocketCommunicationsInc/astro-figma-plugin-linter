@@ -2,18 +2,18 @@ import React from "react";
 import { AnalyzedColor, ContrastTypography } from "../types/results";
 
 const ColorContrastReference: React.FC<{
-  colorReferenceForeground: AnalyzedColor,
-  colorReferenceBackground: AnalyzedColor,
+  colorReferenceForeground: AnalyzedColor | undefined,
+  colorReferenceBackground: AnalyzedColor | undefined,
   contrastTypography?: ContrastTypography,
   colorStatus?: string | null
 }> = ({ colorReferenceForeground, colorReferenceBackground, contrastTypography, colorStatus = null }) => {
   try {
-    const foregroundColor = colorReferenceForeground.rgba;
-    const foregroundColorHex = colorReferenceForeground.hex;
-    const foregroundColorOkLCH = colorReferenceForeground.oklch;
-    const backgroundColor = colorReferenceBackground.rgba;
-    const backgroundColorHex = colorReferenceBackground.hex;
-    const backgroundColorOkLCH = colorReferenceBackground.oklch;
+    const foregroundColor = colorReferenceForeground && colorReferenceForeground.rgba;
+    const foregroundColorHex = colorReferenceForeground && colorReferenceForeground.hex;
+    const foregroundColorOkLCH = colorReferenceForeground && colorReferenceForeground.oklch;
+    const backgroundColor = colorReferenceBackground && colorReferenceBackground.rgba;
+    const backgroundColorHex = colorReferenceBackground && colorReferenceBackground.hex;
+    const backgroundColorOkLCH = colorReferenceBackground && colorReferenceBackground.oklch;
     const { fontSize, fontWeight, fontFamily, fontItalic, apcaInterpolatedFont } = contrastTypography || {};
 
     let fontStack: string;

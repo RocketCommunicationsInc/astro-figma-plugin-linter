@@ -3,7 +3,7 @@ import { PaintColorToken } from "../types/tokens";
 import { convertFigmaColorToCSS, convertFigmaPaintToCSS } from "./convert-figma-colors-to-css";
 
 interface ColorReferenceProps {
-  colorReference: PaintColorToken | PaintStyle | SolidPaint;
+  colorReference: PaintColorToken | PaintStyle | SolidPaint | undefined;
   testMode?: "used" | "source";
   colorStatus?: string | null;
 }
@@ -25,9 +25,9 @@ const ColorReference: React.FC<ColorReferenceProps> = ({ colorReference, testMod
     let colorReferenceType, backgroundColor;
     let colorSwatchName = "";
     let colorSwatchDescription = colorStatus;
-    if ('name' in colorReference) {
+    if (colorReference && 'name' in colorReference) {
       colorReferenceType = "PaintColorToken";
-    } else if ('color' in colorReference) {
+    } else if (colorReference && 'color' in colorReference) {
       colorReferenceType = "FigmaPaint";
     } else {
       throw new Error("Invalid color reference type");

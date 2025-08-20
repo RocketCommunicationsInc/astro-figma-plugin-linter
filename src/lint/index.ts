@@ -7,6 +7,7 @@ import { getChildrenToCheckForOverrides } from "./parsing-promises/get-children-
 import { collectAllOverrides } from "./parsing-promises/collect-all-overrides";
 import { collectAllAssociations } from "./parsing-promises/collect-all-associations";
 import { lintAllNodes } from "./parsing-promises/lint-all-nodes";
+import { collectAllContrastScreenshots } from "./parsing-promises/collect-all-contrast-screenshots";
 
 const lintSelection = async (theme: AstroTheme) => {
   clearResults();
@@ -29,6 +30,7 @@ const lintSelection = async (theme: AstroTheme) => {
 
   await collectAllOverrides(allNodesToLint);
   await collectAllAssociations(allNodesToLint);
+  await collectAllContrastScreenshots(allNodesToLint);
   await lintAllNodes(allNodesToLint, theme);
 
   const results = getResults();

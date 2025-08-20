@@ -3,6 +3,7 @@ import { CopyToClipboardButton } from 'react-clipboard-button';
 import { LintingResult } from "../types/results";
 import { TestResults } from "./test-results";
 import { SelectFilter } from "./select-filter";
+import { evaluateContrast } from "./evaluate-contrast";
 
 import "./css/variables.css";
 import "./css/base.css";
@@ -40,15 +41,28 @@ const LinterUi = () => {
 
   // Listen for messages from the plugin code
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
+    const handleMessage = async (event: MessageEvent) => {
       const messageType = event.data.pluginMessage.type;
       const messageContent = event.data.pluginMessage.content;
+      const foreRgba = event.data.pluginMessage.foreRgba;
+      const fontSize = event.data.pluginMessage.fontSize;
+      const fontWeight = event.data.pluginMessage.fontWeight;
+      const testId = event.data.pluginMessage.testId;
+
       // Handle incoming message with exported JSON
       if (messageType === "lint-results") {
         const sortedResults = (messageContent as LintingResult[]).sort((a: LintingResult, b: LintingResult) => a.id.localeCompare(b.id));
         setResults(sortedResults);
         setFilteredResults(messageContent);
         setReadyToCopy(true);
+      }
+
+      // evaluate text contrast using APCA and WCAG
+      // note: color libraries rely on browser APIs 
+      // so they need to be run in the plugin UI
+      if (messageType === "image") {
+        const contrastResults = await evaluateContrast(messageContent, foreRgba, fontSize, fontWeight);
+        parent.postMessage({ pluginMessage: { type: 'color-contrast-data', contrastResults, nodeId: testId } }, '*');
       }
     };
 

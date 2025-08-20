@@ -35,11 +35,11 @@ const SelectFilter: React.FC<SelectFilterProps> = ({
       sortedResultsForThisField = (results).sort((a: LintingResult, b: LintingResult) => a.id.localeCompare(b.id));
       break;
     case 'nodeType':
-      zeroOptionText = 'All Types';
+      zeroOptionText = 'All Figma Types';
       sortedResultsForThisField = (results).sort((a: LintingResult, b: LintingResult) => a.nodeType.localeCompare(b.nodeType));
       break;
     case 'testType':
-      zeroOptionText = 'Color and Typography';
+      zeroOptionText = 'Color, Contrast and Typography';
       sortedResultsForThisField = (results).sort((a: LintingResult, b: LintingResult) => a.testType.localeCompare(b.testType));
       break;
     default:

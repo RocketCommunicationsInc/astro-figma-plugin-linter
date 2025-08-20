@@ -1,9 +1,9 @@
 import React from "react";
-import { LintingResult } from "../types/results";
+import { AnalyzedColor, LintingResult } from "../types/results";
 import { ColorReference } from "./color-reference";
 import { TypographyReference } from "./typography-reference";
-
-
+import { ColorContrastReference } from "./color-contrast-reference";
+import { PaintColorToken } from "../types/tokens";
 
 const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ result, debug }) => {
   // Click on result name to select the node in Figma
@@ -12,7 +12,28 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
   };
 
   const resultClass = result.pass ? "pass" : "fail";
-  const { testType, usedColor, correspondingColor, usedTypography, correspondingTypography } = result;
+  const { testType, usedTypography, correspondingTypography, contrastTypography } = result;
+
+  const usedColor = result.usedColor;
+  const correspondingColor = result.correspondingColor;
+  let usedColorFills, correspondingColorFills: PaintColorToken | PaintStyle | SolidPaint | undefined;
+  let usedColorContrast, correspondingColorContrast: AnalyzedColor | undefined;
+
+  switch (true) {
+    case usedColor && ("oklch" in usedColor):
+      usedColorContrast = usedColor as AnalyzedColor;
+      break;
+    default:
+      usedColorFills = usedColor as PaintColorToken | PaintStyle | SolidPaint;
+  }
+  switch (true) {
+    case correspondingColor && ("oklch" in correspondingColor):
+      correspondingColorContrast = correspondingColor as AnalyzedColor;
+      break;
+    default:
+      correspondingColorFills = correspondingColor as PaintColorToken | PaintStyle | SolidPaint;
+  }
+  
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
       <div className="result-main">
@@ -37,10 +58,10 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
       <div className="result-references">
         {/* COLOR */}
         {testType === "color" && usedColor && (
-          <ColorReference colorReference={usedColor} />
+          <ColorReference colorReference={usedColorFills} />
         )}
         {testType === "color" && correspondingColor && (
-          <ColorReference colorReference={correspondingColor} testMode="source" colorStatus={result.correspondingColorStatus} />
+          <ColorReference colorReference={correspondingColorFills} testMode="source" colorStatus={result.correspondingColorStatus} />
         )}
         {testType === "color" && !correspondingColor && (
           <div className="result-color-token source error">
@@ -49,12 +70,23 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
             </span>
           </div>
         )}
+
         {/* TYPOGRAPHY */}
         {testType === "typography" && usedTypography && (
           <TypographyReference typographyReference={usedTypography} />
         )}
         {testType === "typography" && correspondingTypography && (
           <TypographyReference typographyReference={correspondingTypography} />
+        )}
+
+        {/* CONTRAST */}
+        {testType === "contrast" && usedColor && correspondingColor && (
+          <ColorContrastReference 
+            colorReferenceForeground={usedColorContrast} 
+            colorReferenceBackground={correspondingColorContrast} 
+            contrastTypography={contrastTypography}
+            colorStatus={result.correspondingColorStatus} 
+          />
         )}
       </div>
     </div>

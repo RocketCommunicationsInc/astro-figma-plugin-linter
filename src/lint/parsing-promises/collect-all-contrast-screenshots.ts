@@ -9,9 +9,11 @@ const collectAllContrastScreenshots: CollectAllContrastScreenshots = async (
   allNodesToLint
 ) => {
   const promises: Promise<boolean | void>[] = [];
-  allNodesToLint.forEach((child) =>
-    promises.push(collectContrastScreenshots(child).catch(console.error))
-  );
+  allNodesToLint
+    .filter((child): child is TextNode => child.type === "TEXT")
+    .forEach((child) =>
+      promises.push(collectContrastScreenshots(child).catch(console.error))
+    );
   await Promise.all(promises);
 };
 

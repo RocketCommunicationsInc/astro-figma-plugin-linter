@@ -46,6 +46,7 @@ const LinterUi = () => {
       const messageContent = event.data.pluginMessage.content;
       const foreRgba = event.data.pluginMessage.foreRgba;
       const fontSize = event.data.pluginMessage.fontSize;
+      const fontWeight = event.data.pluginMessage.fontWeight;
       const testId = event.data.pluginMessage.testId;
 
       // Handle incoming message with exported JSON
@@ -60,7 +61,7 @@ const LinterUi = () => {
       // note: color libraries rely on browser APIs 
       // so they need to be run in the plugin UI
       if (messageType === "image") {
-        const contrastResults = await evaluateContrast(messageContent, foreRgba, fontSize);
+        const contrastResults = await evaluateContrast(messageContent, foreRgba, fontSize, fontWeight);
         parent.postMessage({ pluginMessage: { type: 'color-contrast-data', contrastResults, nodeId: testId } }, '*');
       }
     };

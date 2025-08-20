@@ -1,13 +1,14 @@
 import React from "react";
 import { PaintColorToken } from "../types/tokens";
 import { convertFigmaColorToCSS, convertFigmaPaintToCSS } from "./convert-figma-colors-to-css";
-import { AnalyzedColor } from "../types/results";
+import { AnalyzedColor, ContrastTypography } from "../types/results";
 
 const ColorContrastReference: React.FC<{
   colorReferenceForeground: AnalyzedColor,
   colorReferenceBackground: AnalyzedColor,
+  contrastTypography?: ContrastTypography,
   colorStatus?: string | null
-}> = ({ colorReferenceForeground, colorReferenceBackground, colorStatus = null }) => {
+}> = ({ colorReferenceForeground, colorReferenceBackground, contrastTypography, colorStatus = null }) => {
   try {
     const foregroundColor = colorReferenceForeground.rgba;
     const foregroundColorHex = colorReferenceForeground.hex;
@@ -15,6 +16,16 @@ const ColorContrastReference: React.FC<{
     const backgroundColor = colorReferenceBackground.rgba;
     const backgroundColorHex = colorReferenceBackground.hex;
     const backgroundColorOkLCH = colorReferenceBackground.oklch;
+    const { fontSize, fontWeight, fontFamily, fontItalic, apcaInterpolatedFont, apcaValidatedFont } = contrastTypography || {};
+
+    let fontStack: string;
+    switch (fontFamily) {
+      case "Roboto":
+        fontStack = "'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif";
+        break;
+      default:
+        fontStack = "inherit";
+    }
 
     return (
       <div className={`result-contrast-token`}>
@@ -24,7 +35,19 @@ const ColorContrastReference: React.FC<{
             backgroundColor: backgroundColorOkLCH,
           }}
         >
-          <span className="contrast-swatch-foreground" style={{ color: foregroundColorOkLCH }}>Text</span>
+          <span
+            className="contrast-swatch-foreground"
+            style={
+              {
+                color: foregroundColorOkLCH,
+                fontFamily: fontStack,
+                fontSize: fontSize,
+                fontWeight: fontWeight,
+                fontStyle: fontItalic ? "italic" : "normal",
+              }
+            }>
+            Text
+          </span>
         </span>
 
         <div className="contrast-color-meta contrast-foreground">
@@ -56,6 +79,49 @@ const ColorContrastReference: React.FC<{
             <span className="contrast-label">OKLCH:</span> {backgroundColorOkLCH}
           </div>
         </div>
+
+        {apcaInterpolatedFont && (
+          <div className="contrast-apca-recommendations">
+            <div className="contrast-apca-recommendations-label contrast-label">
+              APCA Recommendations <span className="contrast-apca-recommendations-label-note">(weight / minimum size)</span>
+            </div>
+            <div className="contrast-apca-examples">
+              {Object.entries(apcaInterpolatedFont).map(([weightIndex, minSize]) => {
+                const exampleFontWeight = (Number(weightIndex) + 1) * 100;
+                const minSizeString = (minSize !== "placeholder") ? minSize : "none";
+                const minSizeExampleString = (minSize !== "placeholder") ? minSize : "Text";
+                const activeClass = (exampleFontWeight === fontWeight) ? "active" : "";
+                if (Number(weightIndex) <= 7) {
+                  return (
+                    <div
+                      className={`contrast-apca-example ${activeClass}`}
+                      key={weightIndex}
+                    >
+                      <div className="contrast-apca-example-meta">
+                        <div>{exampleFontWeight}</div>
+                        <div>/ {minSizeString}</div>
+                      </div>
+                      <div
+                        className="contrast-apca-example-content"
+                        style={{
+                          backgroundColor: backgroundColorOkLCH,
+                          color: foregroundColorOkLCH,
+                          fontFamily: fontStack,
+                          fontStyle: fontItalic ? "italic" : "normal",
+                          fontWeight: exampleFontWeight,
+                          fontSize: minSizeString,
+                        }}
+                      >
+                        {minSizeExampleString}
+                      </div>
+                    </div>
+                  )
+                }
+              })}
+            </div>
+          </div>
+        )}
+
 
       </div>
     );

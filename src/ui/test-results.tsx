@@ -11,7 +11,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
   };
 
   const resultClass = result.pass ? "pass" : "fail";
-  const { testType, usedColor, correspondingColor, usedTypography, correspondingTypography } = result;
+  const { testType, usedColor, correspondingColor, usedTypography, correspondingTypography, contrastTypography } = result;
   
   return (
     <div className={`test-result ${resultClass}`} onClick={handleClick}>
@@ -63,6 +63,7 @@ const TestResult: React.FC<{ result: LintingResult, debug: boolean }> = ({ resul
           <ColorContrastReference 
             colorReferenceForeground={usedColor} 
             colorReferenceBackground={correspondingColor} 
+            contrastTypography={contrastTypography}
             colorStatus={result.correspondingColorStatus} 
           />
         )}

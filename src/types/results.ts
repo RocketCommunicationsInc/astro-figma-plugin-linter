@@ -1,15 +1,18 @@
-import type { PaintWithColorName, TestableNode } from './figma';
-import { PaintColorToken } from './tokens';
+import { Rating } from "a11y-color-contrast";
+import type { PaintWithColorName, TestableNode } from "./figma";
+import { PaintColorToken } from "./tokens";
 
-type LintingResultTestType = 'color' | 'typography' | 'contrast';
+type LintingResultTestType = "color" | "typography" | "contrast";
+type ApcaInterpolatedFont = Rating[] | null;
+type ApcaValidatedFont = Record<number, Record<number, boolean>>;
 
 type ContrastTypography = {
   fontSize: number;
   fontWeight: number;
   fontFamily: string;
   fontItalic: boolean;
-  apcaInterpolatedFont?: Record<number, number | "placeholder">;
-  apcaValidatedFont?: Record<number, Record<number, boolean>>;
+  apcaInterpolatedFont?: ApcaInterpolatedFont;
+  apcaValidatedFont?: ApcaValidatedFont;
 };
 
 interface LintingResult {
@@ -24,7 +27,11 @@ interface LintingResult {
   nodeType: string;
   directLibraryCounterpartNode?: TestableNode | null;
   usedColor?: PaintColorToken | Paint | AnalyzedColor;
-  correspondingColor?: PaintColorToken | PaintWithColorName | AnalyzedColor | undefined;
+  correspondingColor?:
+    | PaintColorToken
+    | PaintWithColorName
+    | AnalyzedColor
+    | undefined;
   correspondingColorStatus?: string;
   usedTypography?: TextStyle | StyledTextSegment;
   correspondingTypography?: TextStyle | StyledTextSegment;
@@ -49,8 +56,8 @@ interface ContrastResults {
   correspondingColor: AnalyzedColor;
   contrastApca: number;
   contrastWcag: number;
-  apcaInterpolatedFont: any;
-  apcaValidatedFont: Record<number, Record<number, boolean>>;
+  apcaInterpolatedFont: ApcaInterpolatedFont;
+  apcaValidatedFont: ApcaValidatedFont;
   wcagPass: boolean;
   apcaPass: boolean;
 }
@@ -62,4 +69,13 @@ interface Rgba {
   a: number;
 }
 
-export type { ContrastTypography, LintingResult, FilteredField, LintingResultTestType, ContrastResults, Rgba, AnalyzedColor };
+export type {
+  AnalyzedColor,
+  ApcaInterpolatedFont,
+  ContrastResults,
+  ContrastTypography,
+  FilteredField,
+  LintingResult,
+  LintingResultTestType,
+  Rgba,
+};

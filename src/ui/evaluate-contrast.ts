@@ -31,7 +31,7 @@ const evaluateContrast = async (
     foregroundColorOklch,
     "WCAG21"
   );
-  const apcaInterpolatedFont: Record<number, number> = apcaToInterpolatedFont(contrastApca);
+  const apcaInterpolatedFont = apcaToInterpolatedFont(contrastApca);
   const allowedFontSizes = [
     10, 12, 14, 15, 16, 18, 21, 24, 28, 32, 36, 42, 48, 60, 72, 96,
   ] as const;

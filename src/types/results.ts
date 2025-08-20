@@ -3,6 +3,15 @@ import { PaintColorToken } from './tokens';
 
 type LintingResultTestType = 'color' | 'typography' | 'contrast';
 
+type ContrastTypography = {
+  fontSize: number;
+  fontWeight: number;
+  fontFamily: string;
+  fontItalic: boolean;
+  apcaInterpolatedFont?: Record<number, number | "placeholder">;
+  apcaValidatedFont?: Record<number, Record<number, boolean>>;
+};
+
 interface LintingResult {
   ignore?: boolean;
   test: string;
@@ -20,6 +29,7 @@ interface LintingResult {
   usedTypography?: TextStyle | StyledTextSegment;
   correspondingTypography?: TextStyle | StyledTextSegment;
   correspondingTypographyStatus?: string;
+  contrastTypography?: ContrastTypography;
 }
 
 type FilteredField = "id" | "nodeType" | "testType";
@@ -52,4 +62,4 @@ interface Rgba {
   a: number;
 }
 
-export type { LintingResult, FilteredField, LintingResultTestType, ContrastResults, Rgba, AnalyzedColor };
+export type { ContrastTypography, LintingResult, FilteredField, LintingResultTestType, ContrastResults, Rgba, AnalyzedColor };

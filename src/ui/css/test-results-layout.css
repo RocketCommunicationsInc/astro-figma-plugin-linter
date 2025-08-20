@@ -86,7 +86,7 @@
 }
 
 .contrast-color-meta {
-    grid-column: 2 / span 7;
+  grid-column: 2 / span 7;
 }
 
 .color-swatch-name,
@@ -140,4 +140,38 @@
 
 .result-node-type {
   grid-column: 2 / span 2;
+}
+
+.contrast-apca-recommendations {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+.contrast-apca-recommendations-label {
+  grid-column: 1 / -1;
+}
+
+.contrast-apca-examples {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 1px;
+  grid-template-columns: subgrid;
+  grid-template-rows: repeat(2, auto);
+}
+
+.contrast-apca-example {
+  display: grid;
+  gap: inherit;
+  grid-template-rows: subgrid;
+  grid-row: 1 / span 2;
+  overflow: hidden;
+}
+
+.contrast-apca-example-content {
+  display: grid;
+  align-items: baseline;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  padding: 2px;
 }

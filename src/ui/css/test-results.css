@@ -95,12 +95,6 @@
     grid-row-end: -1;
 }
 
-.contrast-swatch-foreground {
-  /* font-style: italic; */
-  /* font-family: fantasy; */
-  font-family: cursive;
-}
-
 .color-swatch-name,
 .typography-swatch-name {
   font-weight: bold;
@@ -127,4 +121,18 @@
 .contrast-swatch-label,
 .contrast-label {
   font-weight: bold;
+}
+
+.contrast-apca-recommendations-label-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.contrast-apca-example-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+
+  .active & {
+    color: var(--figma-color-text-selected);
+  }
 }

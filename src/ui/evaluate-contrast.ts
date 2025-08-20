@@ -7,7 +7,8 @@ import { AnalyzedColor, ContrastResults, Rgba } from "../types/results";
 const evaluateContrast = async (
   messageContent: Uint8Array,
   foreRgba: Rgba,
-  fontSize: number
+  fontSize: number,
+  fontWeight: number
 ): Promise<ContrastResults> => {
   const bytes = messageContent;
   const canvas = document.createElement("canvas");
@@ -30,7 +31,7 @@ const evaluateContrast = async (
     foregroundColorOklch,
     "WCAG21"
   );
-  const apcaInterpolatedFont = apcaToInterpolatedFont(contrastApca);
+  const apcaInterpolatedFont: Record<number, number> = apcaToInterpolatedFont(contrastApca);
   const allowedFontSizes = [
     10, 12, 14, 15, 16, 18, 21, 24, 28, 32, 36, 42, 48, 60, 72, 96,
   ] as const;
@@ -39,17 +40,21 @@ const evaluateContrast = async (
   )
     ? (fontSize as (typeof allowedFontSizes)[number])
     : 16;
+  const allowedFontWeights = [100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
+  const validFontWeight = allowedFontWeights.includes(fontWeight as typeof allowedFontWeights[number])
+    ? (fontWeight as typeof allowedFontWeights[number])
+    : 400;
   const apcaValidatedFont = apcaValidateFont(
     contrastApca,
     validFontSize,
-    400
+    validFontWeight
   ) as Record<number, Record<number, boolean>>;
 
   // Does this pass WCAG?
   const wcagPass = contrastWcag >= 4.5;
 
   // Does this pass APCA?
-  const apcaPass = apcaValidatedFont[fontSize]?.[400] === true;
+  const apcaPass = apcaValidatedFont[fontSize]?.[validFontWeight] === true;
 
   const usedColor: AnalyzedColor = {
     r: foregroundColor.r,

@@ -11,7 +11,22 @@ const decode = async (
   ctx: DecodeParams['ctx'],
   bytes: DecodeParams['bytes']
 ): Promise<ImageData> => {
-  const url = URL.createObjectURL(new Blob([bytes]))
+  let blobPart: BlobPart
+  if (bytes instanceof Uint8Array) {
+    if (bytes.buffer instanceof ArrayBuffer) {
+      // If the buffer is ArrayBuffer, use a sliced copy to avoid referencing SharedArrayBuffer
+      blobPart = bytes.slice().buffer
+    } else {
+      // Copy to a new ArrayBuffer
+      const ab = new ArrayBuffer(bytes.byteLength)
+      new Uint8Array(ab).set(bytes)
+      blobPart = ab
+    }
+  } else {
+    blobPart = bytes
+  }
+
+  const url = URL.createObjectURL(new Blob([blobPart]));
   const image: HTMLImageElement = await new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image()
     img.onload = () => resolve(img)
